@@ -1,6 +1,9 @@
 const emptyTag = document.querySelector(".summary");
 const button = document.querySelector(".btn");
 const spinner = document.querySelector(".hidden");
+
+chrome.browserAction.onClicked.addListener();
+
 button.addEventListener("click", () => {
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
