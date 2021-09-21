@@ -1,3 +1,4 @@
+import { Summary } from "./entities/Summary";
 import { User } from "./entities/User";
 import { buildSchema } from "type-graphql";
 import dotenv from "dotenv";
@@ -17,7 +18,7 @@ const main = async () => {
     username: "admin",
     password: "admin",
     database: "summarizer",
-    entities: [User],
+    entities: [User, Summary],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",
   });
