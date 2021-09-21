@@ -15,8 +15,8 @@ const main = async () => {
     type: "postgres",
     host: "localhost",
     port: 5432,
-    username: "admin",
-    password: "admin",
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASS,
     database: "summarizer",
     entities: [User, Summary],
     synchronize: true,
@@ -29,10 +29,6 @@ const main = async () => {
   app.register(mercurius, {
     schema,
     graphiql: true,
-  });
-  app.get("/", async function (_: any, reply: any) {
-    const query = "{ add(x: 2, y: 2) }";
-    return reply.graphql(query);
   });
   app.listen(parseInt(process.env.PORT!), () => {
     console.log(`Server running on port ${process.env.PORT}`);
