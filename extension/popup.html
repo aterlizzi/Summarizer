@@ -6,30 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Article Summarizer</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
   </head>
   <body>
     <main class="main">
-      <header class="head">
-        <img src="/images/icon_128.png" class="img" alt="lightbulb" />
-        <h1 class="title">Summarizer</h1>
-        <h4 class="subtitle">
-          Summarize an article with the click of a button
-        </h4>
-      </header>
-      <section class="content">
-        <div class="container">
-          <p class="summary"></p>
-        </div>
-        <div class="btnContainer">
-          <button class="btn">Summarize</button>
-          <div class="la-ball-fussion hidden">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+      <div class="mainSpinnerContainer">
+        <div class="loader"></div>
+      </div>
+      <div class="loginWrapper none">
+        <header class="head">
+          <img src="/images/icon_128.png" alt="lightbulb" class="img" />
+          <h1 class="title">Login</h1>
+          <h4 class="subtitle">Please login to access the extension.</h4>
+        </header>
+        <form action="" class="content">
+          <label for="email" class="label">Email:</label>
+          <div class="inputContainer">
+            <i class="fas fa-users"></i>
+            <input
+              id="email"
+              type="email"
+              class="input"
+              placeholder="jane.doe@example.com"
+            />
           </div>
-        </div>
-      </section>
+          <label for="password" class="label">Password:</label>
+          <div class="inputContainer">
+            <i class="fas fa-lock"></i>
+            <input
+              id="password"
+              type="password"
+              class="input"
+              placeholder="ex. s9r_]{@6-V4)|!q"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="sumWrapper none">
+        <header class="head">
+          <img src="/images/icon_128.png" class="img" alt="lightbulb" />
+          <h1 class="title">Summarizer</h1>
+          <h4 class="subtitle">
+            Summarize an article with the click of a button
+          </h4>
+        </header>
+        <section class="content">
+          <div class="container">
+            <p class="summary"></p>
+          </div>
+          <div class="btnContainer">
+            <button class="btn">Summarize</button>
+            <div class="la-ball-fussion hidden">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
     <script src="/popup.js"></script>
   </body>
