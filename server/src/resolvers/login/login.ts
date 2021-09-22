@@ -1,8 +1,8 @@
 import { User } from "./../../entities/User";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { OAuth2Client } from "google-auth-library";
+// import { OAuth2Client } from "google-auth-library";
 import argon2 from "argon2";
-const client = new OAuth2Client(process.env.CLIENT_ID);
+// const client = new OAuth2Client(process.env.CLIENT_ID);
 
 @Resolver()
 export class LoginResolver {
@@ -19,12 +19,12 @@ export class LoginResolver {
   @Mutation(() => User, { nullable: true })
   async verifyUser(
     @Arg("email") email: string,
-    @Arg("pass") pass: string
+    @Arg("password") password: string
   ): Promise<User | undefined> {
     const user = await User.findOne({ where: { email } });
     if (!user) return undefined;
     if (user.accountType !== "web") return undefined;
-    if (!(await argon2.verify(user.password!, pass))) return undefined;
+    if (!(await argon2.verify(user.password!, password))) return undefined;
     return user;
   }
 }
