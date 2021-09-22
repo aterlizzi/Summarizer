@@ -10,6 +10,9 @@
   </head>
   <body>
     <main class="main">
+      <div class="circle none">
+        <p class="sumNum"></p>
+      </div>
       <div class="mainSpinnerContainer">
         <div class="loader"></div>
       </div>
@@ -28,6 +31,7 @@
               type="email"
               class="input"
               placeholder="jane.doe@example.com"
+              required
             />
           </div>
           <label for="password" class="label">Password:</label>
@@ -38,6 +42,7 @@
               type="password"
               class="input"
               placeholder="ex. s9r_]{@6-V4)|!q"
+              required
             />
           </div>
           <div class="errorContainer none">
@@ -47,7 +52,8 @@
             </p>
           </div>
         </form>
-        <button class="loginBtn" type="button">Login with Google</button>
+        <button class="loginBtn web" type="button">Login</button>
+        <button class="loginBtn google" type="button">Login with Google</button>
       </div>
       <div class="sumWrapper none">
         <header class="head">

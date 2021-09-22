@@ -12,29 +12,6 @@ const STATE = encodeURIComponent("cjkdhslk");
 const SCOPE = encodeURIComponent("openid");
 const PROMPT = encodeURIComponent("consent");
 
-const create_oauth2_url = () => {
-  let nonce = encodeURIComponent(
-    Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15)
-  );
-  let url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URI}&state=${STATE}&scope=${SCOPE}&prompt=${PROMPT}&nonce=${nonce}`;
-  return url;
-};
-
-const verifyUserStatus = () => {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(["userStatus", "userInfo"], (response) => {
-      if (chrome.runtime.lastError) {
-        resolve({ userStatus: false, userInfo: {} });
-      }
-      resolve(
-        response.userStatus === undefined
-          ? { userStatus: false, userInfo: {} }
-          : { userStatus: response.userStatus, userInfo: response.userInfo }
-      );
-    });
-  });
-};
 chrome.runtime.onMessage.addListener(receiver);
 
 function receiver(req, sender, sendResponse) {
@@ -44,7 +21,28 @@ function receiver(req, sender, sendResponse) {
         userSignedIn = res.userStatus;
         switch (userSignedIn) {
           case true:
-            sendResponse({ key: "loginTrue" });
+            if (res.userInfo.email) {
+              console.log(res.userInfo);
+              const body = JSON.stringify({
+                query: `query {
+                  me(email: "${res.userInfo.email}") {
+                    remainingSummaries
+                  }
+                }`,
+              });
+              fetch("http://localhost:4000/graphql", {
+                headers: { "content-type": "application/json" },
+                method: "POST",
+                body,
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  const payload = data.data.me.remainingSummaries;
+                  sendResponse({ key: "loginTrue", payload });
+                })
+                .catch((err) => console.log(err));
+            } else if (res.userInfo.sub) {
+            }
             break;
           case false:
             sendResponse({ key: "loginFalse" });
@@ -53,6 +51,42 @@ function receiver(req, sender, sendResponse) {
             break;
         }
       });
+      break;
+    case "loginWebUser":
+      const email = req.payload.email;
+      const password = req.payload.password;
+      const body = JSON.stringify({
+        query: `mutation {
+          verifyUser(password: "${password}", email: "${email}") {
+            remainingSummaries
+          }
+        }`,
+      });
+      fetch("http://localhost:4000/graphql", {
+        headers: { "content-type": "application/json" },
+        method: "POST",
+        body,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (!data.data.verifyUser) {
+            chrome.runtime.sendMessage({ key: "failedLogin" });
+          } else {
+            const user_info = {
+              email: email,
+            };
+            chrome.runtime.sendMessage({
+              key: "successfulLogin",
+              payload: data.data.verifyUser.remainingSummaries,
+            });
+            chrome.storage.local.set({
+              userStatus: true,
+              userInfo: user_info,
+              sumNum: data.data.verifyUser.remainingSummaries,
+            });
+          }
+        })
+        .catch((err) => console.log(err));
       break;
     case "loginGoogleUser":
       verifyUserStatus().then((res) => {
@@ -102,7 +136,8 @@ function receiver(req, sender, sendResponse) {
                           userInfo: user_info,
                         });
                       }
-                    });
+                    })
+                    .catch((err) => console.log(err));
                 }
               }
             );
@@ -164,3 +199,25 @@ function parseJwt(token) {
 
   return JSON.parse(jsonPayload);
 }
+const create_oauth2_url = () => {
+  let nonce = encodeURIComponent(
+    Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+  );
+  let url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URI}&state=${STATE}&scope=${SCOPE}&prompt=${PROMPT}&nonce=${nonce}`;
+  return url;
+};
+const verifyUserStatus = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["userStatus", "userInfo"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ userStatus: false, userInfo: {} });
+      }
+      resolve(
+        response.userStatus === undefined
+          ? { userStatus: false, userInfo: {} }
+          : { userStatus: response.userStatus, userInfo: response.userInfo }
+      );
+    });
+  });
+};

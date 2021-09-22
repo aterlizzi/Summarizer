@@ -4,15 +4,21 @@ const spinner = document.querySelector(".hidden");
 const sumWrapper = document.querySelector(".sumWrapper");
 const mainSpinnerContainer = document.querySelector(".mainSpinnerContainer");
 const loginWrapper = document.querySelector(".loginWrapper");
-const loginBtn = document.querySelector(".loginBtn");
+const googleBtn = document.querySelector(".google");
+const webBtn = document.querySelector(".web");
+const emailInput = document.querySelector("#email");
+const passwordInput = document.querySelector("#password");
 const errorContainer = document.querySelector(".errorContainer");
+const circle = document.querySelector(".circle");
+const sumNum = document.querySelector(".sumNum");
 
 // get status check when loading the popup
 window.onload = () => {
-  console.log("ready");
   chrome.runtime.sendMessage({ key: "status" }, (response) => {
     if (response.key === "loginTrue") {
       sumWrapper.classList.remove("none");
+      circle.classList.remove("none");
+      sumNum.textContent = response.payload;
     } else if (response.key === "loginFalse") {
       loginWrapper.classList.remove("none");
     }
@@ -27,9 +33,18 @@ button.addEventListener("click", () => {
     chrome.tabs.sendMessage(tabs[0].id, { text: "Hello world." });
   });
 });
-loginBtn.addEventListener("click", () => {
+googleBtn.addEventListener("click", () => {
   errorContainer.classList.add("none");
   chrome.runtime.sendMessage({ key: "loginGoogleUser" });
+});
+webBtn.addEventListener("click", () => {
+  errorContainer.classList.add("none");
+  const email = emailInput.value;
+  const password = passwordInput.value;
+  chrome.runtime.sendMessage({
+    key: "loginWebUser",
+    payload: { email, password },
+  });
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, response) => {
@@ -38,6 +53,12 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
   switch (msg.key) {
     case "failedLogin":
       errorContainer.classList.remove("none");
+      break;
+    case "successfulLogin":
+      loginWrapper.classList.add("none");
+      sumWrapper.classList.remove("none");
+      circle.classList.remove("none");
+      sumNum.textContent = msg.payload;
       break;
     case "k8k4IQwFaX":
       button.classList.toggle("hidden");
