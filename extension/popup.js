@@ -4,6 +4,8 @@ const spinner = document.querySelector(".hidden");
 const sumWrapper = document.querySelector(".sumWrapper");
 const mainSpinnerContainer = document.querySelector(".mainSpinnerContainer");
 const loginWrapper = document.querySelector(".loginWrapper");
+const loginBtn = document.querySelector(".loginBtn");
+const errorContainer = document.querySelector(".errorContainer");
 
 // get status check when loading the popup
 window.onload = () => {
@@ -25,11 +27,18 @@ button.addEventListener("click", () => {
     chrome.tabs.sendMessage(tabs[0].id, { text: "Hello world." });
   });
 });
+loginBtn.addEventListener("click", () => {
+  errorContainer.classList.add("none");
+  chrome.runtime.sendMessage({ key: "loginGoogleUser" });
+});
 
 chrome.runtime.onMessage.addListener((msg, sender, response) => {
   console.log(msg);
   let summary;
   switch (msg.key) {
+    case "failedLogin":
+      errorContainer.classList.remove("none");
+      break;
     case "k8k4IQwFaX":
       button.classList.toggle("hidden");
       spinner.classList.toggle("hidden");

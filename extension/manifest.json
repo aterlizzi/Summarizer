@@ -2,10 +2,12 @@
   "name": "Summarizer",
   "version": "1.0",
   "description": "Summarizes articles.",
-  "permissions": ["activeTab", "tabs", "storage"],
+  "permissions": ["activeTab", "tabs", "storage", "identity"],
   "icons": { "128": "images/icon_128.png" },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtGt89Sd6Wxc4Jo3t1PNzjvFQ7YxmdfUr2rF5iLjrNl89Rrbp35bd1qbSxxU2D43K2duSiPgSHlM0qIzYaeWinPMAyMzTW5FG8NRIOcU3KScbl6QOElyc+MNoHSxLMSUY58alWHBWKVKuTMblF/vRBs26s+PLLCoef8Sm5WENpDHmtcW+0oKmWzEUNdL3fDX91OKHObBzT9QEiKR+l1SNxADbF2Jw3xaKPo9ZPxRRw4So/H52xJrHXMVsFVsBScAmt+TpyOIlq7PG8QhfwcHgXt9ucZ5tzfGTmlNj34/NtCBeCxsj3EtS2iRoIkYEnLAIrSxF9KtiU39Fm2VtTIw4QwIDAQAB",
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html",
@@ -15,7 +17,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js", "jsrsasign-all-min.js"]
     }
   ],
   "manifest_version": 3

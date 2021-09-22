@@ -87,7 +87,7 @@ i {
   width: 100%;
   margin-bottom: 1em;
 }
-button {
+.btn {
   border: 1px solid rgba(187, 134, 252, 0.25);
   color: rgba(255, 255, 255, 0.87);
   background: #121212;
@@ -209,6 +209,12 @@ button:hover {
 }
 .hidden {
   visibility: hidden;
+}
+.error {
+  font-size: 1.125em;
+  color: #cf6679;
+  text-align: center;
+  margin-bottom: 1em;
 }
 .loader,
 .loader:before,

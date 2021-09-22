@@ -11,7 +11,9 @@ export class LoginResolver {
     return "Hello world.";
   }
   @Mutation(() => String)
-  async verifyGoogleAccount(@Arg("token") token: string): Promise<boolean> {
+  async verifyGoogleAccount(@Arg("sub") sub: string): Promise<boolean> {
+    const user = await User.findOne({ where: { googleSubKey: sub } });
+    if (!user) return false;
     return true;
   }
   @Mutation(() => User, { nullable: true })
