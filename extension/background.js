@@ -22,7 +22,6 @@ function receiver(req, sender, sendResponse) {
         switch (userSignedIn) {
           case true:
             if (res.userInfo.email) {
-              console.log(res.userInfo);
               const body = JSON.stringify({
                 query: `query {
                   me(email: "${res.userInfo.email}") {
@@ -42,6 +41,24 @@ function receiver(req, sender, sendResponse) {
                 })
                 .catch((err) => console.log(err));
             } else if (res.userInfo.sub) {
+              const body = JSON.stringify({
+                query: `query {
+                  me(sub: "${res.userInfo.sub}") {
+                    remainingSummaries
+                  }
+                }`,
+              });
+              fetch("http://localhost:4000/graphql", {
+                headers: { "content-type": "application/json" },
+                method: "POST",
+                body,
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  const payload = data.data.me.remainingSummaries;
+                  sendResponse({ key: "loginTrue", payload });
+                })
+                .catch((err) => console.log(err));
             }
             break;
           case false:
@@ -117,7 +134,9 @@ function receiver(req, sender, sendResponse) {
                 ) {
                   const body = JSON.stringify({
                     query: `mutation {
-                      verifyGoogleAccount(sub: "${user_info.sub}")
+                      verifyGoogleUser(sub: "${user_info.sub}") {
+                        remainingSummaries
+                      }
                     }`,
                   });
                   fetch("http://localhost:4000/graphql", {
@@ -127,10 +146,16 @@ function receiver(req, sender, sendResponse) {
                   })
                     .then((response) => response.json())
                     .then((data) => {
-                      if (data.data.verifyGoogleAccount === "false") {
+                      console.log(data);
+                      if (!data.data.verifyGoogleUser) {
                         chrome.runtime.sendMessage({ key: "failedLogin" });
                       } else {
-                        chrome.runtime.sendMessage({ key: "successfulLogin" });
+                        const payload =
+                          data.data.verifyGoogleUser.remainingSummaries;
+                        chrome.runtime.sendMessage({
+                          key: "successfulLogin",
+                          payload,
+                        });
                         chrome.storage.local.set({
                           userStatus: true,
                           userInfo: user_info,

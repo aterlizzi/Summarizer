@@ -3,6 +3,7 @@ import { Summary } from "./entities/Summary";
 import { User } from "./entities/User";
 import { buildSchema } from "type-graphql";
 import dotenv from "dotenv";
+import cors from "cors";
 import "reflect-metadata";
 dotenv.config();
 
@@ -29,7 +30,14 @@ const main = async () => {
     resolvers: [__dirname + "/resolvers/*/*.{ts,js}"],
     validate: true,
   });
-
+  app.register(require("fastify-express")).then(() => {
+    app.use(
+      cors({
+        credentials: true,
+        origin: "http://localhost:3000",
+      })
+    );
+  });
   app.register(mercurius, {
     schema,
     graphiql: true,

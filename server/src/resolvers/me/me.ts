@@ -7,10 +7,15 @@ export class MeResolver {
   @Query(() => User, { nullable: true })
   async me(
     @Ctx() ctx: MyContext,
-    @Arg("email", { nullable: true }) email: string
+    @Arg("email", { nullable: true }) email: string,
+    @Arg("sub", { nullable: true }) sub: string
   ): Promise<User | undefined> {
     if (email) {
       const user = await User.findOne({ where: { email } });
+      if (!user) return undefined;
+      return user;
+    } else if (sub) {
+      const user = await User.findOne({ where: { googleSubKey: sub } });
       if (!user) return undefined;
       return user;
     } else {

@@ -5,13 +5,35 @@ import { User } from "./../../entities/User";
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { v4 } from "uuid";
 import { sendConfirmationMail } from "../../utils/emails/confirmUser";
+import jwtDecode from "jwt-decode";
 // import { OAuth2Client } from "google-auth-library";
 // const client = new OAuth2Client(process.env.CLIENT_ID);
 
 @Resolver()
 export class RegisterResolver {
-  // @Mutation(() => User)
-  // async registerGoogleUser(): Promise<User> {}
+  @Mutation(() => Boolean)
+  async registerGoogleUser(@Arg("token") token: string): Promise<boolean> {
+    const parsedToken: any = jwtDecode(token);
+    console.log(parsedToken);
+    if (parsedToken.iss !== "accounts.google.com") return true;
+    const sub = parsedToken.sub;
+    const user = await User.findOne({ where: { googleSubKey: sub } });
+    const user2 = await User.findOne({ where: { email: parsedToken.email } });
+    if (!user && !user2) {
+      const email = parsedToken.email;
+      const picture = parsedToken.picture;
+      const name = parsedToken.name;
+      const newUser = User.create({
+        email,
+        picture,
+        username: name,
+        googleSubKey: sub,
+        accountType: "google",
+      });
+      await newUser.save();
+    }
+    return true;
+  }
   @Mutation(() => User, { nullable: true })
   async registerWebUser(
     @Arg("pass") pass: string,

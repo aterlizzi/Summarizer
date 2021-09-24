@@ -21,6 +21,7 @@ window.onload = () => {
       sumNum.textContent = response.payload;
     } else if (response.key === "loginFalse") {
       loginWrapper.classList.remove("none");
+      circle.classList.add("none");
     }
     mainSpinnerContainer.classList.add("none");
   });
