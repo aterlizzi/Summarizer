@@ -43,6 +43,7 @@
     "jwt-decode": "^3.1.2",
     "mercurius": "^8.3.0",
     "nodemailer": "^6.6.3",
+    "openai-api": "^1.2.6",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "stripe": "^8.176.0",
