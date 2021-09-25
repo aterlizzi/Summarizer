@@ -24,10 +24,10 @@ function receiver(req, sender, sendResponse) {
             if (res.userInfo.email) {
               const body = JSON.stringify({
                 query: `query {
-                  me(email: "${res.userInfo.email}") {
-                    remainingSummaries
-                  }
-                }`,
+                    me(email: "${res.userInfo.email}") {
+                      remainingSummaries
+                    }
+                  }`,
               });
               fetch("http://localhost:4000/graphql", {
                 headers: { "content-type": "application/json" },
@@ -43,10 +43,10 @@ function receiver(req, sender, sendResponse) {
             } else if (res.userInfo.sub) {
               const body = JSON.stringify({
                 query: `query {
-                  me(sub: "${res.userInfo.sub}") {
-                    remainingSummaries
-                  }
-                }`,
+                    me(sub: "${res.userInfo.sub}") {
+                      remainingSummaries
+                    }
+                  }`,
               });
               fetch("http://localhost:4000/graphql", {
                 headers: { "content-type": "application/json" },
@@ -178,6 +178,12 @@ function receiver(req, sender, sendResponse) {
     case "J4KPsEOjYy":
       // make api request for summary
       break;
+    case "sendSelectedText":
+      retrieveSelectedText().then((response) => {
+        console.log(response);
+        sendResponse(response.highlightedText);
+      });
+      break;
     default:
       break;
   }
@@ -242,6 +248,21 @@ const verifyUserStatus = () => {
         response.userStatus === undefined
           ? { userStatus: false, userInfo: {} }
           : { userStatus: response.userStatus, userInfo: response.userInfo }
+      );
+    });
+  });
+};
+
+const retrieveSelectedText = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["highlightedText"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ highlightedText: "" });
+      }
+      resolve(
+        response.highlightedText === undefined
+          ? { highlightedText: "" }
+          : { highlightedText: response.highlightedText }
       );
     });
   });

@@ -1,3 +1,11 @@
+let selectedText;
+let text;
+
+// select text
+
+document.onmouseup = doSomethingWithSelectedText;
+document.onkeyup = doSomethingWithSelectedText;
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.text === "Hello world.") {
     let message = DOMParser();
@@ -44,4 +52,44 @@ const DOMParser = () => {
     console.log(article);
     return { key: "J4KPsEOjYy", text: article };
   }
+};
+
+function getSelectedText() {
+  text = "";
+  if (typeof window.getSelection != "undefined") {
+    text = window.getSelection().toString();
+  } else if (
+    typeof document.selection != "undefined" &&
+    document.selection.type == "Text"
+  ) {
+    text = document.selection.createRange().text;
+  }
+  return text;
+}
+
+function doSomethingWithSelectedText() {
+  selectedText = getSelectedText();
+  if (selectedText) {
+    verifyUserStatus().then((response) => {
+      if (response.userStatus) {
+        chrome.storage.local.set({ highlightedText: selectedText });
+        console.log("set");
+      }
+    });
+  }
+}
+
+const verifyUserStatus = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["userStatus", "userInfo"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ userStatus: false, userInfo: {} });
+      }
+      resolve(
+        response.userStatus === undefined
+          ? { userStatus: false, userInfo: {} }
+          : { userStatus: response.userStatus, userInfo: response.userInfo }
+      );
+    });
+  });
 };

@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+  color: rgba(255, 2255, 255, 0.87);
 }
 .none {
   display: none !important;
@@ -122,6 +123,64 @@ i {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.contentHead {
+  margin-bottom: 1em;
+}
+.contentTitle {
+  text-transform: uppercase;
+  font-size: 1em;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.actionContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
+}
+.actions {
+  padding-bottom: 1em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.actionContainer:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.active {
+  background: rgba(255, 255, 255, 0.07);
+}
+.paraTitle {
+  margin: 1em 0em;
+}
+.paraContainer {
+  padding: 0em 1em;
+}
+.paraSub {
+  margin-bottom: 0.5em;
+  font-size: 1.125em;
+  color: #bb86fc;
+}
+.paraText {
+  font-size: 1.125em;
+  line-height: 20px;
+}
+.actionCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-right: 0.5em;
+  border-radius: 50%;
+}
+.actionText {
+  font-size: 1.125em;
+}
+.icon {
+  font-size: 1.25em;
+  color: #bb86fc;
 }
 .link {
   color: rgba(255, 255, 255, 0.6);
