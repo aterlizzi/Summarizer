@@ -26,4 +26,16 @@ export class Summary extends BaseEntity {
   @Field(() => String)
   @Column()
   email: string;
+
+  @Field(() => String)
+  @Column()
+  url: string;
+
+  @Field(() => String)
+  @Column()
+  summary: string;
+
+  @Field(() => String)
+  @Column()
+  baseText: string;
 }

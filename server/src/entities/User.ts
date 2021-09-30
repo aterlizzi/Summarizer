@@ -53,7 +53,7 @@ export class User extends BaseEntity {
 
   @Field(() => Number)
   @Column({ default: 10 })
-  remainingSummaries: string;
+  remainingSummaries: number;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
