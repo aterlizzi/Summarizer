@@ -7,6 +7,7 @@
     <title>Article Summarizer</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="styles2.css" />
   </head>
   <body>
     <main class="main">
@@ -41,7 +42,7 @@
               id="password"
               type="password"
               class="input"
-              placeholder="ex. s9r_]{@6-V4)|!q"
+              placeholder="*********"
               required
             />
           </div>
@@ -90,21 +91,46 @@
               </div>
               <p class="actionText">Summarize highlighted.</p>
             </div>
+            <div class="actionContainer pdf">
+              <div class="actionCircle">
+                <i class="icon fas fa-file-pdf"></i>
+              </div>
+              <p class="actionText">Summarize PDF.</p>
+            </div>
             <div class="actionContainer outline">
               <div class="actionCircle">
                 <i class="icon fas fa-list-ul"></i>
               </div>
               <p class="actionText">Outline article.</p>
             </div>
+            <div class="actionContainer manual">
+              <div class="actionCircle">
+                <i class="icon fas fa-paragraph"></i>
+              </div>
+              <p class="actionText">Manual text submission.</p>
+            </div>
           </section>
           <section class="parameters none">
             <header class="paraHead">
               <h3 class="contentTitle paraTitle">Parameters</h3>
             </header>
-            <div class="paraContainer">
+            <div class="paraContainer hTextPara none">
               <p class="paraSub">Highlighted Text:</p>
-              <p class="paraText"></p>
+              <p class="hTextParaText"></p>
             </div>
+            <form action="" class="paraContainer mTextPara none">
+              <div class="manualContainer">
+                <textarea
+                  name="textarea"
+                  id="textarea"
+                  class="manualTextarea"
+                  placeholder=" "
+                ></textarea>
+                <label for="textarea" class="manualLabel"
+                  >Text to Summarize</label
+                >
+              </div>
+            </form>
           </section>
           <div class="container">
             <p class="summary"></p>

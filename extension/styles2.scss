@@ -1,0 +1,58 @@
+$clr-primary: #bb86fc;
+$clr-primaryRGB: rgb(187, 134, 252);
+$clr-primaryVariant: #3700b3;
+$clr-secondary: #03dac6;
+$clr-secondaryRGB: rgb(3, 218, 198);
+$clr-bg: #121212;
+$clr-bg1: rgba(255, 255, 255, 0.025);
+$clr-bg2: rgba(255, 255, 255, 0.05);
+$clr-bg3: rgba(255, 255, 255, 0.07);
+$clr-bg4: rgba(255, 255, 255, 0.08);
+$clr-bg5: rgba(255, 255, 255, 0.1);
+$clr-error: #cf6679;
+$clr-highEmpha: rgba(white, 0.87);
+$clr-medEmpha: rgba(white, 0.6);
+
+.manualContainer {
+  position: relative;
+  height: 200px;
+  margin-top: 2em;
+  .manualTextarea {
+    position: absolute;
+    padding: 1em 1em 0em 1em;
+    left: 0;
+    top: 0;
+    width: 82.5%;
+    height: 100%;
+    border: 2px solid $clr-bg5;
+    border-radius: 0.5em;
+    resize: none;
+    outline: none;
+    font-size: 1.125em;
+    background: none;
+    &:hover {
+      border-color: rgba(187, 134, 252, 0.25);
+    }
+    &:focus {
+      border-color: rgba(187, 134, 252, 0.5);
+    }
+  }
+  .manualLabel {
+    position: absolute;
+    top: 0.8em;
+    left: 1em;
+    cursor: text;
+    padding: 0 0.5em;
+    font-size: 1.25em;
+    transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+    background: #1b1b1b;
+  }
+}
+
+.manualTextarea:focus ~ .manualLabel,
+.manualTextarea:not(:placeholder-shown).manualTextarea:not(:focus)
+  ~ .manualLabel {
+  top: -0.5em;
+  font-size: 1.125em;
+  left: 0.8em;
+}

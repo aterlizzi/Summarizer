@@ -13,8 +13,13 @@ const circle = document.querySelector(".circle");
 const sumNum = document.querySelector(".sumNum");
 const articleContainer = document.querySelector(".entireArticle");
 const highlightedContainer = document.querySelector(".highlighted");
-const paraText = document.querySelector(".paraText");
+const manualContainer = document.querySelector(".manual");
+const outlineContainer = document.querySelector(".outline");
+const pdfContainer = document.querySelector(".pdf");
+const hTextParaText = document.querySelector(".hTextParaText");
 const parameters = document.querySelector(".parameters");
+const hTextPara = document.querySelector(".hTextPara");
+const mTextPara = document.querySelector(".mTextPara");
 
 let action = "entire";
 
@@ -63,28 +68,76 @@ webBtn.addEventListener("click", () => {
 // selects entire article summmary options
 articleContainer.addEventListener("click", () => {
   highlightedContainer.classList.remove("active");
+  manualContainer.classList.remove("active");
+  outlineContainer.classList.remove("active");
+  pdfContainer.classList.remove("active");
   articleContainer.classList.toggle("active");
+  parameters.classList.add("none");
+  hTextPara.classList.add("none");
+  mTextPara.classList.add("none");
   action = "entire";
+});
+
+outlineContainer.addEventListener("click", () => {
+  highlightedContainer.classList.remove("active");
+  manualContainer.classList.remove("active");
+  articleContainer.classList.remove("active");
+  pdfContainer.classList.remove("active");
+  outlineContainer.classList.toggle("active");
+  parameters.classList.add("none");
+  hTextPara.classList.add("none");
+  mTextPara.classList.add("none");
+  action = "outline";
+});
+
+pdfContainer.addEventListener("click", () => {
+  highlightedContainer.classList.remove("active");
+  manualContainer.classList.remove("active");
+  articleContainer.classList.remove("active");
+  outlineContainer.classList.remove("active");
+  pdfContainer.classList.toggle("active");
+  parameters.classList.remove("none");
+  hTextPara.classList.add("none");
+  mTextPara.classList.add("none");
+  action = "pdf";
 });
 
 // selects only highlighted text summary option and opens up highlighted text parameter.
 highlightedContainer.addEventListener("click", () => {
   articleContainer.classList.remove("active");
+  manualContainer.classList.remove("active");
+  outlineContainer.classList.remove("active");
+  pdfContainer.classList.remove("active");
+  mTextPara.classList.add("none");
   highlightedContainer.classList.toggle("active");
   action = "highlighted";
   chrome.runtime.sendMessage({ key: "sendSelectedText" }, (response) => {
     if (response === "") {
-      parameters.classList.toggle("none");
-      paraText.classList.add("error");
-      paraText.style.textAlign = "left";
-      paraText.textContent =
-        "Please select your desire text by clicking and dragging over the text on the page, just like if you're trying to copy and paste. After your desired selection is made, your selection is automatically saved locally and displayed here.";
+      parameters.classList.remove("none");
+      hTextPara.classList.remove("none");
+      hTextParaText.classList.add("error");
+      hTextParaText.style.textAlign = "left";
+      hTextParaText.textContent =
+        "Please select your desired text by clicking and dragging over the text on the page, just like if you're trying to copy and paste. After your desired selection is made, your selection is automatically saved locally and displayed here.";
     } else {
-      parameters.classList.toggle("none");
-      paraText.classList.remove("error");
-      paraText.textContent = response;
+      parameters.classList.remove("none");
+      hTextPara.classList.remove("none");
+      hTextParaText.classList.remove("error");
+      hTextParaText.textContent = response;
     }
   });
+});
+
+manualContainer.addEventListener("click", () => {
+  articleContainer.classList.remove("active");
+  highlightedContainer.classList.remove("active");
+  outlineContainer.classList.remove("active");
+  pdfContainer.classList.remove("active");
+  manualContainer.classList.toggle("active");
+  parameters.classList.remove("none");
+  hTextPara.classList.add("none");
+  mTextPara.classList.remove("none");
+  action = "manual";
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, response) => {

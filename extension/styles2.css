@@ -1,0 +1,44 @@
+.manualContainer {
+  position: relative;
+  height: 200px;
+  margin-top: 2em;
+}
+.manualContainer .manualTextarea {
+  position: absolute;
+  padding: 1em 1em 0em 1em;
+  left: 0;
+  top: 0;
+  width: 82.5%;
+  height: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5em;
+  resize: none;
+  outline: none;
+  font-size: 1.125em;
+  background: none;
+}
+.manualContainer .manualTextarea:hover {
+  border-color: rgba(187, 134, 252, 0.25);
+}
+.manualContainer .manualTextarea:focus {
+  border-color: rgba(187, 134, 252, 0.5);
+}
+.manualContainer .manualLabel {
+  position: absolute;
+  top: 0.8em;
+  left: 1em;
+  cursor: text;
+  padding: 0 0.5em;
+  font-size: 1.25em;
+  transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+  background: #1b1b1b;
+}
+
+.manualTextarea:focus ~ .manualLabel,
+.manualTextarea:not(:placeholder-shown).manualTextarea:not(:focus) ~ .manualLabel {
+  top: -0.5em;
+  font-size: 1.125em;
+  left: 0.8em;
+}
+
+/*# sourceMappingURL=styles2.css.map */

@@ -1,1 +1,17 @@
-{}
+{
+  "dependencies": {
+    "sass": "^1.42.1"
+  },
+  "name": "extension",
+  "version": "1.0.0",
+  "main": "background.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "sass --watch styles2.scss:styles2.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
