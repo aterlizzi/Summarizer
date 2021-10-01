@@ -1,3 +1,4 @@
+import { SavedSummary } from "./entities/SavedSummary";
 import { MyContext } from "./types/MyContext";
 import { Summary } from "./entities/Summary";
 import { User } from "./entities/User";
@@ -21,7 +22,7 @@ const main = async () => {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
     database: "summarizer",
-    entities: [User, Summary],
+    entities: [User, Summary, SavedSummary],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",
   });

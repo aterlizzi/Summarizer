@@ -4,9 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { SavedSummary } from "./SavedSummary";
 
 @ObjectType()
 @Entity()
@@ -58,4 +60,10 @@ export class User extends BaseEntity {
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   googleSubKey?: string;
+
+  @Field(() => [SavedSummary])
+  @OneToMany(() => SavedSummary, (summary) => summary.author, {
+    cascade: true,
+  })
+  summaries: SavedSummary[];
 }
