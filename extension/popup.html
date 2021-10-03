@@ -11,6 +11,13 @@
   </head>
   <body>
     <main class="main">
+      <div class="spinner spinnerTwo" aria-hidden="true"></div>
+      <div class="wordCountContainer none">
+        <p class="wordCount">
+          <span class="count">0</span>
+          words
+        </p>
+      </div>
       <div class="circle none">
         <p class="sumNum"></p>
       </div>
@@ -130,6 +137,15 @@
                   >Text to Summarize</label
                 >
               </div>
+            </form>
+            <form action="" class="paraContainer filePara none">
+              <label for="file" class="file">
+                <div class="leftContainer">
+                  <i class="fas icon fa-cloud-upload-alt"></i>
+                </div>
+                <div class="rightContainer">Upload PDF</div>
+                <input id="file" type="file" class="fileUpload"
+              /></label>
             </form>
           </section>
           <div class="container">

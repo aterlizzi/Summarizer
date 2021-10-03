@@ -184,6 +184,42 @@ function receiver(req, sender, sendResponse) {
         sendResponse(response.highlightedText);
       });
       break;
+    case "retrieveText":
+      const url = req.payload;
+      console.log(url);
+      const bodyTwo = JSON.stringify({
+        query: `mutation {
+        webParse(url: "${url}") {
+          text
+          interpreter
+          wordCount
+        }
+      }`,
+      });
+      fetch("http://localhost:4000/graphql", {
+        headers: { "content-type": "application/json" },
+        method: "POST",
+        body: bodyTwo,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.data) {
+            chrome.storage.local.set({
+              parsedText: data.data.webParse.text,
+            });
+          } else {
+            chrome.storage.local.set({
+              parsedText: "",
+            });
+          }
+          sendResponse(data);
+        });
+      break;
+    case "retrieveArticleText":
+      retrieveArticleText().then((response) => {
+        sendResponse(response.parsedText);
+      });
+      break;
     default:
       break;
   }
@@ -252,7 +288,20 @@ const verifyUserStatus = () => {
     });
   });
 };
-
+const retrieveArticleText = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["parsedText"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ parsedText: "" });
+      }
+      resolve(
+        response.parsedText === undefined
+          ? { parsedText: "" }
+          : { parsedText: response.parsedText }
+      );
+    });
+  });
+};
 const retrieveSelectedText = () => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["highlightedText"], (response) => {

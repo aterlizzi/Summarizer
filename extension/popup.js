@@ -20,6 +20,11 @@ const hTextParaText = document.querySelector(".hTextParaText");
 const parameters = document.querySelector(".parameters");
 const hTextPara = document.querySelector(".hTextPara");
 const mTextPara = document.querySelector(".mTextPara");
+const textSpinner = document.querySelector(".spinner");
+const wordCountContainer = document.querySelector(".wordCountContainer");
+const count = document.querySelector(".count");
+const filePara = document.querySelector(".filePara");
+const fileUpload = document.querySelector(".fileUpload");
 
 let action = "entire";
 
@@ -36,11 +41,26 @@ window.onload = () => {
       circle.classList.add("none");
     }
     mainSpinnerContainer.classList.add("none");
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const url = tabs[0].url;
+      chrome.runtime.sendMessage(
+        { key: "retrieveText", payload: url },
+        (response) => {
+          console.log(response);
+          textSpinner.classList.add("none");
+          wordCountContainer.classList.remove("none");
+          if (response.data) {
+            count.textContent = response.data.webParse.wordCount.toString();
+          }
+        }
+      );
+    });
   });
 };
 // runs content script
 // this will be reworked
 button.addEventListener("click", () => {
+  console.log("clicked");
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -48,6 +68,9 @@ button.addEventListener("click", () => {
   });
 });
 
+fileUpload.addEventListener("change", () => {
+  console.log("changed");
+});
 // activates login with google
 googleBtn.addEventListener("click", () => {
   errorContainer.classList.add("none");
@@ -75,7 +98,19 @@ articleContainer.addEventListener("click", () => {
   parameters.classList.add("none");
   hTextPara.classList.add("none");
   mTextPara.classList.add("none");
+  filePara.classList.add("none");
+  wordCountContainer.classList.add("none");
   action = "entire";
+  chrome.runtime.sendMessage({ key: "retrieveArticleText" }, (response) => {
+    if (response) {
+      wordCountContainer.classList.remove("none");
+      if (response !== "") {
+        count.textContent = response.split(" ").length.toString();
+      } else {
+        count.textContent = "0";
+      }
+    }
+  });
 });
 
 outlineContainer.addEventListener("click", () => {
@@ -87,6 +122,7 @@ outlineContainer.addEventListener("click", () => {
   parameters.classList.add("none");
   hTextPara.classList.add("none");
   mTextPara.classList.add("none");
+  filePara.classList.add("none");
   action = "outline";
 });
 
@@ -99,6 +135,7 @@ pdfContainer.addEventListener("click", () => {
   parameters.classList.remove("none");
   hTextPara.classList.add("none");
   mTextPara.classList.add("none");
+  filePara.classList.remove("none");
   action = "pdf";
 });
 
@@ -110,6 +147,8 @@ highlightedContainer.addEventListener("click", () => {
   pdfContainer.classList.remove("active");
   mTextPara.classList.add("none");
   highlightedContainer.classList.toggle("active");
+  wordCountContainer.classList.add("none");
+  filePara.classList.add("none");
   action = "highlighted";
   chrome.runtime.sendMessage({ key: "sendSelectedText" }, (response) => {
     if (response === "") {
@@ -124,6 +163,8 @@ highlightedContainer.addEventListener("click", () => {
       hTextPara.classList.remove("none");
       hTextParaText.classList.remove("error");
       hTextParaText.textContent = response;
+      wordCountContainer.classList.remove("none");
+      count.textContent = response.split(" ").length.toString();
     }
   });
 });
@@ -137,6 +178,7 @@ manualContainer.addEventListener("click", () => {
   parameters.classList.remove("none");
   hTextPara.classList.add("none");
   mTextPara.classList.remove("none");
+  filePara.classList.add("none");
   action = "manual";
 });
 
