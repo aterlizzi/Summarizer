@@ -8,6 +8,7 @@
 .filePara {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .filePara .file {
   display: flex;
@@ -20,7 +21,7 @@
   border-bottom-left-radius: 0.25em;
   justify-content: center;
   align-items: center;
-  background: #7a57a5;
+  background: #7d41a5;
   padding: 0em 1em;
 }
 .filePara .file .leftContainer .icon {
@@ -95,12 +96,24 @@
   left: 0.8em;
 }
 
+.animation {
+  animation: uploadAnimRightContainer 1.5s forwards;
+}
+
 @keyframes anim-rotate {
   0% {
     transform: rotate(0);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+@keyframes uploadAnimRightContainer {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
   }
 }
 .spinner {

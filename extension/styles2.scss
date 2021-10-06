@@ -24,6 +24,7 @@ $clr-medEmpha: rgba(white, 0.6);
 .filePara {
   display: flex;
   justify-content: center;
+  align-items: center;
   .file {
     display: flex;
     height: 35px;
@@ -33,7 +34,7 @@ $clr-medEmpha: rgba(white, 0.6);
       border-bottom-left-radius: 0.25em;
       justify-content: center;
       align-items: center;
-      background: #7a57a5;
+      background: #7d41a5;
       padding: 0em 1em;
       .icon {
         color: $clr-highEmpha;
@@ -109,12 +110,23 @@ $clr-medEmpha: rgba(white, 0.6);
   font-size: 1.125em;
   left: 0.8em;
 }
+.animation {
+  animation: uploadAnimRightContainer 1.5s forwards;
+}
 @keyframes anim-rotate {
   0% {
     transform: rotate(0);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+@keyframes uploadAnimRightContainer {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
   }
 }
 

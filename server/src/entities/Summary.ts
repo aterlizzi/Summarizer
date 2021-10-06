@@ -27,9 +27,9 @@ export class Summary extends BaseEntity {
   @Column()
   email: string;
 
-  @Field(() => String)
-  @Column()
-  url: string;
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  url?: string;
 
   @Field(() => String)
   @Column()

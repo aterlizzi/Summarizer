@@ -20,13 +20,16 @@ const hTextParaText = document.querySelector(".hTextParaText");
 const parameters = document.querySelector(".parameters");
 const hTextPara = document.querySelector(".hTextPara");
 const mTextPara = document.querySelector(".mTextPara");
+const manualTextArea = document.querySelector(".manualTextarea");
 const textSpinner = document.querySelector(".spinner");
 const wordCountContainer = document.querySelector(".wordCountContainer");
 const count = document.querySelector(".count");
 const filePara = document.querySelector(".filePara");
 const fileUpload = document.querySelector(".fileUpload");
+const rightContainer = document.querySelector(".rightContainer");
 
 let action = "entire";
+let logged = false;
 
 // get status check when loading the popup
 // also retrieves the remaining summaries from backend
@@ -36,9 +39,12 @@ window.onload = () => {
       sumWrapper.classList.remove("none");
       circle.classList.remove("none");
       sumNum.textContent = response.payload;
+      logged = true;
     } else if (response.key === "loginFalse") {
       loginWrapper.classList.remove("none");
       circle.classList.add("none");
+      wordCountContainer.classList.add("none");
+      logged = false;
     }
     mainSpinnerContainer.classList.add("none");
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -48,7 +54,9 @@ window.onload = () => {
         (response) => {
           console.log(response);
           textSpinner.classList.add("none");
-          wordCountContainer.classList.remove("none");
+          if (logged) {
+            wordCountContainer.classList.remove("none");
+          }
           if (response.data) {
             count.textContent = response.data.webParse.wordCount.toString();
           }
@@ -58,18 +66,33 @@ window.onload = () => {
   });
 };
 // runs content script
+
 // this will be reworked
 button.addEventListener("click", () => {
   console.log("clicked");
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { text: "Hello world." });
+    // chrome.tabs.sendMessage(tabs[0].id, { key: "Hello world." });
   });
 });
 
-fileUpload.addEventListener("change", () => {
-  console.log("changed");
+fileUpload.addEventListener("change", (e) => {
+  if (e.target.files[0].type !== "application/pdf") {
+    alert("invalid file type");
+  } else {
+    rightContainer.classList.add("animation");
+    const file = fileUpload.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    console.log(formData);
+    fetch("http://localhost:4000/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  }
 });
 // activates login with google
 googleBtn.addEventListener("click", () => {
@@ -174,18 +197,25 @@ manualContainer.addEventListener("click", () => {
   highlightedContainer.classList.remove("active");
   outlineContainer.classList.remove("active");
   pdfContainer.classList.remove("active");
-  manualContainer.classList.toggle("active");
   parameters.classList.remove("none");
-  hTextPara.classList.add("none");
   mTextPara.classList.remove("none");
+  manualContainer.classList.toggle("active");
+  hTextPara.classList.add("none");
   filePara.classList.add("none");
   action = "manual";
+  manualTextArea.addEventListener("keyup", (e) => {
+    if (e.currentTarget.value === "") {
+      count.textContent = "0";
+    } else {
+      const text = e.currentTarget.value;
+      count.textContent = text.split(" ").length.toString();
+    }
+  });
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, response) => {
-  console.log(msg);
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   let summary;
-  switch (msg.key) {
+  switch (req.key) {
     case "failedLogin":
       errorContainer.classList.remove("none");
       break;
@@ -193,20 +223,33 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
       loginWrapper.classList.add("none");
       sumWrapper.classList.remove("none");
       circle.classList.remove("none");
-      sumNum.textContent = msg.payload;
+      sumNum.textContent = req.payload;
+      break;
+    case "parseWeb":
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { key: "parseWeb" }, (response) => {
+          if (response) {
+            count.textContent = response.split(" ").length.toString();
+          } else {
+            count.textContent = "0";
+          }
+          sendResponse(response);
+        });
+      });
       break;
     case "k8k4IQwFaX":
       button.classList.toggle("hidden");
       spinner.classList.toggle("hidden");
-      summary = msg.text;
+      summary = req.text;
       emptyTag.textContent = summary;
       break;
     case "ogLlRDalkA":
       button.classList.toggle("hidden");
       spinner.classList.toggle("hidden");
-      summary = msg.text;
+      summary = req.text;
       break;
     default:
       break;
   }
+  return true;
 });

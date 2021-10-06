@@ -204,9 +204,17 @@ function receiver(req, sender, sendResponse) {
         .then((response) => response.json())
         .then((data) => {
           if (data.data) {
-            chrome.storage.local.set({
-              parsedText: data.data.webParse.text,
-            });
+            if (data.data.webParse.text.split(" ").length < 200) {
+              chrome.runtime.sendMessage({ key: "parseWeb" }, (response) => {
+                chrome.storage.local.set({
+                  parsedText: response,
+                });
+              });
+            } else {
+              chrome.storage.local.set({
+                parsedText: data.data.webParse.text,
+              });
+            }
           } else {
             chrome.storage.local.set({
               parsedText: "",
@@ -219,6 +227,15 @@ function receiver(req, sender, sendResponse) {
       retrieveArticleText().then((response) => {
         sendResponse(response.parsedText);
       });
+      break;
+    case "fileUpload":
+      console.log(req.payload);
+      fetch("http://localhost:4000/upload", {
+        method: "POST",
+        body: req.payload,
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
       break;
     default:
       break;
