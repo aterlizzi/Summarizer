@@ -12,16 +12,20 @@ const fastify = require("fastify");
 import mercurius from "mercurius";
 import { createConnection } from "typeorm";
 import multer from "fastify-multer";
+import path from "path";
+import { spawn } from "child_process";
+import { v4 } from "uuid";
+import fs from "fs";
 
 const main = async () => {
   const app = fastify();
 
   const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_, __, cb) => {
       cb(null, "./dist/uploads/");
     },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + "-" + file.originalname);
+    filename: (_, __, cb) => {
+      cb(null, v4() + ".pdf");
     },
   });
 
@@ -64,6 +68,29 @@ const main = async () => {
     "/upload",
     { preHandler: upload.single("file") },
     async (req: any, reply: any) => {
+      const filename = req.file.filename;
+      const pathName = path.join(__dirname, `./uploads/${filename}`);
+      const childPython = spawn("python3", [
+        path.join(__dirname, "./uploads/pythonPDF.py"),
+        pathName,
+        filename,
+      ]);
+      childPython.stdout.on("data", (data) => {
+        const jsonString = data.toString();
+        console.log(jsonString.length);
+        if (jsonString.length < 3) {
+          return console.log("error");
+        } else {
+          fs.unlinkSync(pathName);
+          return console.log(jsonString);
+        }
+      });
+      childPython.stderr.on("data", (data) => {
+        return console.log(data.toString());
+      });
+      childPython.on("close", (code) => {
+        return console.log(`closed on ${code}`);
+      });
       reply.send({ hello: "world" });
     }
   );

@@ -269,6 +269,8 @@ function receiver(req, sender, sendResponse) {
 //     chrome.runtime.sendMessage({ key: "k8k4IQwFaX", text: returnMsg });
 //   });
 
+// Give a brief statement of the main points of the following text.
+
 function parseJwt(token) {
   var base64Url = token.split(".")[1];
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
