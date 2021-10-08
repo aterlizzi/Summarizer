@@ -14,14 +14,14 @@ const sumNum = document.querySelector(".sumNum");
 const articleContainer = document.querySelector(".entireArticle");
 const highlightedContainer = document.querySelector(".highlighted");
 const manualContainer = document.querySelector(".manual");
-const outlineContainer = document.querySelector(".outline");
 const pdfContainer = document.querySelector(".pdf");
 const hTextParaText = document.querySelector(".hTextParaText");
 const parameters = document.querySelector(".parameters");
 const hTextPara = document.querySelector(".hTextPara");
 const mTextPara = document.querySelector(".mTextPara");
 const manualTextArea = document.querySelector(".manualTextarea");
-const textSpinner = document.querySelector(".spinner");
+const textSpinner = document.querySelector(".textSpinner");
+const saveSpinner = document.querySelector(".saveSpinner");
 const wordCountContainer = document.querySelector(".wordCountContainer");
 const count = document.querySelector(".count");
 const filePara = document.querySelector(".filePara");
@@ -30,6 +30,7 @@ const rightContainer = document.querySelector(".rightContainer");
 
 let action = "entire";
 let logged = false;
+let typingTimer;
 
 // get status check when loading the popup
 // also retrieves the remaining summaries from backend
@@ -39,6 +40,7 @@ window.onload = () => {
       sumWrapper.classList.remove("none");
       circle.classList.remove("none");
       sumNum.textContent = response.payload;
+      textSpinner.classList.remove("none");
       logged = true;
     } else if (response.key === "loginFalse") {
       loginWrapper.classList.remove("none");
@@ -57,8 +59,8 @@ window.onload = () => {
           if (logged) {
             wordCountContainer.classList.remove("none");
           }
-          if (response.data) {
-            count.textContent = response.data.webParse.wordCount.toString();
+          if (response) {
+            count.textContent = response.split(" ").length.toString();
           }
         }
       );
@@ -72,15 +74,22 @@ button.addEventListener("click", () => {
   console.log("clicked");
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    // chrome.tabs.sendMessage(tabs[0].id, { key: "Hello world." });
-  });
+  chrome.runtime.sendMessage(
+    { key: "summarize", payload: action },
+    (response) => {
+      if (response) {
+        spinner.classList.toggle("hidden");
+        button.classList.toggle("hidden");
+      }
+    }
+  );
 });
 
 fileUpload.addEventListener("change", (e) => {
   if (e.target.files[0].type !== "application/pdf") {
     alert("invalid file type");
   } else {
+    action = "file";
     rightContainer.classList.add("animation");
     const file = fileUpload.files[0];
     const formData = new FormData();
@@ -115,7 +124,6 @@ webBtn.addEventListener("click", () => {
 articleContainer.addEventListener("click", () => {
   highlightedContainer.classList.remove("active");
   manualContainer.classList.remove("active");
-  outlineContainer.classList.remove("active");
   pdfContainer.classList.remove("active");
   articleContainer.classList.toggle("active");
   parameters.classList.add("none");
@@ -136,24 +144,11 @@ articleContainer.addEventListener("click", () => {
   });
 });
 
-outlineContainer.addEventListener("click", () => {
-  highlightedContainer.classList.remove("active");
-  manualContainer.classList.remove("active");
-  articleContainer.classList.remove("active");
-  pdfContainer.classList.remove("active");
-  outlineContainer.classList.toggle("active");
-  parameters.classList.add("none");
-  hTextPara.classList.add("none");
-  mTextPara.classList.add("none");
-  filePara.classList.add("none");
-  action = "outline";
-});
-
+// allows for pdf submission
 pdfContainer.addEventListener("click", () => {
   highlightedContainer.classList.remove("active");
   manualContainer.classList.remove("active");
   articleContainer.classList.remove("active");
-  outlineContainer.classList.remove("active");
   pdfContainer.classList.toggle("active");
   parameters.classList.remove("none");
   hTextPara.classList.add("none");
@@ -166,7 +161,6 @@ pdfContainer.addEventListener("click", () => {
 highlightedContainer.addEventListener("click", () => {
   articleContainer.classList.remove("active");
   manualContainer.classList.remove("active");
-  outlineContainer.classList.remove("active");
   pdfContainer.classList.remove("active");
   mTextPara.classList.add("none");
   highlightedContainer.classList.toggle("active");
@@ -192,10 +186,10 @@ highlightedContainer.addEventListener("click", () => {
   });
 });
 
+// selects manually inputted text
 manualContainer.addEventListener("click", () => {
   articleContainer.classList.remove("active");
   highlightedContainer.classList.remove("active");
-  outlineContainer.classList.remove("active");
   pdfContainer.classList.remove("active");
   parameters.classList.remove("none");
   mTextPara.classList.remove("none");
@@ -203,6 +197,11 @@ manualContainer.addEventListener("click", () => {
   hTextPara.classList.add("none");
   filePara.classList.add("none");
   action = "manual";
+  chrome.runtime.sendMessage({ key: "retrieveManualText" }, (response) => {
+    if (response !== "") {
+      manualTextArea.value = response;
+    }
+  });
   manualTextArea.addEventListener("keyup", (e) => {
     if (e.currentTarget.value === "") {
       count.textContent = "0";
@@ -211,6 +210,16 @@ manualContainer.addEventListener("click", () => {
       count.textContent = text.split(" ").length.toString();
     }
   });
+});
+
+// save text
+manualTextArea.addEventListener("keyup", () => {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(handleSaveText, 3000);
+});
+
+manualTextArea.addEventListener("keydn", () => {
+  clearTimeout(typingTimer);
 });
 
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
@@ -253,3 +262,13 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   }
   return true;
 });
+
+const handleSaveText = () => {
+  saveSpinner.classList.remove("none");
+  chrome.runtime.sendMessage(
+    { key: "manualSaveText", payload: manualTextArea.value },
+    (response) => {
+      if (response) saveSpinner.classList.add("none");
+    }
+  );
+};

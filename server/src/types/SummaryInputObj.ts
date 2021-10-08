@@ -11,9 +11,6 @@ export class SummaryInputObj {
   @Field(() => String)
   text: string;
 
-  @Field(() => Number)
-  wordCount: number;
-
   @Field(() => String)
   url: string;
 }

@@ -186,7 +186,7 @@ function receiver(req, sender, sendResponse) {
       break;
     case "retrieveText":
       const url = req.payload;
-      console.log(url);
+      chrome.storage.local.set({ url });
       const bodyTwo = JSON.stringify({
         query: `mutation {
         webParse(url: "${url}") {
@@ -206,21 +206,41 @@ function receiver(req, sender, sendResponse) {
           if (data.data) {
             if (data.data.webParse.text.split(" ").length < 200) {
               chrome.runtime.sendMessage({ key: "parseWeb" }, (response) => {
-                chrome.storage.local.set({
-                  parsedText: response,
-                });
+                // check to see if manually parse has more words. If not, stick with default.
+                if (response) {
+                  if (
+                    response.split(" ").length >
+                    data.data.webParse.text.split(" ").length
+                  ) {
+                    chrome.storage.local.set({
+                      parsedText: response,
+                    });
+                    sendResponse(response);
+                  } else {
+                    chrome.storage.local.set({
+                      parsedText: data.data.webParse.text,
+                    });
+                    sendResponse(data.data.webParse.text);
+                  }
+                } else {
+                  chrome.storage.local.set({
+                    parsedText: data.data.webParse.text,
+                  });
+                  sendResponse(data.data.webParse.text);
+                }
               });
             } else {
               chrome.storage.local.set({
                 parsedText: data.data.webParse.text,
               });
+              sendResponse(data.data.webParse.text);
             }
           } else {
             chrome.storage.local.set({
               parsedText: "",
             });
+            sendResponse("");
           }
-          sendResponse(data);
         });
       break;
     case "retrieveArticleText":
@@ -237,6 +257,52 @@ function receiver(req, sender, sendResponse) {
         .then((response) => response.json())
         .then((data) => console.log(data));
       break;
+    case "summarize":
+      const action = req.payload;
+      retrieveSummaryParameters(action).then((initObj) => {
+        const email = initObj.user.email;
+        const sub = initObj.user.sub;
+        const text = initObj.text;
+        const url = initObj.url;
+        if (text !== "") {
+          const query = `mutation Summarize($options: SummaryInputObj!) {
+            summarize(options: $options)
+          }`;
+          const summaryBody = JSON.stringify({
+            query,
+            variables: {
+              options: {
+                email,
+                sub,
+                text,
+                url,
+              },
+            },
+          });
+          fetch("http://localhost:4000/graphql", {
+            headers: { "content-type": "application/json" },
+            method: "POST",
+            body: summaryBody,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              sendResponse(data);
+            });
+        } else {
+          sendResponse("not enough text");
+        }
+      });
+      break;
+    case "manualSaveText":
+      chrome.storage.local.set({
+        manual: req.payload,
+      });
+      sendResponse(true);
+      break;
+    case "retrieveManualText":
+      retrieveManualText().then((response) => {
+        sendResponse(response.manual);
+      });
     default:
       break;
   }
@@ -332,6 +398,81 @@ const retrieveSelectedText = () => {
           ? { highlightedText: "" }
           : { highlightedText: response.highlightedText }
       );
+    });
+  });
+};
+const retrieveManualText = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["manual"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ manual: "" });
+      }
+      resolve(
+        response.manual === undefined
+          ? { manual: "" }
+          : { manual: response.manual }
+      );
+    });
+  });
+};
+
+const retrieveSummaryParameters = (action) => {
+  return new Promise((resolve) => {
+    verifyUserStatus().then((data) => {
+      let userParams = {};
+      if (data.userInfo.email) {
+        userParams = { email: data.userInfo.email, sub: undefined };
+      } else if (data.userInfo.sub) {
+        userParams = { email: undefined, sub: data.userInfo.sub };
+      }
+      switch (action) {
+        case "entire":
+          chrome.storage.local.get(["parsedText", "url"], (response) => {
+            if (chrome.runtime.lastError) {
+              resolve({ text: "", url: "", user: userParams });
+            }
+            resolve(
+              response.parsedText === undefined
+                ? { text: "", url: "", user: userParams }
+                : {
+                    text: response.parsedText,
+                    url: response.url,
+                    user: userParams,
+                  }
+            );
+          });
+          break;
+        case "highlighted":
+          chrome.storage.local.get(["highlightedText", "url"], (response) => {
+            if (chrome.runtime.lastError) {
+              resolve({ text: "", url: "", user: userParams });
+            }
+            resolve(
+              response.highlightedText === undefined
+                ? { text: "", url: "", user: userParams }
+                : {
+                    text: response.highlightedText,
+                    url: response.url,
+                    user: userParams,
+                  }
+            );
+          });
+          break;
+        case "file":
+          break;
+        case "manual":
+          chrome.storage.local.get(["manual", "url"], (response) => {
+            if (chrome.runtime.lastError) {
+              resolve({ text: "", url: "", user: userParams });
+            }
+            resolve(
+              response.manual === undefined
+                ? { text: "", url: "", user: userParams }
+                : { text: response.manual, url: response.url, user: userParams }
+            );
+          });
+          break;
+      }
     });
   });
 };
