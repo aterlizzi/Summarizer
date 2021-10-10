@@ -5,6 +5,8 @@ import { User } from "./entities/User";
 import { buildSchema } from "type-graphql";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookie from "fastify-cookie";
+import { FastifyCookieOptions } from "fastify-cookie";
 import "reflect-metadata";
 dotenv.config();
 
@@ -48,6 +50,9 @@ const main = async () => {
     validate: true,
   });
   app.register(require("fastify-multipart"));
+  app.register(cookie, {
+    secret: process.env.COOKIE_SECRET,
+  } as FastifyCookieOptions);
   app.register(require("fastify-express")).then(() => {
     app.use(
       cors({

@@ -57,6 +57,10 @@ export class User extends BaseEntity {
   @Column({ default: 10 })
   remainingSummaries: number;
 
+  @Field(() => String)
+  @Column({ default: "" })
+  reason: string;
+
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   googleSubKey?: string;

@@ -13,6 +13,18 @@ const SCOPE = encodeURIComponent("openid");
 const PROMPT = encodeURIComponent("consent");
 
 chrome.runtime.onMessage.addListener(receiver);
+chrome.runtime.onInstalled.addListener((details) => {
+  switch (details.reason) {
+    case "install":
+      chrome.tabs.create({ url: "http://localhost:3000/welcome" });
+      break;
+    case "update":
+      chrome.tabs.create({ url: "http://localhost:3000/update" });
+      break;
+    default:
+      break;
+  }
+});
 
 function receiver(req, sender, sendResponse) {
   switch (req.key) {
@@ -415,7 +427,6 @@ const retrieveManualText = () => {
     });
   });
 };
-
 const retrieveSummaryParameters = (action) => {
   return new Promise((resolve) => {
     verifyUserStatus().then((data) => {

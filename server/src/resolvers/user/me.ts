@@ -20,7 +20,7 @@ export class MeResolver {
       return user;
     } else {
       const user = await User.findOne({
-        where: { id: ctx.req.session.userId },
+        where: { id: ctx.req.cookies.uid },
       });
       if (!user) return undefined;
       return user;
