@@ -27,6 +27,8 @@ const count = document.querySelector(".count");
 const filePara = document.querySelector(".filePara");
 const fileUpload = document.querySelector(".fileUpload");
 const rightContainer = document.querySelector(".rightContainer");
+const mTrashBtn = document.querySelector(".mTrash");
+const hTrashBtn = document.querySelector(".hTrash");
 
 let action = "entire";
 let logged = false;
@@ -69,6 +71,20 @@ window.onload = () => {
 };
 // runs content script
 
+// clear and save manual text
+mTrashBtn.addEventListener("click", () => {
+  manualTextArea.value = "";
+  chrome.runtime.sendMessage({ key: "manualSaveText", payload: "" });
+});
+hTrashBtn.addEventListener("click", () => {
+  chrome.runtime.sendMessage({ key: "resetHighlight" }, (response) => {
+    if (response) {
+      hTextParaText.style.color = "#cf6679";
+      hTextParaText.textContent = "You haven't highlighted any text.";
+    }
+  });
+});
+
 // this will be reworked
 button.addEventListener("click", () => {
   console.log("clicked");
@@ -77,10 +93,24 @@ button.addEventListener("click", () => {
   chrome.runtime.sendMessage(
     { key: "summarize", payload: action },
     (response) => {
+      console.log(response);
       if (response) {
-        spinner.classList.toggle("hidden");
-        button.classList.toggle("hidden");
+        if (response.data) {
+          if (response.data.summarize) {
+            spinner.classList.toggle("hidden");
+            button.classList.toggle("hidden");
+            console.log(response);
+            emptyTag.textContent = response.data.summarize.summary;
+          } else {
+            spinner.classList.toggle("hidden");
+            button.classList.toggle("hidden");
+            emptyTag.textContent =
+              "You don't have any enough words left to summarize this text.";
+            emptyTag.style.color = "#cf6679";
+          }
+        }
       }
+      return true;
     }
   );
 });

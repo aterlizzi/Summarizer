@@ -1,8 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
+
 *,
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Roboto", sans-serif;
   color: rgba(255, 2255, 255, 0.87);
 }
 .none {
@@ -45,6 +47,8 @@ h1 {
   font-size: 2em;
   text-align: center;
   margin-bottom: 0.5em;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
 }
 .subtitle {
   text-align: center;
@@ -53,6 +57,7 @@ h1 {
   font-size: 1.25em;
   margin-bottom: 1em;
   line-height: 25px;
+  font-family: "Raleway", sans-serif;
 }
 .summary {
   line-height: 25px;
@@ -133,6 +138,7 @@ i {
   font-size: 1em;
   letter-spacing: 1.5px;
   color: rgba(255, 255, 255, 0.6);
+  font-family: "Roboto", sans-serif;
 }
 .actionContainer {
   display: flex;
@@ -163,8 +169,9 @@ i {
   margin-bottom: 0.5em;
   font-size: 1.125em;
   color: #bb86fc;
+  font-family: "Raleway", sans-serif;
 }
-.paraText {
+.hTextParaText {
   font-size: 1.125em;
   line-height: 20px;
 }
@@ -180,6 +187,7 @@ i {
 }
 .actionText {
   font-size: 1.125em;
+  font-family: "Roboto", sans-serif;
 }
 .icon {
   font-size: 1.25em;

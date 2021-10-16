@@ -54,8 +54,8 @@ export class User extends BaseEntity {
   paymentTier: string;
 
   @Field(() => Number)
-  @Column({ default: 10 })
-  remainingSummaries: number;
+  @Column({ default: 10000 })
+  wordCount: number;
 
   @Field(() => String)
   @Column({ default: "" })

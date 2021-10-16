@@ -12,6 +12,7 @@ $clr-bg5: rgba(255, 255, 255, 0.1);
 $clr-error: #cf6679;
 $clr-highEmpha: rgba(white, 0.87);
 $clr-medEmpha: rgba(white, 0.6);
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
 
 @font-face {
   font-family: "icomoon";
@@ -20,6 +21,78 @@ $clr-medEmpha: rgba(white, 0.6);
   font-weight: normal;
   font-style: normal;
   font-display: block;
+}
+.hTextPara {
+  .utilContainer {
+    display: flex;
+    position: relative;
+    .trashBtn {
+      margin-top: 2.5em;
+      margin-right: 2.5em;
+      display: flex;
+      align-items: center;
+      background: $clr-bg;
+      padding: 0.5em 1em;
+      color: $clr-highEmpha;
+      outline: none;
+      border: 2px solid $clr-bg5;
+      border-radius: 0.5em;
+      cursor: pointer;
+      &:hover {
+        border-color: rgba(187, 134, 252, 0.25);
+      }
+      &:hover .trash-top {
+        //open the lid
+        transform: translate(-50%, -15%) rotate(-20deg);
+      }
+
+      &:hover .trash-btm {
+        //rotate the bottom a little
+        transform: translate(-50%, -100%) rotate(5deg);
+      }
+
+      &:hover .trash {
+        top: 50%;
+        transform: translate(-42%, -50%) rotate(35deg); //comes from bottom
+      }
+    }
+  }
+}
+.mTextPara {
+  .utilContainer {
+    display: flex;
+    position: relative;
+    .trashBtn {
+      margin-top: 2.5em;
+      margin-right: 2.5em;
+      display: flex;
+      align-items: center;
+      background: $clr-bg;
+      padding: 0.5em 1em;
+      color: $clr-highEmpha;
+      outline: none;
+      border: 2px solid $clr-bg5;
+      border-radius: 0.5em;
+      cursor: pointer;
+      &:hover {
+        border-color: rgba(187, 134, 252, 0.25);
+      }
+      &:hover .trash-top {
+        //open the lid
+        transform: translate(-50%, -15%) rotate(-20deg);
+      }
+
+      &:hover .trash-btm {
+        //rotate the bottom a little
+        transform: translate(-50%, -100%) rotate(5deg);
+      }
+
+      &:hover .trash {
+        top: 50%;
+        transform: translate(-42%, -50%) rotate(35deg); //comes from bottom
+      }
+    }
+  }
 }
 .filePara {
   display: flex;
@@ -62,6 +135,7 @@ $clr-medEmpha: rgba(white, 0.6);
   right: 1em;
   .wordCount {
     color: $clr-medEmpha;
+    font-family: "Raleway", sans-serif;
     .count {
       color: $clr-primary;
     }
@@ -157,4 +231,105 @@ $clr-medEmpha: rgba(white, 0.6);
 }
 .spinnerTwo:before {
   content: "\e001";
+}
+
+$trashColor1: #95afc0;
+$trashColor2: #535c68;
+$trashColor3: #dff9fb;
+$transition: all 0.2s ease-in-out;
+
+//trashcan
+
+.trash-box {
+  width: 15px;
+  height: 15px;
+  position: relative;
+  margin-left: 10px;
+  //Hover
+
+  //trash-lid
+  .trash-top {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -15%);
+    width: 80%;
+    height: 15%;
+    background: $clr-primary;
+    border-radius: 5px;
+    transform-origin: left bottom;
+    transition: $transition;
+
+    //the top of lid
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 95%;
+      left: 50%;
+      transform: translate(-50%);
+      width: 30%;
+      height: 80%;
+      background: inherit;
+      border-radius: 5px 5px 0 0;
+    }
+  }
+
+  //trash-can-bottom
+  .trash-btm {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 70%;
+    height: 65%;
+    background: $clr-primary;
+    border-radius: 2.5px;
+    transform-origin: left 70%; //transform left-side and 70% from top
+    transition: $transition;
+
+    //lines in the middle
+    .trash-lines {
+      //centering
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      //
+      width: 60%;
+      height: 80%;
+      display: flex;
+      justify-content: space-around; //or space-between
+
+      .trash-line {
+        width: 20%;
+        height: 100%;
+        background: darken($clr-primary, 10%); //make color 10% darker
+        border-radius: 3px;
+      }
+    }
+  }
+  //trash in(behind) the can
+
+  .trash {
+    position: absolute;
+    top: 80%;
+    left: 38%;
+    transform: translate(-38%, -80%) rotate(35deg);
+    width: 20%;
+    height: 20%;
+    background: $trashColor3;
+    border-radius: 2px;
+    transition: $transition;
+
+    //second trash
+    &::before {
+      content: "";
+      position: absolute;
+      transform: translate(30%, -20%) rotate(25deg);
+      width: 100%;
+      height: 100%;
+      background: darken($trashColor3, 10%);
+      border-radius: 2px;
+    }
+  }
 }

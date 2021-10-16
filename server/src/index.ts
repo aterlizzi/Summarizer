@@ -15,9 +15,9 @@ import mercurius from "mercurius";
 import { createConnection } from "typeorm";
 import multer from "fastify-multer";
 import path from "path";
-import { spawn } from "child_process";
+import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { v4 } from "uuid";
-import fs from "fs";
+import fs, { fstat } from "fs";
 
 const main = async () => {
   const app = fastify();
@@ -80,23 +80,11 @@ const main = async () => {
         pathName,
         filename,
       ]);
-      childPython.stdout.on("data", (data) => {
-        const jsonString = data.toString();
-        console.log(jsonString.length);
-        if (jsonString.length < 3) {
-          return console.log("error");
-        } else {
-          fs.unlinkSync(pathName);
-          return console.log(jsonString);
-        }
-      });
-      childPython.stderr.on("data", (data) => {
-        return console.log(data.toString());
-      });
-      childPython.on("close", (code) => {
-        return console.log(`closed on ${code}`);
-      });
-      reply.send({ hello: "world" });
+      spawnProcess(childPython, pathName)
+        .then((response) => {
+          reply.send({ text: response });
+        })
+        .catch((err) => console.log(err));
     }
   );
   app.listen(parseInt(process.env.PORT!), () => {
@@ -104,3 +92,17 @@ const main = async () => {
   });
 };
 main().catch((err) => console.log(err));
+
+const spawnProcess = (
+  childPython: ChildProcessWithoutNullStreams,
+  pathName: string
+) => {
+  return new Promise((resolve, reject) => {
+    childPython.stdout.on("data", (data) => {
+      resolve(data.toString());
+    });
+    childPython.stderr.on("data", (data) => {
+      reject(data.toString());
+    });
+  });
+};

@@ -37,7 +37,7 @@ function receiver(req, sender, sendResponse) {
               const body = JSON.stringify({
                 query: `query {
                     me(email: "${res.userInfo.email}") {
-                      remainingSummaries
+                      wordCount
                     }
                   }`,
               });
@@ -48,7 +48,7 @@ function receiver(req, sender, sendResponse) {
               })
                 .then((response) => response.json())
                 .then((data) => {
-                  const payload = data.data.me.remainingSummaries;
+                  const payload = data.data.me.wordCount;
                   sendResponse({ key: "loginTrue", payload });
                 })
                 .catch((err) => console.log(err));
@@ -56,7 +56,7 @@ function receiver(req, sender, sendResponse) {
               const body = JSON.stringify({
                 query: `query {
                     me(sub: "${res.userInfo.sub}") {
-                      remainingSummaries
+                      wordCount
                     }
                   }`,
               });
@@ -67,7 +67,7 @@ function receiver(req, sender, sendResponse) {
               })
                 .then((response) => response.json())
                 .then((data) => {
-                  const payload = data.data.me.remainingSummaries;
+                  const payload = data.data.me.wordCount;
                   sendResponse({ key: "loginTrue", payload });
                 })
                 .catch((err) => console.log(err));
@@ -87,7 +87,7 @@ function receiver(req, sender, sendResponse) {
       const body = JSON.stringify({
         query: `mutation {
           verifyUser(password: "${password}", email: "${email}") {
-            remainingSummaries
+            wordCount
           }
         }`,
       });
@@ -106,12 +106,12 @@ function receiver(req, sender, sendResponse) {
             };
             chrome.runtime.sendMessage({
               key: "successfulLogin",
-              payload: data.data.verifyUser.remainingSummaries,
+              payload: data.data.verifyUser.wordCount,
             });
             chrome.storage.local.set({
               userStatus: true,
               userInfo: user_info,
-              sumNum: data.data.verifyUser.remainingSummaries,
+              sumNum: data.data.verifyUser.wordCount,
             });
           }
         })
@@ -147,7 +147,7 @@ function receiver(req, sender, sendResponse) {
                   const body = JSON.stringify({
                     query: `mutation {
                       verifyGoogleUser(sub: "${user_info.sub}") {
-                        remainingSummaries
+                        wordCount
                       }
                     }`,
                   });
@@ -162,8 +162,7 @@ function receiver(req, sender, sendResponse) {
                       if (!data.data.verifyGoogleUser) {
                         chrome.runtime.sendMessage({ key: "failedLogin" });
                       } else {
-                        const payload =
-                          data.data.verifyGoogleUser.remainingSummaries;
+                        const payload = data.data.verifyGoogleUser.wordCount;
                         chrome.runtime.sendMessage({
                           key: "successfulLogin",
                           payload,
@@ -186,9 +185,6 @@ function receiver(req, sender, sendResponse) {
       break;
     case "logout":
       // log user out
-      break;
-    case "J4KPsEOjYy":
-      // make api request for summary
       break;
     case "sendSelectedText":
       retrieveSelectedText().then((response) => {
@@ -267,7 +263,9 @@ function receiver(req, sender, sendResponse) {
         body: req.payload,
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+          console.log(data);
+        });
       break;
     case "summarize":
       const action = req.payload;
@@ -278,7 +276,10 @@ function receiver(req, sender, sendResponse) {
         const url = initObj.url;
         if (text !== "") {
           const query = `mutation Summarize($options: SummaryInputObj!) {
-            summarize(options: $options)
+            summarize(options: $options) {
+              summary
+              remainingSummaries
+            }
           }`;
           const summaryBody = JSON.stringify({
             query,
@@ -315,6 +316,12 @@ function receiver(req, sender, sendResponse) {
       retrieveManualText().then((response) => {
         sendResponse(response.manual);
       });
+    case "resetHighlight":
+      chrome.storage.local.set({
+        highlightedText: "You haven't highlighted any text.",
+      });
+      sendResponse(true);
+      break;
     default:
       break;
   }

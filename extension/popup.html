@@ -76,7 +76,7 @@
       <div class="sumWrapper none">
         <header class="head">
           <img src="/images/icon_128.png" class="img" alt="lightbulb" />
-          <h1 class="title">Summarizer</h1>
+          <h1 class="title">Untanglify</h1>
           <h4 class="subtitle">
             Summarize an article with the click of a button
           </h4>
@@ -118,11 +118,26 @@
             <div class="paraContainer hTextPara none">
               <p class="paraSub">Highlighted Text:</p>
               <p class="hTextParaText"></p>
+              <div class="utilContainer">
+                <button type="button" class="trashBtn hTrash">
+                  Clear
+                  <div class="trash-box">
+                    <div class="trash"></div>
+                    <div class="trash-top"></div>
+                    <div class="trash-btm">
+                      <div class="trash-lines">
+                        <div class="trash-line"></div>
+                        <div class="trash-line"></div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                <div
+                  class="spinner spinnerTwo none saveSpinner"
+                  aria-hidden="true"
+                ></div>
+              </div>
             </div>
-            <div
-              class="spinner spinnerTwo none saveSpinner"
-              aria-hidden="true"
-            ></div>
             <form action="" class="paraContainer mTextPara none">
               <div class="manualContainer">
                 <textarea
@@ -134,6 +149,25 @@
                 <label for="textarea" class="manualLabel"
                   >Text to Summarize</label
                 >
+              </div>
+              <div class="utilContainer">
+                <button type="button" class="trashBtn mTrash">
+                  Clear
+                  <div class="trash-box">
+                    <div class="trash"></div>
+                    <div class="trash-top"></div>
+                    <div class="trash-btm">
+                      <div class="trash-lines">
+                        <div class="trash-line"></div>
+                        <div class="trash-line"></div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                <div
+                  class="spinner spinnerTwo none saveSpinner"
+                  aria-hidden="true"
+                ></div>
               </div>
             </form>
             <form action="" class="paraContainer filePara none">
