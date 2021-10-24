@@ -56,6 +56,21 @@
       }
     }
   }
+  .accountType {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    display: flex;
+    align-items: center;
+    border: 1.5px solid $clr-bg3;
+    padding: 0.5em 1em;
+    border-radius: 5em;
+    .type {
+      margin: 0;
+      font-family: "Raleway", sans-serif;
+      letter-spacing: 1.5px;
+    }
+  }
   .reverse {
     position: absolute;
     cursor: pointer;
@@ -98,28 +113,133 @@
       letter-spacing: 1.5px;
     }
   }
-  .illustration {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
   .gridWrap {
     display: grid;
     position: relative;
     grid-template-columns: 1fr 1fr;
-    gap: 4em;
-    padding: 2em;
-    .left {
-    }
+    background: $clr-bg1;
+    height: 80vh;
+    border-radius: 1em;
     .right {
       background: $clr-bg1;
+      max-height: 80vh;
+      padding-top: 3em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
+      .rightContent {
+        max-width: 25em;
+        .tagLine {
+          margin: 2em 0em 0em 0em;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          font-size: 0.65rem;
+          color: $clr-medEmpha;
+          font-family: "Raleway", sans-serif;
+        }
+        .mainTag {
+          font-size: 2rem;
+          margin: 0.3em 0em 1.5em 0em;
+        }
+        .bottomContainer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .circles {
+            display: flex;
+            .circle {
+              &:not(:last-child) {
+                margin-right: 0.25em;
+              }
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              background: rgba(255, 255, 255, 0.116);
+            }
+          }
+          .controls {
+            display: flex;
+            .leftControl {
+              cursor: pointer;
+              margin-right: 0.5em;
+              width: 25px;
+              height: 25px;
+              border-radius: 0.25em;
+              border: 2px solid $clr-bg5;
+              &:hover {
+                border: 2px solid rgba(187, 134, 252, 0.25);
+              }
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              .icon {
+                font-size: 0.85rem;
+              }
+            }
+            .rightControl {
+              cursor: pointer;
+              width: 25px;
+              height: 25px;
+              border-radius: 0.25em;
+              border: 2px solid $clr-bg5;
+              &:hover {
+                border: 2px solid rgba(187, 134, 252, 0.25);
+              }
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              .icon {
+                font-size: 0.85rem;
+              }
+            }
+          }
+        }
+      }
+    }
+    .left {
+      .top {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2em;
+        .logoContainer {
+          max-width: 30px;
+        }
+        .signinBtn {
+          outline: none;
+          background: transparent;
+          border-radius: 0.5em;
+          cursor: pointer;
+          border: 2px solid $clr-bg5;
+          padding: 0.5em 1em;
+          color: $clr-highEmpha;
+          font-family: "Roboto", sans-serif;
+          &:hover {
+            border: 2px solid rgba(187, 134, 252, 0.25);
+          }
+        }
+      }
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100%;
       width: 35em;
-      padding: 2em;
+      padding: 5em;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
       .registerHeader {
+        align-self: flex-start;
+        .tagLine {
+          text-transform: uppercase;
+          margin: 0em 0em 1em 0em;
+          color: $clr-medEmpha;
+          font-family: "Raleway", sans-serif;
+          letter-spacing: 1.5px;
+          font-size: 0.65rem;
+        }
         .registerTitle {
           margin: 0;
           font-size: 2.25rem;
@@ -136,6 +256,18 @@
           margin-bottom: 0.5em;
           margin-top: 1em;
         }
+        .inputContainer {
+          position: relative;
+          .icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 15px;
+            cursor: pointer;
+            color: $clr-medEmpha;
+            font-size: 0.85rem;
+          }
+        }
         .input {
           padding: 0.5em;
           font-size: 1.125rem;
@@ -143,10 +275,23 @@
           background: transparent;
           border: 1px solid $clr-bg3;
           color: $clr-highEmpha;
-          border-radius: 0.5em;
+          border-radius: 0.25em;
+          width: 100%;
           &::placeholder {
             font-size: 1rem;
           }
+        }
+        .submitBtn {
+          background: $clr-primaryVariant;
+          color: $clr-highEmpha;
+          font-size: 1rem;
+          font-family: "Roboto", sans-serif;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          border-radius: 0.25em;
+          padding: 0.75em 1em;
+          margin-top: 1em;
         }
       }
       .divider {
@@ -169,8 +314,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 1em 1.5em;
+        background: transparent;
+        color: $clr-highEmpha;
+        outline: none;
+        border: 1px solid $clr-bg4;
+        cursor: pointer;
+        margin-top: 2em;
+        border-radius: 0.25em;
         .googleLogo {
-          max-width: 70px;
+          max-width: 20px;
+          margin-right: 1em;
         }
       }
     }

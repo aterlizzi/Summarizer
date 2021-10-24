@@ -36,8 +36,4 @@ export class SavedSummary extends BaseEntity {
   @Field(() => String)
   @Column()
   summary: string;
-
-  @Field(() => String)
-  @Column()
-  baseText: string;
 }

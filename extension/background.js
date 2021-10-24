@@ -12,6 +12,7 @@ const STATE = encodeURIComponent("cjkdhslk");
 const SCOPE = encodeURIComponent("openid");
 const PROMPT = encodeURIComponent("consent");
 
+chrome.runtime.onMessage.addListener(receiver2);
 chrome.runtime.onMessage.addListener(receiver);
 chrome.runtime.onInstalled.addListener((details) => {
   switch (details.reason) {
@@ -299,6 +300,9 @@ function receiver(req, sender, sendResponse) {
           })
             .then((response) => response.json())
             .then((data) => {
+              const url = data.data.summarize.url;
+              const summary = data.data.summarize.summary;
+              chrome.storage.local.set({ summaryUrl: url, summary });
               sendResponse(data);
             });
         } else {
@@ -310,17 +314,66 @@ function receiver(req, sender, sendResponse) {
       chrome.storage.local.set({
         manual: req.payload,
       });
-      sendResponse(true);
       break;
-    case "retrieveManualText":
-      retrieveManualText().then((response) => {
-        sendResponse(response.manual);
-      });
     case "resetHighlight":
       chrome.storage.local.set({
         highlightedText: "You haven't highlighted any text.",
       });
       sendResponse(true);
+      break;
+    case "saveSummary":
+      retrieveSummaryAndUrl().then((data) => {
+        verifyUserStatus().then((data2) => {
+          if (!data2.userInfo.email || !data2.userInfo.sub)
+            sendResponse("Something has gone wrong, try again.");
+          const email = data2.userInfo.email;
+          const sub = data2.userInfo.sub;
+          const summary = data.summary;
+          const url = data.summaryUrl;
+          if (data.error) {
+            sendResponse("Wasn't able to retrieve the summary.");
+          } else {
+            const query = `mutation SaveSummary($options: SaveSummaryInputObj!) {
+              saveSummary(options: $options) {
+                id
+              }
+            }`;
+            const summaryBody = JSON.stringify({
+              query,
+              variables: {
+                options: {
+                  email,
+                  sub,
+                  summary,
+                  url,
+                },
+              },
+            });
+            fetch("http://localhost:4000/graphql", {
+              headers: { "content-type": "application/json" },
+              method: "POST",
+              body: summaryBody,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                sendResponse("Saved");
+              });
+          }
+        });
+      });
+      break;
+    default:
+      break;
+  }
+  return true;
+}
+function receiver2(req, sender, sendResponse) {
+  switch (req.key) {
+    case "retrieveManualText":
+      retrieveManualText().then((response) => {
+        sendResponse(response.manual);
+      });
       break;
     default:
       break;
@@ -406,6 +459,22 @@ const retrieveArticleText = () => {
     });
   });
 };
+
+const retrieveSummaryAndUrl = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["summary, summaryUrl"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ error: "Wasn't able to retrieve." });
+      }
+      resolve(
+        response.summary === undefined
+          ? { error: "Wasn't able to retrieve." }
+          : { summary: response.summary, summaryUrl: response.summaryUrl }
+      );
+    });
+  });
+};
+
 const retrieveSelectedText = () => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["highlightedText"], (response) => {

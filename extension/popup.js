@@ -29,6 +29,8 @@ const fileUpload = document.querySelector(".fileUpload");
 const rightContainer = document.querySelector(".rightContainer");
 const mTrashBtn = document.querySelector(".mTrash");
 const hTrashBtn = document.querySelector(".hTrash");
+const summaryContainer = document.querySelector(".container");
+const bookmark = document.querySelector(".save");
 
 let action = "entire";
 let logged = false;
@@ -84,12 +86,18 @@ hTrashBtn.addEventListener("click", () => {
     }
   });
 });
+bookmark.addEventListener("click", () => {
+  chrome.runtime.sendMessage({ key: "saveSummary" }, (response) => {
+    console.log(response);
+  });
+});
 
 // this will be reworked
 button.addEventListener("click", () => {
   console.log("clicked");
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
+  summaryContainer.classList.remove("none");
   chrome.runtime.sendMessage(
     { key: "summarize", payload: action },
     (response) => {

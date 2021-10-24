@@ -37,6 +37,55 @@
   transform: translate(-42%, -50%) rotate(35deg);
 }
 
+.container {
+  padding-top: 1em;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.container .summary {
+  line-height: 25px;
+  font-size: 1.25em;
+  color: rgba(255, 255, 255, 0.87);
+  text-align: center;
+  padding: 1em 0em;
+}
+.container .saveRejectContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.container .saveRejectContainer .save {
+  color: black;
+  font-family: "Roboto", sans-serif;
+  padding: 0.5em 1em;
+  outline: none;
+  background: #bb86fc;
+  border-radius: 0.5em;
+  display: flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+}
+.container .saveRejectContainer .save .icon {
+  font-size: 1.25em;
+  margin-right: 0.5em;
+  color: black;
+}
+.container .saveRejectContainer .reject {
+  font-family: "Roboto", sans-serif;
+  padding: 0.5em 1em;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  border-radius: 0.5em;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.container .saveRejectContainer .reject .icon {
+  font-size: 1.25em;
+  margin-right: 0.5em;
+  color: rgba(255, 255, 255, 0.87);
+}
+
 .mTextPara .utilContainer {
   display: flex;
   position: relative;
@@ -46,7 +95,7 @@
   margin-right: 2.5em;
   display: flex;
   align-items: center;
-  background: #121212;
+  background: transparent;
   padding: 0.5em 1em;
   color: rgba(255, 255, 255, 0.87);
   outline: none;

@@ -39,15 +39,15 @@ export class SummarizeResolver {
       //   frequencyPenalty: 1,
       //   stop: [`"""`],
       // });
-      const gtpResponse = await openai.complete({
-        engine: "curie",
-        prompt: `${text}\nI rephrased this for my student, in plain language a twelfth grader can understand:`,
-        maxTokens: 100,
-        temperature: 0.3,
-        topP: 1,
-        presencePenalty: 0,
-        frequencyPenalty: 1,
-      });
+      // const gtpResponse = await openai.complete({
+      //   engine: "curie",
+      //   prompt: `${text}\nI rephrased this for my student, in plain language a twelfth grader can understand:`,
+      //   maxTokens: 100,
+      //   temperature: 0,
+      //   topP: 1,
+      //   presencePenalty: 0,
+      //   frequencyPenalty: 1,
+      // });
       // const gtpResponse = await openai.complete({
       //   engine: "curie",
       //   prompt: `${text}\ntl;dr:`,
@@ -57,15 +57,15 @@ export class SummarizeResolver {
       //   presencePenalty: 0,
       //   frequencyPenalty: 1,
       // });
-      // const gtpResponse = await openai.complete({
-      //   engine: "curie-instruct-beta",
-      //   prompt: `Give a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
-      //   maxTokens: 150,
-      //   temperature: 0,
-      //   topP: 1,
-      //   presencePenalty: 0,
-      //   frequencyPenalty: 0,
-      // });
+      const gtpResponse = await openai.complete({
+        engine: "curie-instruct-beta",
+        prompt: `Give a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
+        maxTokens: 150,
+        temperature: 0,
+        topP: 1,
+        presencePenalty: 0,
+        frequencyPenalty: 0,
+      });
       // const gtpResponse = await openai.complete({
       //   engine: "curie-instruct-beta",
       //   prompt: `Write a unique summary of the following text:\n${text}\nSummary:`,
@@ -101,8 +101,8 @@ export class SummarizeResolver {
     const returnObj = {
       summary: summary as string,
       remainingSummaries: user.wordCount,
+      url,
     };
-    console.log(returnObj);
     return returnObj;
   }
 }

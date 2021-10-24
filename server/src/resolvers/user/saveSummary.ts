@@ -7,7 +7,7 @@ import { User } from "./../../entities/User";
 export class SaveSummaryResolver {
   @Mutation(() => SavedSummary, { nullable: true })
   async saveSummary(
-    @Arg("options") { email, sub, text, summary, url }: SaveSummaryInputObj
+    @Arg("options") { email, sub, summary, url }: SaveSummaryInputObj
   ): Promise<SavedSummary | undefined> {
     let user;
     if (email) {
@@ -23,7 +23,6 @@ export class SaveSummaryResolver {
       author: user,
       url,
       summary,
-      baseText: text,
     });
     user.summaries = [...user.summaries, newSummarySave];
     await user.save();

@@ -59,13 +59,6 @@ h1 {
   line-height: 25px;
   font-family: "Raleway", sans-serif;
 }
-.summary {
-  line-height: 25px;
-  font-size: 1.25em;
-  color: rgba(255, 255, 255, 0.87);
-  text-align: center;
-  padding: 1em 0em;
-}
 .label {
   font-size: 1.25em;
   color: rgba(255, 255, 255, 0.87);
@@ -158,6 +151,7 @@ i {
 }
 .parameters {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1em;
 }
 .paraTitle {
   margin: 1em 0em;
@@ -224,11 +218,10 @@ i {
   display: inline-block;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.5em;
-  margin-top: 1em;
   border-radius: 12px;
-  margin: 0 auto;
   display: block;
   cursor: pointer;
+  margin-top: 3em;
   /* transition: background 80ms ease-in; */
 }
 .btn:hover {

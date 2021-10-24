@@ -1,21 +1,21 @@
+import { registerUserInput } from "./../../types/registerUserInput";
 import { MyContext } from "./../../types/MyContext";
 import { registerUserToken } from "./../../constants/redisPrefixes";
 import { redis } from "./../../redis";
 import argon2 from "argon2";
 import { User } from "./../../entities/User";
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { v4 } from "uuid";
 import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
-// import { OAuth2Client } from "google-auth-library";
-// const client = new OAuth2Client(process.env.CLIENT_ID);
 
 @Resolver()
 export class RegisterResolver {
   @Mutation(() => Boolean)
   async registerGoogleUser(
     @Arg("token") token: string,
-    @Arg("usecase") usecase: string
+    @Arg("usecase") usecase: string,
+    @Ctx() ctx: MyContext
   ): Promise<boolean> {
     const parsedToken: any = jwtDecode(token);
     console.log(parsedToken);
@@ -33,26 +33,32 @@ export class RegisterResolver {
         username: name,
         googleSubKey: sub,
         accountType: "google",
+        reason: usecase,
       });
       await newUser.save();
+      ctx.reply.setCookie("uid", newUser.id, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+        path: "/",
+      });
+      return true;
+    } else {
+      return false;
     }
-    return true;
   }
-  @Mutation(() => User, { nullable: true })
+  @Mutation(() => Boolean)
   async registerWebUser(
-    @Arg("pass") pass: string,
-    @Arg("email") email: string,
-    @Arg("username") username: string,
-    @Arg("usecase") usecase: string
-  ): Promise<User | undefined> {
+    @Arg("options") { email, password, reason }: registerUserInput
+  ): Promise<boolean> {
     let user = await User.findOne({ where: { email } });
-    if (user) return undefined;
-    const hash = await argon2.hash(pass);
+    if (user) return false;
+    const hash = await argon2.hash(password);
     user = User.create({
       email,
-      username,
       password: hash,
       accountType: "web",
+      reason,
     });
     const token = v4();
     await redis.set(registerUserToken + token, user.id, "ex", 60 * 60 * 24);
@@ -62,9 +68,9 @@ export class RegisterResolver {
       user.username!,
       registerUserToken + token
     );
-    return user;
+    return true;
   }
-  @Mutation(() => User, { nullable: true })
+  @Query(() => User, { nullable: true })
   async confirmUser(
     @Arg("token") token: string,
     @Ctx() ctx: MyContext

@@ -58,6 +58,54 @@ $clr-medEmpha: rgba(white, 0.6);
     }
   }
 }
+.container {
+  padding-top: 1em;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  .summary {
+    line-height: 25px;
+    font-size: 1.25em;
+    color: rgba(255, 255, 255, 0.87);
+    text-align: center;
+    padding: 1em 0em;
+  }
+  .saveRejectContainer {
+    display: flex;
+    justify-content: space-between;
+    .save {
+      color: black;
+      font-family: "Roboto", sans-serif;
+      padding: 0.5em 1em;
+      outline: none;
+      background: $clr-primary;
+      border-radius: 0.5em;
+      display: flex;
+      align-items: center;
+      border: none;
+      cursor: pointer;
+      .icon {
+        font-size: 1.25em;
+        margin-right: 0.5em;
+        color: black;
+      }
+    }
+    .reject {
+      font-family: "Roboto", sans-serif;
+      padding: 0.5em 1em;
+      outline: none;
+      border: 2px solid $clr-bg5;
+      background: transparent;
+      border-radius: 0.5em;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      .icon {
+        font-size: 1.25em;
+        margin-right: 0.5em;
+        color: $clr-highEmpha;
+      }
+    }
+  }
+}
 .mTextPara {
   .utilContainer {
     display: flex;
@@ -67,7 +115,7 @@ $clr-medEmpha: rgba(white, 0.6);
       margin-right: 2.5em;
       display: flex;
       align-items: center;
-      background: $clr-bg;
+      background: transparent;
       padding: 0.5em 1em;
       color: $clr-highEmpha;
       outline: none;

@@ -7,4 +7,7 @@ export class SummaryReturnObj {
 
   @Field(() => Number)
   remainingSummaries: number;
+
+  @Field(() => String)
+  url: string;
 }

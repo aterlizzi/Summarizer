@@ -9,9 +9,6 @@ export class SaveSummaryInputObj {
   email?: string;
 
   @Field(() => String)
-  text: string;
-
-  @Field(() => String)
   summary: string;
 
   @Field(() => String)
