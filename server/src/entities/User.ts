@@ -70,4 +70,16 @@ export class User extends BaseEntity {
     cascade: true,
   })
   summaries: SavedSummary[];
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  prem: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  custKey: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  subKey: string;
 }

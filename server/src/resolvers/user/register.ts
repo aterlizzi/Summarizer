@@ -8,6 +8,7 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { v4 } from "uuid";
 import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
+import { RegisterUserOutput } from "../../types/registerUserOutput";
 
 @Resolver()
 export class RegisterResolver {
@@ -47,12 +48,28 @@ export class RegisterResolver {
       return false;
     }
   }
-  @Mutation(() => Boolean)
+  @Mutation(() => RegisterUserOutput)
   async registerWebUser(
     @Arg("options") { email, password, reason }: registerUserInput
-  ): Promise<boolean> {
+  ): Promise<RegisterUserOutput> {
     let user = await User.findOne({ where: { email } });
-    if (user) return false;
+    if (user)
+      return {
+        registered: false,
+        error: {
+          type: "Email",
+          message: "User with that email already exists.",
+        },
+      };
+    if (password.length > 255 || password.length < 8)
+      return {
+        registered: false,
+        error: {
+          type: "Password",
+          message:
+            "Your password must be greater than 8 characters and less than 255.",
+        },
+      };
     const hash = await argon2.hash(password);
     user = User.create({
       email,
@@ -63,12 +80,8 @@ export class RegisterResolver {
     const token = v4();
     await redis.set(registerUserToken + token, user.id, "ex", 60 * 60 * 24);
     await user.save();
-    await sendConfirmationMail(
-      user.email,
-      user.username!,
-      registerUserToken + token
-    );
-    return true;
+    sendConfirmationMail(user.email, user.username!, registerUserToken + token);
+    return { registered: true, error: {} };
   }
   @Query(() => User, { nullable: true })
   async confirmUser(

@@ -13,10 +13,18 @@ import {
   faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import GoogleLogin from "react-google-login";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 const RegisterWebUser = `
     mutation($options: registerUserInput!) {
-        registerWebUser(options: $options)
+        registerWebUser(options: $options) {
+          registered
+          error {
+            type
+            message
+          }
+        }
     }
 `;
 const RegisterGoogleUser = `
@@ -29,8 +37,19 @@ const VerifyGoogleUser = `
       verifyGoogleUser(token: $token)
     }
 `;
+const VerifyWebUser = `
+    mutation($email: String!, $password: String!) {
+      verifyUser(email: $email, password: $password) {
+        logged
+        error {
+          message
+        }
+      }
+    }
+`;
 
 function Welcome() {
+  const router = useRouter();
   const [usecase, setUseCase] = useState("");
   const [section, setSection] = useState(0);
   const [email, setEmail] = useState("");
@@ -38,10 +57,13 @@ function Welcome() {
   const [revealPass, setRevealPass] = useState(false);
   const [slide, setSlide] = useState(1);
   const [signin, setSignin] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
+  const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
 
   const handleResponseGoogle = (data) => {
     const token = data.tokenId;
@@ -52,11 +74,30 @@ function Welcome() {
         usecase: usecaseVariable,
       };
       registerGoogleUser(variables).then((response) => {
-        console.log(response);
+        if (response) {
+          if (response.data) {
+            if (!response.data.registerGoogleUser) {
+              setErrorMsg("User with that email already exists.");
+              setError(true);
+            } else {
+              router.push("/begin");
+            }
+          }
+        }
       });
     } else {
       verifyGoogleUser({ token }).then((response) => {
-        console.log(response);
+        if (response) {
+          if (response.data) {
+            if (response.data.verifyGoogleUser) {
+              router.push("/begin");
+            } else {
+              setErrorMsg(
+                "No user with that Google account exists. Create an account first."
+              );
+            }
+          }
+        }
       });
     }
   };
@@ -72,9 +113,38 @@ function Welcome() {
         },
       };
       registerWebUser(variables).then((response) => {
-        console.log(response);
+        if (response) {
+          if (response.data) {
+            if (response.data.registerWebUser) {
+              if (!response.data.registerWebUser.registered) {
+                setError(true);
+                setErrorMsg(response.data.registerWebUser.error.message);
+              } else {
+                router.push("/begin");
+              }
+            }
+          }
+        }
       });
     } else {
+      const variables = {
+        email,
+        password,
+      };
+      verifyWebUser(variables).then((response) => {
+        if (response) {
+          if (response.data) {
+            if (response.data.verifyUser) {
+              if (!response.data.verifyUser.logged) {
+                setError(true);
+                setErrorMsg(response.data.verifyUser.error.message);
+              } else {
+                router.push("/begin");
+              }
+            }
+          }
+        }
+      });
     }
   };
 
@@ -947,6 +1017,7 @@ function Welcome() {
                   placeholder="Enter your email:"
                   onChange={(e) => {
                     setEmail(e.currentTarget.value);
+                    setError(false);
                   }}
                 />
                 <label htmlFor="" className={styles.formLabel}>
@@ -959,6 +1030,7 @@ function Welcome() {
                     placeholder="Enter your password:"
                     onChange={(e) => {
                       setPassword(e.currentTarget.value);
+                      setError(false);
                     }}
                   />
                   <FontAwesomeIcon
@@ -972,6 +1044,11 @@ function Welcome() {
                   value={signin ? "Sign up" : "Sign in"}
                   className={styles.submitBtn}
                 />
+                {error ? (
+                  <div className={styles.errorContainer}>
+                    <p className={styles.error}>{errorMsg}</p>
+                  </div>
+                ) : null}
                 <div className={styles.divider}>
                   <p className={styles.or}>or</p>
                 </div>
@@ -1332,5 +1409,18 @@ function Welcome() {
 
 Welcome.getLayout = (page) => {
   return <Layout title="Welcome! - Summarizer">{page}</Layout>;
+};
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  if (req.cookies.hasOwnProperty("uid")) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 export default Welcome;
