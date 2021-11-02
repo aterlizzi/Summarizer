@@ -53,11 +53,11 @@
   justify-content: space-between;
 }
 .container .saveRejectContainer .save {
-  color: black;
+  color: rgba(255, 255, 255, 0.87);
   font-family: "Roboto", sans-serif;
   padding: 0.5em 1em;
   outline: none;
-  background: #bb86fc;
+  background: #4740d1;
   border-radius: 0.5em;
   display: flex;
   align-items: center;
@@ -67,7 +67,7 @@
 .container .saveRejectContainer .save .icon {
   font-size: 1.25em;
   margin-right: 0.5em;
-  color: black;
+  color: rgba(255, 255, 255, 0.87);
 }
 .container .saveRejectContainer .reject {
   font-family: "Roboto", sans-serif;

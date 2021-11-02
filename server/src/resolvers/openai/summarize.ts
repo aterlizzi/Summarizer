@@ -59,9 +59,9 @@ export class SummarizeResolver {
       // });
       const gtpResponse = await openai.complete({
         engine: "curie-instruct-beta",
-        prompt: `Give a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
+        prompt: `${text}\ntl;dr:\n`,
         maxTokens: 150,
-        temperature: 0,
+        temperature: 0.1,
         topP: 1,
         presencePenalty: 0,
         frequencyPenalty: 0,
@@ -133,9 +133,10 @@ const parseResponseData = async (rawResult: any, text: string) => {
   const originalLength = summaryTextSentenceArr.length;
   const newLength = newSummaryTextSentenceArr.length;
   if (newLength / originalLength < 0.333) {
+    console.log("flagged");
     const gtpResponse = await openai.complete({
       engine: "curie-instruct-beta",
-      prompt: `Give a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
+      prompt: `Write a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
       maxTokens: 150,
       temperature: 0,
       topP: 1,

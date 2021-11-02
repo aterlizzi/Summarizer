@@ -1,6 +1,6 @@
 $clr-primary: #bb86fc;
 $clr-primaryRGB: rgb(187, 134, 252);
-$clr-primaryVariant: #3700b3;
+$clr-primaryVariant: #4740d1;
 $clr-secondary: #03dac6;
 $clr-secondaryRGB: rgb(3, 218, 198);
 $clr-bg: #121212;
@@ -72,11 +72,11 @@ $clr-medEmpha: rgba(white, 0.6);
     display: flex;
     justify-content: space-between;
     .save {
-      color: black;
+      color: $clr-highEmpha;
       font-family: "Roboto", sans-serif;
       padding: 0.5em 1em;
       outline: none;
-      background: $clr-primary;
+      background: $clr-primaryVariant;
       border-radius: 0.5em;
       display: flex;
       align-items: center;
@@ -85,7 +85,7 @@ $clr-medEmpha: rgba(white, 0.6);
       .icon {
         font-size: 1.25em;
         margin-right: 0.5em;
-        color: black;
+        color: $clr-highEmpha;
       }
     }
     .reject {

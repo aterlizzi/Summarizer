@@ -17,6 +17,8 @@ import multer from "fastify-multer";
 import path from "path";
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { v4 } from "uuid";
+import fs from "fs";
+import kill from "tree-kill";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK;
 
@@ -83,6 +85,14 @@ const main = async () => {
       ]);
       spawnProcess(childPython, pathName)
         .then((response) => {
+          console.log(response);
+          // fs.unlink(pathName, (err) => {
+          //   if (err) {
+          //     console.log(err);
+          //   } else {
+          //     console.log(`Successfully deleted file at ${pathName}`);
+          //   }
+          // });
           reply.send({ text: response });
         })
         .catch((err) => console.log(err));
@@ -150,12 +160,27 @@ const spawnProcess = (
   childPython: ChildProcessWithoutNullStreams,
   pathName: string
 ) => {
-  return new Promise((resolve, reject) => {
+  const timeout = new Promise((_, reject) => {
+    const id = setTimeout(() => {
+      kill(childPython.pid!);
+      clearTimeout(id);
+      console.log("killed");
+      reject("Ran out of allotted time to extract text from PDF.");
+    }, 10000);
+  });
+  const promise = new Promise((resolve) => {
     childPython.stdout.on("data", (data) => {
-      resolve(data.toString());
+      const regex = new RegExp("^hi ");
+      const finalData = data.toString();
+      if (regex.test(finalData)) {
+        console.log(finalData);
+        resolve(finalData);
+      }
     });
     childPython.stderr.on("data", (data) => {
-      reject(data.toString());
+      const finalData = data.toString();
+      resolve(finalData);
     });
   });
+  return Promise.race([promise, timeout]);
 };

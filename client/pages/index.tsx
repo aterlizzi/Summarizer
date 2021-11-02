@@ -33,7 +33,7 @@ function Home() {
 }
 
 Home.getLayout = (page) => {
-  return <Layout title="Home - Summarizer">{page}</Layout>;
+  return <Layout title="Home - Untanglify">{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {

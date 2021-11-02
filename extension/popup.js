@@ -31,6 +31,7 @@ const mTrashBtn = document.querySelector(".mTrash");
 const hTrashBtn = document.querySelector(".hTrash");
 const summaryContainer = document.querySelector(".container");
 const bookmark = document.querySelector(".save");
+const saveRejectContainer = document.querySelector(".saveRejectContainer");
 
 let action = "entire";
 let logged = false;
@@ -94,7 +95,7 @@ bookmark.addEventListener("click", () => {
 
 // this will be reworked
 button.addEventListener("click", () => {
-  console.log("clicked");
+  saveRejectContainer.classList.add("none");
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
   summaryContainer.classList.remove("none");
@@ -107,7 +108,12 @@ button.addEventListener("click", () => {
           if (response.data.summarize) {
             spinner.classList.toggle("hidden");
             button.classList.toggle("hidden");
-            console.log(response);
+            if (
+              response.data.summarize.summary !==
+              "I'm sorry, we were unable to summarize this text."
+            ) {
+              saveRejectContainer.classList.remove("none");
+            }
             emptyTag.textContent = response.data.summarize.summary;
           } else {
             spinner.classList.toggle("hidden");
