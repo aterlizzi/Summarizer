@@ -22,6 +22,46 @@ $clr-medEmpha: rgba(white, 0.6);
   font-style: normal;
   font-display: block;
 }
+.main {
+  .loginWrapper {
+    .buttonContainer {
+      .divider {
+        position: relative;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        border-top: 3px dashed $clr-bg4;
+        width: 100%;
+        height: 15px;
+        .or {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%) translateY(-55%);
+          padding: 0em 1em;
+          background: #1b1b1b;
+          color: $clr-medEmpha;
+        }
+      }
+      .google {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background: transparent;
+        border: 1px solid $clr-bg4;
+        border-radius: 0.25em;
+        padding: 0.65em 1em;
+        margin-bottom: 1em;
+        .googleLogo {
+          margin-right: 0.5em;
+          .logo {
+            max-width: 15px;
+          }
+        }
+      }
+    }
+  }
+}
 .hTextPara {
   .utilContainer {
     display: flex;

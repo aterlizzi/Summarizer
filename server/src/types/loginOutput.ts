@@ -8,4 +8,10 @@ export class LoginOutput {
 
   @Field(() => ErrorMessage)
   error: ErrorMessage;
+
+  @Field(() => String)
+  tier: string;
+
+  @Field(() => Number)
+  wordCount: number;
 }

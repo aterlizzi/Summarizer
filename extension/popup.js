@@ -1,3 +1,5 @@
+// mass element selection.
+
 const emptyTag = document.querySelector(".summary");
 const button = document.querySelector(".btn");
 const spinner = document.querySelector(".hidden");
@@ -33,15 +35,27 @@ const summaryContainer = document.querySelector(".container");
 const bookmark = document.querySelector(".save");
 const saveRejectContainer = document.querySelector(".saveRejectContainer");
 
+// icons
+const pdfIcon = document.querySelector(".pdficon");
+const manualIcon = document.querySelector(".manualicon");
+
+// specific texts
+const pdfText = document.querySelector(".pdftext");
+const manualText = document.querySelector(".manualtext");
+
+// variables
 let action = "entire";
 let logged = false;
+let manualAction = true;
+let pdfAction = true;
 let typingTimer;
 
-// get status check when loading the popup
-// also retrieves the remaining summaries from backend
+// get status check when loading the popup, if login fails show login if login succeeds, proceed to application.
+// also retrieves the remaining word count from backend
 window.onload = () => {
   chrome.runtime.sendMessage({ key: "status" }, (response) => {
     if (response.key === "loginTrue") {
+      checkTier(response.tier);
       sumWrapper.classList.remove("none");
       circle.classList.remove("none");
       sumNum.textContent = response.payload;
@@ -72,7 +86,6 @@ window.onload = () => {
     });
   });
 };
-// runs content script
 
 // clear and save manual text
 mTrashBtn.addEventListener("click", () => {
@@ -93,7 +106,95 @@ bookmark.addEventListener("click", () => {
   });
 });
 
-// this will be reworked
+// main listener, listens for login success and failure upon completion of login page.
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+  let summary;
+  switch (req.key) {
+    case "failedLogin":
+      errorContainer.classList.remove("none");
+      logged = false;
+      break;
+    case "successfulLogin":
+      checkTier(req.tier);
+      loginWrapper.classList.add("none");
+      sumWrapper.classList.remove("none");
+      circle.classList.remove("none");
+      sumNum.textContent = req.payload;
+      logged = true;
+      break;
+    case "parseWeb":
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { key: "parseWeb" }, (response) => {
+          if (response) {
+            count.textContent = response.split(" ").length.toString();
+          } else {
+            count.textContent = "0";
+          }
+          sendResponse(response);
+        });
+      });
+      break;
+    case "k8k4IQwFaX":
+      button.classList.toggle("hidden");
+      spinner.classList.toggle("hidden");
+      summary = req.text;
+      emptyTag.textContent = summary;
+      break;
+    case "ogLlRDalkA":
+      button.classList.toggle("hidden");
+      spinner.classList.toggle("hidden");
+      summary = req.text;
+      break;
+    default:
+      break;
+  }
+  return true;
+});
+
+// utility functions
+
+const checkTier = (tier) => {
+  switch (tier) {
+    case "Free":
+      manualAction = false;
+      pdfAction = false;
+      pdfIcon.style.color = "rgba(255, 255, 255, 0.2)";
+      manualIcon.style.color = "rgba(255, 255, 255, 0.2)";
+      pdfText.style.color = "rgba(255, 255, 255, 0.6)";
+      manualText.style.color = "rgba(255, 255, 255, 0.6)";
+      break;
+    case "Student":
+      break;
+    case "Researcher":
+      break;
+    default:
+      break;
+  }
+};
+
+const handleSaveText = () => {
+  saveSpinner.classList.remove("none");
+  chrome.runtime.sendMessage(
+    { key: "manualSaveText", payload: manualTextArea.value },
+    (response) => {
+      if (response) saveSpinner.classList.add("none");
+    }
+  );
+};
+
+// save text
+manualTextArea.addEventListener("keyup", () => {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(handleSaveText, 3000);
+});
+
+manualTextArea.addEventListener("keydn", () => {
+  clearTimeout(typingTimer);
+});
+
+// button responses and functionalities
+// this is the majority of the summarizer functionality section.
+
 button.addEventListener("click", () => {
   saveRejectContainer.classList.add("none");
   button.classList.toggle("hidden");
@@ -190,6 +291,10 @@ articleContainer.addEventListener("click", () => {
 
 // allows for pdf submission
 pdfContainer.addEventListener("click", () => {
+  if (!pdfAction) {
+    chrome.tabs.create({ url: "http://localhost:3000/begin" });
+    return;
+  }
   highlightedContainer.classList.remove("active");
   manualContainer.classList.remove("active");
   articleContainer.classList.remove("active");
@@ -232,6 +337,10 @@ highlightedContainer.addEventListener("click", () => {
 
 // selects manually inputted text
 manualContainer.addEventListener("click", () => {
+  if (!manualAction) {
+    chrome.tabs.create({ url: "http://localhost:3000/begin" });
+    return;
+  }
   articleContainer.classList.remove("active");
   highlightedContainer.classList.remove("active");
   pdfContainer.classList.remove("active");
@@ -255,64 +364,3 @@ manualContainer.addEventListener("click", () => {
     }
   });
 });
-
-// save text
-manualTextArea.addEventListener("keyup", () => {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(handleSaveText, 3000);
-});
-
-manualTextArea.addEventListener("keydn", () => {
-  clearTimeout(typingTimer);
-});
-
-chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
-  let summary;
-  switch (req.key) {
-    case "failedLogin":
-      errorContainer.classList.remove("none");
-      break;
-    case "successfulLogin":
-      loginWrapper.classList.add("none");
-      sumWrapper.classList.remove("none");
-      circle.classList.remove("none");
-      sumNum.textContent = req.payload;
-      break;
-    case "parseWeb":
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, { key: "parseWeb" }, (response) => {
-          if (response) {
-            count.textContent = response.split(" ").length.toString();
-          } else {
-            count.textContent = "0";
-          }
-          sendResponse(response);
-        });
-      });
-      break;
-    case "k8k4IQwFaX":
-      button.classList.toggle("hidden");
-      spinner.classList.toggle("hidden");
-      summary = req.text;
-      emptyTag.textContent = summary;
-      break;
-    case "ogLlRDalkA":
-      button.classList.toggle("hidden");
-      spinner.classList.toggle("hidden");
-      summary = req.text;
-      break;
-    default:
-      break;
-  }
-  return true;
-});
-
-const handleSaveText = () => {
-  saveSpinner.classList.remove("none");
-  chrome.runtime.sendMessage(
-    { key: "manualSaveText", payload: manualTextArea.value },
-    (response) => {
-      if (response) saveSpinner.classList.add("none");
-    }
-  );
-};

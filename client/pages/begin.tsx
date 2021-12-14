@@ -27,21 +27,26 @@ function Begin() {
   const [sessionResult, createSession] = useMutation(CreateSession);
 
   const [monthly, setMonthly] = useState(true);
-  const [tier, setTier] = useState("");
-  const [mode, setMode] = useState("");
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   const handleFreeClick = () => {
     router.push("/welcome");
   };
   const handleStudentClick = () => {
-    setTier("student");
-    monthly ? setMode("monthly") : setMode("yearly");
+    setLoading2(true);
+    let mode;
+    if (monthly) {
+      mode = "monthly";
+    } else {
+      mode = "yearly";
+    }
     const variables = {
-      tier,
+      tier: "student",
       mode,
     };
     createSession(variables).then((res) => {
-      console.log(res);
+      setLoading2(true);
       if (res.data) {
         if (res.data.createStripeSession) {
           router.push(res.data.createStripeSession);
@@ -50,13 +55,19 @@ function Begin() {
     });
   };
   const handleResearcherClick = () => {
-    setTier("researcher");
-    monthly ? setMode("monthly") : setMode("yearly");
+    setLoading1(true);
+    let mode;
+    if (monthly) {
+      mode = "monthly";
+    } else {
+      mode = "yearly";
+    }
     const variables = {
-      tier,
+      tier: "researcher",
       mode,
     };
     createSession(variables).then((res) => {
+      setLoading1(false);
       if (res.data) {
         if (res.data.createStripeSession) {
           router.push(res.data.createStripeSession);
@@ -140,7 +151,11 @@ function Begin() {
               className={styles.paymentBtn}
               onClick={handleResearcherClick}
             >
-              Try for free
+              {!loading1 ? (
+                "Try for free"
+              ) : (
+                <div className={styles.loading2}></div>
+              )}
             </button>
           </section>
         </div>
@@ -192,7 +207,11 @@ function Begin() {
               <p className={styles.feature}>500,000 words</p>
             </div>
             <button className={styles.paymentBtn} onClick={handleStudentClick}>
-              Try for free
+              {!loading2 ? (
+                "Try for free"
+              ) : (
+                <div className={styles.loading2}></div>
+              )}
             </button>
           </section>
         </div>

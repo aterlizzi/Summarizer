@@ -11,22 +11,42 @@ export class LoginResolver {
   hello(): string {
     return "Hello world.";
   }
-  @Mutation(() => Boolean)
+  @Mutation(() => LoginOutput)
   async verifyGoogleUser(
-    @Arg("token") token: string,
+    @Arg("token", { nullable: true }) token: string,
+    @Arg("sub", { nullable: true }) subKey: string,
     @Ctx() ctx: MyContext
-  ): Promise<boolean> {
-    const parsedToken: any = jwtDecode(token);
-    const sub = parsedToken.sub;
-    const user = await User.findOne({ where: { googleSubKey: sub } });
-    if (!user) return false;
+  ): Promise<LoginOutput> {
+    let user;
+    let sub;
+    if (token) {
+      const parsedToken: any = jwtDecode(token);
+      sub = parsedToken.sub;
+    }
+    if (subKey) {
+      sub = subKey;
+    }
+    user = await User.findOne({ where: { googleSubKey: sub } });
+    if (!user) {
+      return {
+        logged: false,
+        error: { message: "Either your email or password is incorrect." },
+        tier: "",
+        wordCount: 0,
+      };
+    }
     ctx.reply.setCookie("uid", user.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
       path: "/",
     });
-    return true;
+    return {
+      logged: true,
+      error: {},
+      tier: user.paymentTier,
+      wordCount: user.wordCount,
+    };
   }
   @Mutation(() => LoginOutput)
   async verifyUser(
@@ -39,16 +59,22 @@ export class LoginResolver {
       return {
         logged: false,
         error: { message: "Either your email or password is incorrect." },
+        tier: "",
+        wordCount: 0,
       };
     if (user.accountType !== "web")
       return {
         logged: false,
         error: { message: "Either your email or password is incorrect." },
+        tier: "",
+        wordCount: 0,
       };
     if (!(await argon2.verify(user.password!, password)))
       return {
         logged: false,
         error: { message: "Either your email or password is incorrect." },
+        tier: "",
+        wordCount: 0,
       };
     ctx.reply.setCookie("uid", user.id, {
       httpOnly: true,
@@ -56,6 +82,11 @@ export class LoginResolver {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
       path: "/",
     });
-    return { logged: true, error: {} };
+    return {
+      logged: true,
+      error: {},
+      tier: user.paymentTier,
+      wordCount: user.wordCount,
+    };
   }
 }

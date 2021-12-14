@@ -33,8 +33,10 @@ const RegisterGoogleUser = `
     }
 `;
 const VerifyGoogleUser = `
-    mutation($token: String!) {
-      verifyGoogleUser(token: $token)
+    mutation($token: String, $sub: String) {
+      verifyGoogleUser(token: $token, sub: $sub) {
+        logged
+      }
     }
 `;
 const VerifyWebUser = `
@@ -90,11 +92,13 @@ function Welcome() {
         if (response) {
           if (response.data) {
             if (response.data.verifyGoogleUser) {
-              router.push("/begin");
-            } else {
-              setErrorMsg(
-                "No user with that Google account exists. Create an account first."
-              );
+              if (response.data.verifyGoogleUser.logged) {
+                router.push("/begin");
+              } else {
+                setErrorMsg(
+                  "No user with that Google account exists. Create an account first."
+                );
+              }
             }
           }
         }

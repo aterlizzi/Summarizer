@@ -13,7 +13,7 @@ export class StripeResolver {
     @Arg("tier") tier: string
   ): Promise<string> {
     const user = await User.findOne({ where: { id: ctx.req.cookies.uid } });
-    if (!user) return "";
+    if (!user) return "/welcome";
     let session;
     switch (mode) {
       case "monthly":

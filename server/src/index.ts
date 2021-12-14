@@ -14,13 +14,12 @@ const fastify = require("fastify");
 import mercurius from "mercurius";
 import { createConnection } from "typeorm";
 import multer from "fastify-multer";
-import path from "path";
+import path, { parse } from "path";
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { v4 } from "uuid";
-import fs from "fs";
 import kill from "tree-kill";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const webhookSecret = process.env.STRIPE_WEBHOOK;
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const main = async () => {
   const app = fastify();
@@ -100,10 +99,12 @@ const main = async () => {
   );
   app.post("/webhook", async (req: any, reply: any) => {
     const sig = req.headers["stripe-signature"];
+    console.log(req.headers);
     let event;
     try {
       event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-    } catch {
+    } catch (err) {
+      console.log(err);
       reply.status(400).send("Improper webhook signature.");
     }
     switch (event.type) {
@@ -118,9 +119,25 @@ const main = async () => {
         );
         const price_id = line_items.data[0].price.id;
         switch (price_id) {
-          case process.env.STRIPE_PREM_PLAN_KEY:
+          case process.env.STRIPE_STUDENT_MONTH_KEY:
             user.wordCount = 500000;
             user.prem = true;
+            user.paymentTier = "Student";
+            break;
+          case process.env.STRIPE_STUDENT_YEAR_KEY:
+            user.wordCount = 6000000;
+            user.prem = true;
+            user.paymentTier = "Student";
+            break;
+          case process.env.STRIPE_RESEARCH_MONTH_KEY:
+            user.wordCount = 1000000;
+            user.prem = true;
+            user.paymentTier = "Researcher";
+            break;
+          case process.env.STRIPE_RESEARCH_YEAR_KEY:
+            user.wordCount = 12000000;
+            user.prem = true;
+            user.paymentTier = "Researcher";
             break;
           default:
             break;
@@ -134,7 +151,8 @@ const main = async () => {
         user = await User.findOne({ where: { custKey } });
         if (!user) break;
         user.prem = false;
-        user.wordCount = 100000;
+        user.wordCount = 25000;
+        user.paymentTier = "Free";
         await user.save();
         break;
       case "invoice.paid":
@@ -147,8 +165,10 @@ const main = async () => {
         await user.save();
         break;
       default:
-        break;
+        console.log(`Unhandled event type: ${event.type}`);
+        return reply.status(400).end();
     }
+    reply.json({ received: true });
   });
   app.listen(parseInt(process.env.PORT!), () => {
     console.log(`Server running on port ${process.env.PORT}`);

@@ -39,6 +39,7 @@ function receiver(req, sender, sendResponse) {
                 query: `query {
                     me(email: "${res.userInfo.email}") {
                       wordCount
+                      tier
                     }
                   }`,
               });
@@ -50,7 +51,8 @@ function receiver(req, sender, sendResponse) {
                 .then((response) => response.json())
                 .then((data) => {
                   const payload = data.data.me.wordCount;
-                  sendResponse({ key: "loginTrue", payload });
+                  const tier = data.data.me.tier;
+                  sendResponse({ key: "loginTrue", payload, tier });
                 })
                 .catch((err) => console.log(err));
             } else if (res.userInfo.sub) {
@@ -58,6 +60,7 @@ function receiver(req, sender, sendResponse) {
                 query: `query {
                     me(sub: "${res.userInfo.sub}") {
                       wordCount
+                      paymentTier
                     }
                   }`,
               });
@@ -69,7 +72,8 @@ function receiver(req, sender, sendResponse) {
                 .then((response) => response.json())
                 .then((data) => {
                   const payload = data.data.me.wordCount;
-                  sendResponse({ key: "loginTrue", payload });
+                  const tier = data.data.me.paymentTier;
+                  sendResponse({ key: "loginTrue", payload, tier });
                 })
                 .catch((err) => console.log(err));
             }
@@ -89,6 +93,8 @@ function receiver(req, sender, sendResponse) {
         query: `mutation {
           verifyUser(password: "${password}", email: "${email}") {
             wordCount
+            tier
+            logged
           }
         }`,
       });
@@ -99,7 +105,7 @@ function receiver(req, sender, sendResponse) {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (!data.data.verifyUser) {
+          if (!data.data.verifyUser.logged) {
             chrome.runtime.sendMessage({ key: "failedLogin" });
           } else {
             const user_info = {
@@ -108,6 +114,7 @@ function receiver(req, sender, sendResponse) {
             chrome.runtime.sendMessage({
               key: "successfulLogin",
               payload: data.data.verifyUser.wordCount,
+              tier: data.data.verifyUser.wordCount,
             });
             chrome.storage.local.set({
               userStatus: true,
@@ -149,6 +156,8 @@ function receiver(req, sender, sendResponse) {
                     query: `mutation {
                       verifyGoogleUser(sub: "${user_info.sub}") {
                         wordCount
+                        logged
+                        tier
                       }
                     }`,
                   });
@@ -160,13 +169,13 @@ function receiver(req, sender, sendResponse) {
                     .then((response) => response.json())
                     .then((data) => {
                       console.log(data);
-                      if (!data.data.verifyGoogleUser) {
+                      if (!data.data.verifyGoogleUser.logged) {
                         chrome.runtime.sendMessage({ key: "failedLogin" });
                       } else {
-                        const payload = data.data.verifyGoogleUser.wordCount;
                         chrome.runtime.sendMessage({
                           key: "successfulLogin",
-                          payload,
+                          payload: data.data.verifyGoogleUser.wordCount,
+                          tier: data.data.verifyGoogleUser.tier,
                         });
                         chrome.storage.local.set({
                           userStatus: true,
