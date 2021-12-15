@@ -14,12 +14,11 @@ const fastify = require("fastify");
 import mercurius from "mercurius";
 import { createConnection } from "typeorm";
 import multer from "fastify-multer";
-import path, { parse } from "path";
+import path from "path";
+const stripeWebhook = require("./routes/stripe");
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { v4 } from "uuid";
 import kill from "tree-kill";
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const main = async () => {
   const app = fastify();
@@ -97,79 +96,7 @@ const main = async () => {
         .catch((err) => console.log(err));
     }
   );
-  app.post("/webhook", async (req: any, reply: any) => {
-    const sig = req.headers["stripe-signature"];
-    console.log(req.headers);
-    let event;
-    try {
-      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-    } catch (err) {
-      console.log(err);
-      reply.status(400).send("Improper webhook signature.");
-    }
-    switch (event.type) {
-      case "checkout.session.completed":
-        const checkoutId = event.data.object.id;
-        let uid = event.data.object.client_reference_id;
-        if (!uid) break;
-        let user = await User.findOne({ where: { id: uid } });
-        if (!user) break;
-        const line_items = await stripe.checkout.session.listLineItems(
-          checkoutId
-        );
-        const price_id = line_items.data[0].price.id;
-        switch (price_id) {
-          case process.env.STRIPE_STUDENT_MONTH_KEY:
-            user.wordCount = 500000;
-            user.prem = true;
-            user.paymentTier = "Student";
-            break;
-          case process.env.STRIPE_STUDENT_YEAR_KEY:
-            user.wordCount = 6000000;
-            user.prem = true;
-            user.paymentTier = "Student";
-            break;
-          case process.env.STRIPE_RESEARCH_MONTH_KEY:
-            user.wordCount = 1000000;
-            user.prem = true;
-            user.paymentTier = "Researcher";
-            break;
-          case process.env.STRIPE_RESEARCH_YEAR_KEY:
-            user.wordCount = 12000000;
-            user.prem = true;
-            user.paymentTier = "Researcher";
-            break;
-          default:
-            break;
-        }
-        user.custKey = event.data.object.customer;
-        user.subKey = event.data.object.subscription;
-        await user.save();
-        break;
-      case "customer.subscription.deleted":
-        let custKey = event.data.object.customer;
-        user = await User.findOne({ where: { custKey } });
-        if (!user) break;
-        user.prem = false;
-        user.wordCount = 25000;
-        user.paymentTier = "Free";
-        await user.save();
-        break;
-      case "invoice.paid":
-        custKey = event.data.object.customer;
-        user = await User.findOne({ where: { custKey } });
-        if (!user) break;
-        if (user.prem) {
-          user.wordCount = 500000;
-        }
-        await user.save();
-        break;
-      default:
-        console.log(`Unhandled event type: ${event.type}`);
-        return reply.status(400).end();
-    }
-    reply.json({ received: true });
-  });
+  app.register(stripeWebhook);
   app.listen(parseInt(process.env.PORT!), () => {
     console.log(`Server running on port ${process.env.PORT}`);
   });
