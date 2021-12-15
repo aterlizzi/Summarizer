@@ -39,7 +39,7 @@ function receiver(req, sender, sendResponse) {
                 query: `query {
                     me(email: "${res.userInfo.email}") {
                       wordCount
-                      tier
+                      paymentTier
                     }
                   }`,
               });
@@ -51,7 +51,7 @@ function receiver(req, sender, sendResponse) {
                 .then((response) => response.json())
                 .then((data) => {
                   const payload = data.data.me.wordCount;
-                  const tier = data.data.me.tier;
+                  const tier = data.data.me.paymentTier;
                   sendResponse({ key: "loginTrue", payload, tier });
                 })
                 .catch((err) => console.log(err));
@@ -114,7 +114,7 @@ function receiver(req, sender, sendResponse) {
             chrome.runtime.sendMessage({
               key: "successfulLogin",
               payload: data.data.verifyUser.wordCount,
-              tier: data.data.verifyUser.wordCount,
+              tier: data.data.verifyUser.tier,
             });
             chrome.storage.local.set({
               userStatus: true,

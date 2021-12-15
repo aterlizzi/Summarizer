@@ -112,7 +112,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   switch (req.key) {
     case "failedLogin":
       errorContainer.classList.remove("none");
-      logged = false;
       break;
     case "successfulLogin":
       checkTier(req.tier);
@@ -120,7 +119,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       sumWrapper.classList.remove("none");
       circle.classList.remove("none");
       sumNum.textContent = req.payload;
-      logged = true;
       break;
     case "parseWeb":
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
