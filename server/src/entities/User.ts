@@ -1,10 +1,13 @@
+import { Settings } from "./Settings";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -75,6 +78,10 @@ export class User extends BaseEntity {
   @Column({ default: false })
   prem: boolean;
 
+  @Field(() => Number)
+  @Column({ default: Date.now(), type: "bigint" })
+  current_period: number;
+
   @Field(() => String)
   @Column({ default: "" })
   custKey: string;
@@ -82,4 +89,8 @@ export class User extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   subKey: string;
+
+  @OneToOne(() => Settings)
+  @JoinColumn()
+  settings: Settings;
 }

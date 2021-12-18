@@ -12,6 +12,7 @@ const emailInput = document.querySelector("#email");
 const passwordInput = document.querySelector("#password");
 const errorContainer = document.querySelector(".errorContainer");
 const circle = document.querySelector(".circle");
+const settingsCircle = document.querySelector(".settingsCircle");
 const sumNum = document.querySelector(".sumNum");
 const articleContainer = document.querySelector(".entireArticle");
 const highlightedContainer = document.querySelector(".highlighted");
@@ -56,9 +57,8 @@ window.onload = () => {
   chrome.runtime.sendMessage({ key: "status" }, (response) => {
     if (response.key === "loginTrue") {
       checkTier(response.tier);
-      sumWrapper.classList.remove("none");
-      circle.classList.remove("none");
-      sumNum.textContent = response.payload;
+      handleOnLoadClassChanges();
+      sumNum.textContent = checkText(response.payload);
       textSpinner.classList.remove("none");
       logged = true;
     } else if (response.key === "loginFalse") {
@@ -115,10 +115,9 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       break;
     case "successfulLogin":
       checkTier(req.tier);
+      handleOnLoadClassChanges();
       loginWrapper.classList.add("none");
-      sumWrapper.classList.remove("none");
-      circle.classList.remove("none");
-      sumNum.textContent = req.payload;
+      sumNum.textContent = checkText(req.payload);
       break;
     case "parseWeb":
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -170,12 +169,51 @@ const checkTier = (tier) => {
   }
 };
 
+// converts the wordcount into appropriate sizes.
+const checkText = (text) => {
+  let number;
+  let final;
+  let roundedNum;
+  if (text >= 1000000) {
+    number = text / 1000000;
+    roundedNum = Math.round(number * 10) / 10;
+    final = roundedNum + "M";
+  } else if (text >= 100000) {
+    number = text / 1000;
+    roundedNum = Math.round(number * 10) / 10;
+    final = roundedNum + "K";
+  } else {
+    final = text.toString();
+  }
+  return final;
+};
+
 const handleSaveText = () => {
   saveSpinner.classList.remove("none");
   chrome.runtime.sendMessage(
     { key: "manualSaveText", payload: manualTextArea.value },
     (response) => {
       if (response) saveSpinner.classList.add("none");
+    }
+  );
+};
+
+const handleOnLoadClassChanges = () => {
+  sumWrapper.classList.remove("none");
+  settingsCircle.classList.remove("none");
+  circle.classList.remove("none");
+};
+
+// if cookie is found for website, navigate to settings, else navigate to login
+const checkCookies = () => {
+  chrome.cookies.get(
+    { url: "http://localhost:3000/", name: "uid" },
+    (cookie) => {
+      if (cookie) {
+        chrome.tabs.create({ url: "http://localhost:3000/settings" });
+      } else {
+        chrome.tabs.create({ url: "http://localhost:3000/welcome" });
+      }
     }
   );
 };
@@ -361,4 +399,9 @@ manualContainer.addEventListener("click", () => {
       count.textContent = text.split(" ").length.toString();
     }
   });
+});
+
+// opens settings when clicked.
+settingsCircle.addEventListener("click", () => {
+  checkCookies();
 });

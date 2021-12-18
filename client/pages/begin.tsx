@@ -147,16 +147,50 @@ function Begin() {
               </div>
               <p className={styles.feature}>1,000,000 words</p>
             </div>
-            <button
-              className={styles.paymentBtn}
-              onClick={handleResearcherClick}
-            >
-              {!loading1 ? (
-                "Try for free"
-              ) : (
-                <div className={styles.loading2}></div>
-              )}
-            </button>
+            {!meResult.fetching ? (
+              meResult.data ? (
+                meResult.data.me ? (
+                  meResult.data.me.paymentTier === "Researcher" ? (
+                    <button
+                      className={styles.paymentBtn}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.05)",
+                        cursor: "default",
+                      }}
+                      disabled={true}
+                    >
+                      {!loading1 ? (
+                        "Try for free"
+                      ) : (
+                        <div className={styles.loading2}></div>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      className={styles.paymentBtn}
+                      onClick={handleResearcherClick}
+                    >
+                      {!loading1 ? (
+                        "Try for free"
+                      ) : (
+                        <div className={styles.loading2}></div>
+                      )}
+                    </button>
+                  )
+                ) : (
+                  <button
+                    className={styles.paymentBtn}
+                    onClick={handleResearcherClick}
+                  >
+                    {!loading1 ? (
+                      "Try for free"
+                    ) : (
+                      <div className={styles.loading2}></div>
+                    )}
+                  </button>
+                )
+              ) : null
+            ) : null}
           </section>
         </div>
         <div className={styles.card}>
@@ -206,13 +240,50 @@ function Begin() {
               </div>
               <p className={styles.feature}>500,000 words</p>
             </div>
-            <button className={styles.paymentBtn} onClick={handleStudentClick}>
-              {!loading2 ? (
-                "Try for free"
-              ) : (
-                <div className={styles.loading2}></div>
-              )}
-            </button>
+            {!meResult.fetching ? (
+              meResult.data ? (
+                meResult.data.me ? (
+                  meResult.data.me.paymentTier === "Student" ? (
+                    <button
+                      className={styles.paymentBtn}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.05)",
+                        cursor: "default",
+                      }}
+                      disabled={true}
+                    >
+                      {!loading2 ? (
+                        "Try for free"
+                      ) : (
+                        <div className={styles.loading2}></div>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      className={styles.paymentBtn}
+                      onClick={handleStudentClick}
+                    >
+                      {!loading2 ? (
+                        "Try for free"
+                      ) : (
+                        <div className={styles.loading2}></div>
+                      )}
+                    </button>
+                  )
+                ) : (
+                  <button
+                    className={styles.paymentBtn}
+                    onClick={handleStudentClick}
+                  >
+                    {!loading2 ? (
+                      "Try for free"
+                    ) : (
+                      <div className={styles.loading2}></div>
+                    )}
+                  </button>
+                )
+              ) : null
+            ) : null}
           </section>
         </div>
         <div className={styles.card}>
