@@ -217,7 +217,17 @@ const checkCookies = () => {
     }
   );
 };
+// count number of words in text.
+const countWords = (text) => {
+  // remove any excess characters that are not A-Z or a-z
+  const removeChar = text.replace(/[^A-Za-z]\s+/g, " ");
 
+  // remove white space in front of and behind the string. Then split into an array.
+  const newWord = removeChar.trim().split(" ");
+
+  // return the array length to get the word count.
+  return newWord.length;
+};
 // save text
 manualTextArea.addEventListener("keyup", () => {
   clearTimeout(typingTimer);
@@ -270,18 +280,29 @@ fileUpload.addEventListener("change", (e) => {
   if (e.target.files[0].type !== "application/pdf") {
     alert("invalid file type");
   } else {
+    textSpinner.classList.remove("none");
     action = "file";
     rightContainer.classList.add("animation");
     const file = fileUpload.files[0];
+    const fileName = file.name;
     const formData = new FormData();
     formData.append("file", file);
-    console.log(formData);
     fetch("http://localhost:4000/upload", {
       method: "POST",
       body: formData,
     })
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        textSpinner.classList.add("none");
+        if (data.result) {
+          const wordCount = countWords(data.result).toString();
+          count.textContent = wordCount;
+          chrome.runtime.sendMessage({
+            key: "storeFileText",
+            payload: { filename: fileName, text: data.result },
+          });
+        }
+      });
   }
 });
 // activates login with google

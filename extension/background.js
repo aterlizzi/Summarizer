@@ -140,7 +140,6 @@ function receiver(req, sender, sendResponse) {
               },
               async (redirect_url) => {
                 console.log(redirect_url);
-                console.log();
                 let id_token = redirect_url.substring(
                   redirect_url.indexOf("id_token=") + 9
                 );
@@ -266,16 +265,10 @@ function receiver(req, sender, sendResponse) {
         sendResponse(response.parsedText);
       });
       break;
-    case "fileUpload":
-      console.log(req.payload);
-      fetch("http://localhost:4000/upload", {
-        method: "POST",
-        body: req.payload,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        });
+    case "storeFileText":
+      const filename = req.payload.filename;
+      const text = req.payload.text;
+      storePDFText(text, filename);
       break;
     case "summarize":
       const action = req.payload;
@@ -377,6 +370,8 @@ function receiver(req, sender, sendResponse) {
   }
   return true;
 }
+
+// built for when a receiver might have to process more than one request at a time.
 function receiver2(req, sender, sendResponse) {
   switch (req.key) {
     case "retrieveManualText":
@@ -389,35 +384,9 @@ function receiver2(req, sender, sendResponse) {
   }
   return true;
 }
-// const data = {
-//   prompt: `Write a short summary of the text.\nText: ${req.text}\nSummary:`,
-//   max_tokens: 256,
-//   temperature: 0.7,
-//   top_p: 1,
-//   stream: false,
-// };
-// const options = {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//     Authorization:
-//       "Bearer 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",
-//   },
-//   body: JSON.stringify(data),
-// };
-// fetch(
-//   "https://api.openai.com/v1/engines/davinci-instruct-beta/completions",
-//   options
-// )
-//   .then((response) => response.json())
-//   .then((data) => {
-//     console.log(data);
-//     returnMsg = data.choices[0].text;
-//     chrome.runtime.sendMessage({ key: "k8k4IQwFaX", text: returnMsg });
-//   });
 
-// Give a brief statement of the main points of the following text.
-
+// functions section
+// parse jwt into a usable form.
 function parseJwt(token) {
   var base64Url = token.split(".")[1];
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -432,6 +401,13 @@ function parseJwt(token) {
 
   return JSON.parse(jsonPayload);
 }
+
+// stores pdf text from extracted pdfs.
+const storePDFText = (text, filename) => {
+  chrome.storage.local.set({ file: text, url: filename });
+};
+
+// responsible for launching google login.
 const create_oauth2_url = () => {
   let nonce = encodeURIComponent(
     Math.random().toString(36).substring(2, 15) +
@@ -440,6 +416,8 @@ const create_oauth2_url = () => {
   let url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URI}&state=${STATE}&scope=${SCOPE}&prompt=${PROMPT}&nonce=${nonce}`;
   return url;
 };
+
+// retrieves user parameters upon loading, failure results in login screen.
 const verifyUserStatus = () => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["userStatus", "userInfo"], (response) => {
@@ -469,6 +447,7 @@ const retrieveArticleText = () => {
   });
 };
 
+// returns the saved summaries.
 const retrieveSummaryAndUrl = () => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["summary, summaryUrl"], (response) => {
@@ -484,6 +463,7 @@ const retrieveSummaryAndUrl = () => {
   });
 };
 
+// returns the stored selected text.
 const retrieveSelectedText = () => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["highlightedText"], (response) => {
@@ -498,6 +478,8 @@ const retrieveSelectedText = () => {
     });
   });
 };
+
+// returns the stored manual text.
 const retrieveManualText = () => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["manual"], (response) => {
@@ -512,6 +494,8 @@ const retrieveManualText = () => {
     });
   });
 };
+
+// when summarizing, use this function to return the appropriate data for the action type.
 const retrieveSummaryParameters = (action) => {
   return new Promise((resolve) => {
     verifyUserStatus().then((data) => {
@@ -555,6 +539,16 @@ const retrieveSummaryParameters = (action) => {
           });
           break;
         case "file":
+          chrome.storage.local.get(["file", "url"], (response) => {
+            if (chrome.runtime.lastError) {
+              resolve({ text: "", url: "", user: userParams });
+            }
+            resolve(
+              response.file === undefined
+                ? { text: "", url: "", user: userParams }
+                : { text: response.file, url: response.url, user: userParams }
+            );
+          });
           break;
         case "manual":
           chrome.storage.local.get(["manual", "url"], (response) => {

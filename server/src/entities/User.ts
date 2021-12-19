@@ -57,7 +57,7 @@ export class User extends BaseEntity {
   paymentTier: string;
 
   @Field(() => Number)
-  @Column({ default: 10000 })
+  @Column({ default: 25000 })
   wordCount: number;
 
   @Field(() => String)
@@ -90,7 +90,12 @@ export class User extends BaseEntity {
   @Column({ default: "" })
   subKey: string;
 
-  @OneToOne(() => Settings)
+  @Field(() => Settings, { nullable: true })
+  @OneToOne(() => Settings, {
+    cascade: true,
+    onDelete: "CASCADE",
+    nullable: true,
+  }) // cascade makes it such that I only need to save user to save settings, ondelete makes it so if a user is deleted, so are the settings.
   @JoinColumn()
   settings: Settings;
 }

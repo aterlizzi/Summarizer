@@ -5,7 +5,7 @@ import { Query, Resolver } from "type-graphql";
 export class FindUsersResolver {
   @Query(() => [User])
   async findUsers(): Promise<User[]> {
-    const users = await User.find();
+    const users = await User.find({ relations: ["settings"] });
     return users;
   }
 }

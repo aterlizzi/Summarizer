@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { useQuery } from "urql";
-import styles from "../../../styles/Token.module.scss";
+import Layout from "../../../components/layout";
+import styles from "../../../styles/ConfirmToken.module.scss";
 
 const ConfirmUser = `
   query($token: String!){
@@ -19,7 +20,11 @@ function Token() {
     variables: { token },
     pause: !token,
   });
+  console.log(result);
   return <main className={styles.main}></main>;
 }
 
+Token.getLayout = (page) => (
+  <Layout title="Confirmation - Untanglify">{page}</Layout>
+);
 export default Token;

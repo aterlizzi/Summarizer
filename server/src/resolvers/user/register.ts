@@ -9,6 +9,7 @@ import { v4 } from "uuid";
 import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
+import { Settings } from "../../entities/Settings";
 
 @Resolver()
 export class RegisterResolver {
@@ -36,6 +37,8 @@ export class RegisterResolver {
         accountType: "google",
         reason: usecase,
       });
+      const userSettings = Settings.create({ user: newUser });
+      newUser.settings = userSettings;
       await newUser.save();
       ctx.reply.setCookie("uid", newUser.id, {
         httpOnly: true,
@@ -77,10 +80,12 @@ export class RegisterResolver {
       accountType: "web",
       reason,
     });
+    const userSettings = Settings.create({ user });
+    user.settings = userSettings;
+    await user.save();
     const token = v4();
     await redis.set(registerUserToken + token, user.id, "ex", 60 * 60 * 24);
-    await user.save();
-    sendConfirmationMail(user.email, user.username!, registerUserToken + token);
+    sendConfirmationMail(user.email, user.username!, token);
     return { registered: true, error: {} };
   }
   @Query(() => User, { nullable: true })
@@ -89,6 +94,7 @@ export class RegisterResolver {
     @Ctx() ctx: MyContext
   ): Promise<User | undefined> {
     const userId = await redis.get(registerUserToken + token);
+    console.log(await redis.get(registerUserToken + token));
     if (!userId) return undefined;
     const user = await User.findOne(userId);
     if (!user || user.confirmed) return undefined;

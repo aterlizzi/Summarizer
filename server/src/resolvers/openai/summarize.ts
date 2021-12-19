@@ -13,6 +13,7 @@ export class SummarizeResolver {
     @Arg("options") { email, sub, text, url }: SummaryInputObj
   ): Promise<SummaryReturnObj | undefined> {
     let wordCount = countWords(text);
+    console.log(wordCount);
     let user;
     if (email) {
       user = await User.findOne({ where: { email } });

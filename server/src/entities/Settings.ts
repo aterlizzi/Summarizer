@@ -37,6 +37,7 @@ export class Settings extends BaseEntity {
   @Column({ default: Date.now(), type: "bigint" })
   timeInStorage: number;
 
+  @Field(() => User)
   @OneToOne(() => User)
   user: User;
 }
