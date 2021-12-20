@@ -1,6 +1,14 @@
+import { isAuth } from "./../../middlewares/isAuth";
 import { LoginOutput } from "./../../types/loginOutput";
 import { User } from "./../../entities/User";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import argon2 from "argon2";
 import jwtDecode from "jwt-decode";
 import { MyContext } from "../../types/MyContext";
@@ -111,5 +119,11 @@ export class LoginResolver {
         expiresIn: "15m",
       }),
     };
+  }
+
+  @Mutation(() => String)
+  @UseMiddleware(isAuth)
+  clickMe(): string {
+    return "hello";
   }
 }

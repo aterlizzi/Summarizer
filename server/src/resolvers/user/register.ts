@@ -112,7 +112,6 @@ export class RegisterResolver {
     @Ctx() ctx: MyContext
   ): Promise<ConfirmUserOutput> {
     const userId = await redis.get(registerUserToken + token);
-    console.log(await redis.get(registerUserToken + token));
     if (!userId) return { accessToken: "" };
     const user = await User.findOne(userId);
     if (!user || user.confirmed) return { accessToken: "" };

@@ -1,15 +1,28 @@
 import { useRouter } from "next/router";
-import React from "react";
-import { useQuery } from "urql";
+import React, { useEffect } from "react";
+import { useMutation, useQuery } from "urql";
 import Layout from "../../../components/layout";
 import styles from "../../../styles/ConfirmToken.module.scss";
 
 const ConfirmUser = `
   query($token: String!){
     confirmUser(token: $token) {
-      id
+      accessToken
     }
   }
+`;
+
+const ClickMe = `
+  mutation{
+    clickMe
+  }
+`;
+
+const Logout = `
+  mutation{
+    logout
+  }
+
 `;
 
 function Token() {
@@ -20,8 +33,37 @@ function Token() {
     variables: { token },
     pause: !token,
   });
-  console.log(result);
-  return <main className={styles.main}></main>;
+  const [clickResult, clickme] = useMutation(ClickMe);
+  const [logoutResult, logout] = useMutation(Logout);
+  useEffect(() => {
+    if (result.data) {
+      if (result.data.confirmUser.accessToken !== "") {
+        localStorage.setItem(
+          "accessToken",
+          result.data.confirmUser.accessToken
+        );
+      }
+    }
+  }, [result]);
+
+  const handleClick = () => {
+    clickme().then((result) => console.log(result));
+  };
+
+  const handleLogout = () => {
+    logout().then((result) => {
+      if (result) {
+        localStorage.clear();
+      }
+    });
+  };
+  return (
+    <main className={styles.main}>
+      {result.data ? result.data.confirmUser.accessToken : null}
+      <button onClick={handleClick}>Click me</button>
+      <button onClick={handleLogout}>logout</button>
+    </main>
+  );
 }
 
 Token.getLayout = (page) => (

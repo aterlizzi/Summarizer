@@ -1,4 +1,4 @@
-export const getAuth = async ({ authState, mutate }) => {
+export const getAuth = async ({ authState }) => {
   if (!authState) {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) return { accessToken };

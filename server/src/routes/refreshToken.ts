@@ -7,6 +7,7 @@ const refreshTokenRoute = (fastify: any, _: void, next: any) => {
   fastify.post(
     "/refresh_token",
     async (req: FastifyRequest, reply: FastifyReply) => {
+      console.log("attempted refresh");
       const token = req.cookies.jid;
       if (!token) return reply.send({ ok: false, accessToken: "" });
       let payload: any;
@@ -28,7 +29,7 @@ const refreshTokenRoute = (fastify: any, _: void, next: any) => {
         {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+          maxAge: 60 * 60 * 24 * 7, // 7 days,
           path: "/",
         }
       );

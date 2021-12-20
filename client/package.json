@@ -15,6 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@urql/exchange-auth": "^0.1.7",
     "@urql/exchange-multipart-fetch": "^0.1.13",
+    "jwt-decode": "^3.1.2",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -23,6 +24,7 @@
     "urql": "^2.0.5"
   },
   "devDependencies": {
+    "@types/jwt-decode": "^3.1.0",
     "@types/react": "17.0.22",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",

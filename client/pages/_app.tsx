@@ -8,25 +8,27 @@ import { authExchange } from "@urql/exchange-auth";
 import { getAuth } from "../utils/getAuth";
 import { addAuthToOperation } from "../utils/addAuthToOperation";
 import { didAuthError } from "../utils/didAuthError";
+import { useMemo } from "react";
+import { willAuthError } from "../utils/willAuthError";
 
-const client = createClient({
-  url: "http://localhost:4000/graphql",
-  exchanges: [
-    multipartFetchExchange,
-    dedupExchange,
-    authExchange({
-      getAuth,
-      addAuthToOperation,
-      didAuthError,
-    }),
-  ],
-  fetchOptions: {
-    credentials: "include",
-  },
-});
-
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, isLoggedIn }) {
   const getLayout = Component.getLayout || ((page) => page);
+
+  const client = useMemo(() => {
+    return createClient({
+      url: "http://localhost:4000/graphql",
+      exchanges: [
+        dedupExchange,
+        authExchange({
+          getAuth,
+          addAuthToOperation,
+          didAuthError,
+          willAuthError,
+        }),
+        multipartFetchExchange,
+      ],
+    });
+  }, [isLoggedIn]);
 
   return getLayout(
     <Provider value={client}>

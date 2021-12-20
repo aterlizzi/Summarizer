@@ -15,6 +15,7 @@ export const addAuthToOperation = ({ authState, operation }) => {
         ...fetchOptions.headers,
         Authorization: `Bearer ${authState.accessToken}`,
       },
+      credentials: "include",
     },
   });
 };
