@@ -14,4 +14,7 @@ export class LoginOutput {
 
   @Field(() => Number)
   wordCount: number;
+
+  @Field(() => String)
+  accessToken: string;
 }

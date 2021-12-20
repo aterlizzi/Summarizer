@@ -13,6 +13,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "@urql/exchange-auth": "^0.1.7",
     "@urql/exchange-multipart-fetch": "^0.1.13",
     "next": "11.1.2",
     "react": "17.0.2",

@@ -1,5 +1,7 @@
+import { FastifyRequest, FastifyReply } from "fastify";
+
 export interface MyContext {
-  req: Record<string, any>;
-  reply: any;
-  redis: any;
+  req: FastifyRequest;
+  reply: FastifyReply;
+  payload?: { userId: string };
 }

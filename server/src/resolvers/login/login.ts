@@ -4,6 +4,7 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import argon2 from "argon2";
 import jwtDecode from "jwt-decode";
 import { MyContext } from "../../types/MyContext";
+import { sign } from "jsonwebtoken";
 
 @Resolver()
 export class LoginResolver {
@@ -33,19 +34,29 @@ export class LoginResolver {
         error: { message: "Either your email or password is incorrect." },
         tier: "",
         wordCount: 0,
+        accessToken: "",
       };
     }
-    ctx.reply.setCookie("uid", user.id, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
-      path: "/",
-    });
+    ctx.reply.setCookie(
+      "jid",
+      sign({ userId: user.id }, process.env.JWT_RT_SECRET_TOKEN!, {
+        expiresIn: "7d",
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+        path: "/",
+      }
+    );
     return {
       logged: true,
       error: {},
       tier: user.paymentTier,
       wordCount: user.wordCount,
+      accessToken: sign({ userId: user.id }, process.env.JWT_AT_SECRET_TOKEN!, {
+        expiresIn: "15m",
+      }),
     };
   }
   @Mutation(() => LoginOutput)
@@ -61,6 +72,7 @@ export class LoginResolver {
         error: { message: "Either your email or password is incorrect." },
         tier: "",
         wordCount: 0,
+        accessToken: "",
       };
     if (user.accountType !== "web")
       return {
@@ -68,6 +80,7 @@ export class LoginResolver {
         error: { message: "Either your email or password is incorrect." },
         tier: "",
         wordCount: 0,
+        accessToken: "",
       };
     if (!(await argon2.verify(user.password!, password)))
       return {
@@ -75,18 +88,28 @@ export class LoginResolver {
         error: { message: "Either your email or password is incorrect." },
         tier: "",
         wordCount: 0,
+        accessToken: "",
       };
-    ctx.reply.setCookie("uid", user.id, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
-      path: "/",
-    });
+    ctx.reply.setCookie(
+      "jid",
+      sign({ userId: user.id }, process.env.JWT_RT_SECRET_TOKEN!, {
+        expiresIn: "7d",
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+        path: "/",
+      }
+    );
     return {
       logged: true,
       error: {},
       tier: user.paymentTier,
       wordCount: user.wordCount,
+      accessToken: sign({ userId: user.id }, process.env.JWT_AT_SECRET_TOKEN!, {
+        expiresIn: "15m",
+      }),
     };
   }
 }

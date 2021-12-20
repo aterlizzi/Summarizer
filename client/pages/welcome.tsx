@@ -78,10 +78,14 @@ function Welcome() {
       registerGoogleUser(variables).then((response) => {
         if (response) {
           if (response.data) {
-            if (!response.data.registerGoogleUser) {
+            if (response.data.registerGoogleUser.accessToken === "") {
               setErrorMsg("User with that email already exists.");
               setError(true);
             } else {
+              localStorage.setItem(
+                "accessToken",
+                response.data.registerGoogleUser.accessToken
+              );
               router.push("/begin");
             }
           }
@@ -93,6 +97,10 @@ function Welcome() {
           if (response.data) {
             if (response.data.verifyGoogleUser) {
               if (response.data.verifyGoogleUser.logged) {
+                localStorage.setItem(
+                  "accessToken",
+                  response.data.verifyGoogleUser.accessToken
+                );
                 router.push("/begin");
               } else {
                 setErrorMsg(
@@ -1415,7 +1423,7 @@ Welcome.getLayout = (page) => {
   return <Layout title="Welcome! - Summarizer">{page}</Layout>;
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  if (req.cookies.hasOwnProperty("uid")) {
+  if (req.cookies.hasOwnProperty("jid")) {
     return {
       redirect: {
         destination: "/",

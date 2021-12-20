@@ -1,19 +1,21 @@
+import { isAuth } from "./../../middlewares/isAuth";
 import { Summary } from "./../../entities/Summary";
 import { SummaryInputObj } from "./../../types/SummaryInputObj";
 import { SummaryReturnObj } from "./../../types/SummaryReturnObj";
 import { User } from "../../entities/User";
-import { Arg, Mutation, Resolver } from "type-graphql";
+import { Arg, Mutation, Resolver, UseMiddleware } from "type-graphql";
 const OpenAI = require("openai-api");
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 @Resolver()
 export class SummarizeResolver {
   @Mutation(() => SummaryReturnObj, { nullable: true })
+  @UseMiddleware(isAuth)
   async summarize(
     @Arg("options") { email, sub, text, url }: SummaryInputObj
   ): Promise<SummaryReturnObj | undefined> {
     let wordCount = countWords(text);
-    console.log(wordCount);
+    console.log(text, wordCount);
     let user;
     if (email) {
       user = await User.findOne({ where: { email } });
@@ -126,6 +128,7 @@ const handleCooldown = async (user: User) => {
 const spliceLargeText = (text: string) => {
   const wordCount = countWords(text);
   const [largestFactor, newWordCount] = determineLargestFactor(wordCount);
+  console.log(largestFactor);
   const hashmap = sectionalizeText(largestFactor, newWordCount, text);
   console.log(hashmap);
 };

@@ -1,3 +1,5 @@
+import { ConfirmUserOutput } from "./../../types/confirmUserOutput";
+import { sign } from "jsonwebtoken";
 import { registerUserInput } from "./../../types/registerUserInput";
 import { MyContext } from "./../../types/MyContext";
 import { registerUserToken } from "./../../constants/redisPrefixes";
@@ -18,10 +20,9 @@ export class RegisterResolver {
     @Arg("token") token: string,
     @Arg("usecase") usecase: string,
     @Ctx() ctx: MyContext
-  ): Promise<boolean> {
+  ): Promise<{ accessToken: string }> {
     const parsedToken: any = jwtDecode(token);
-    console.log(parsedToken);
-    if (parsedToken.iss !== "accounts.google.com") return true;
+    if (parsedToken.iss !== "accounts.google.com") return { accessToken: "" };
     const sub = parsedToken.sub;
     const user = await User.findOne({ where: { googleSubKey: sub } });
     const user2 = await User.findOne({ where: { email: parsedToken.email } });
@@ -40,15 +41,29 @@ export class RegisterResolver {
       const userSettings = Settings.create({ user: newUser });
       newUser.settings = userSettings;
       await newUser.save();
-      ctx.reply.setCookie("uid", newUser.id, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
-        path: "/",
-      });
-      return true;
+      ctx.reply.setCookie(
+        "jid",
+        sign({ userId: newUser.id }, process.env.JWT_RT_SECRET_TOKEN!, {
+          expiresIn: "7d",
+        }),
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+          path: "/",
+        }
+      );
+      return {
+        accessToken: sign(
+          { userId: newUser.id },
+          process.env.JWT_AT_SECRET_TOKEN!,
+          {
+            expiresIn: "15m",
+          }
+        ),
+      };
     } else {
-      return false;
+      return { accessToken: "" };
     }
   }
   @Mutation(() => RegisterUserOutput)
@@ -86,27 +101,40 @@ export class RegisterResolver {
     const token = v4();
     await redis.set(registerUserToken + token, user.id, "ex", 60 * 60 * 24);
     sendConfirmationMail(user.email, user.username!, token);
-    return { registered: true, error: {} };
+    return {
+      registered: true,
+      error: {},
+    };
   }
-  @Query(() => User, { nullable: true })
+  @Query(() => ConfirmUserOutput)
   async confirmUser(
     @Arg("token") token: string,
     @Ctx() ctx: MyContext
-  ): Promise<User | undefined> {
+  ): Promise<ConfirmUserOutput> {
     const userId = await redis.get(registerUserToken + token);
     console.log(await redis.get(registerUserToken + token));
-    if (!userId) return undefined;
+    if (!userId) return { accessToken: "" };
     const user = await User.findOne(userId);
-    if (!user || user.confirmed) return undefined;
+    if (!user || user.confirmed) return { accessToken: "" };
     user.confirmed = true;
     await user.save();
     await redis.del(registerUserToken + token);
-    ctx.reply.setCookie("uid", userId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
-      path: "/",
-    });
-    return user;
+    ctx.reply.setCookie(
+      "jid",
+      sign({ userId: user.id }, process.env.JWT_RT_SECRET_TOKEN!, {
+        expiresIn: "7d",
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days,
+        path: "/",
+      }
+    );
+    return {
+      accessToken: sign({ userId: user.id }, process.env.JWT_AT_SECRET_TOKEN!, {
+        expiresIn: "15m",
+      }),
+    };
   }
 }

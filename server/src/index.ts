@@ -16,6 +16,7 @@ import mercurius from "mercurius";
 import { createConnection } from "typeorm";
 const stripeWebhook = require("./routes/stripe");
 const uploadEndpoint = require("./routes/upload");
+const refreshTokenRoute = require("./routes/refreshToken");
 
 const main = async () => {
   const app = fastify();
@@ -25,7 +26,7 @@ const main = async () => {
     host: "localhost",
     port: 5432,
     username: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PsASS,
+    password: process.env.DATABASE_PASS,
     database: "summarizer",
     entities: [User, Summary, SavedSummary, Settings],
     synchronize: true,
@@ -58,6 +59,7 @@ const main = async () => {
   });
   app.register(uploadEndpoint);
   app.register(stripeWebhook);
+  app.register(refreshTokenRoute);
   app.listen(parseInt(process.env.PORT!), () => {
     console.log(`Server running on port ${process.env.PORT}`);
   });
