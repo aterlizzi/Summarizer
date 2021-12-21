@@ -34,48 +34,9 @@ function receiver(req, sender, sendResponse) {
         userSignedIn = res.userStatus;
         switch (userSignedIn) {
           case true:
-            if (res.userInfo.email) {
-              const body = JSON.stringify({
-                query: `query {
-                    me(email: "${res.userInfo.email}") {
-                      wordCount
-                      paymentTier
-                    }
-                  }`,
-              });
-              fetch("http://localhost:4000/graphql", {
-                headers: { "content-type": "application/json" },
-                method: "POST",
-                body,
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  const payload = data.data.me.wordCount;
-                  const tier = data.data.me.paymentTier;
-                  sendResponse({ key: "loginTrue", payload, tier });
-                })
-                .catch((err) => console.log(err));
-            } else if (res.userInfo.sub) {
-              const body = JSON.stringify({
-                query: `query {
-                    me(sub: "${res.userInfo.sub}") {
-                      wordCount
-                      paymentTier
-                    }
-                  }`,
-              });
-              fetch("http://localhost:4000/graphql", {
-                headers: { "content-type": "application/json" },
-                method: "POST",
-                body,
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  const payload = data.data.me.wordCount;
-                  const tier = data.data.me.paymentTier;
-                  sendResponse({ key: "loginTrue", payload, tier });
-                })
-                .catch((err) => console.log(err));
+            const token = res.userInfo.accessToken;
+            if (token) {
+              confirmUserStatus(res.userInfo).then((res) => sendResponse(res));
             }
             break;
           case false:
@@ -95,6 +56,7 @@ function receiver(req, sender, sendResponse) {
             wordCount
             tier
             logged
+            accessToken
           }
         }`,
       });
@@ -110,6 +72,7 @@ function receiver(req, sender, sendResponse) {
           } else {
             const user_info = {
               email: email,
+              accessToken: data.data.verifyUser.accessToken,
             };
             chrome.runtime.sendMessage({
               key: "successfulLogin",
@@ -139,13 +102,11 @@ function receiver(req, sender, sendResponse) {
                 interactive: true,
               },
               async (redirect_url) => {
-                console.log(redirect_url);
                 let id_token = redirect_url.substring(
                   redirect_url.indexOf("id_token=") + 9
                 );
                 id_token = id_token.substring(0, id_token.indexOf("&"));
-                const user_info = parseJwt(id_token);
-                console.log(user_info);
+                let user_info = parseJwt(id_token);
                 if (
                   (user_info.iss === "https://accounts.google.com" ||
                     user_info.iss === "accounts.google") &&
@@ -157,6 +118,7 @@ function receiver(req, sender, sendResponse) {
                         wordCount
                         logged
                         tier
+                        accessToken
                       }
                     }`,
                   });
@@ -167,7 +129,6 @@ function receiver(req, sender, sendResponse) {
                   })
                     .then((response) => response.json())
                     .then((data) => {
-                      console.log(data);
                       if (!data.data.verifyGoogleUser.logged) {
                         chrome.runtime.sendMessage({ key: "failedLogin" });
                       } else {
@@ -176,6 +137,10 @@ function receiver(req, sender, sendResponse) {
                           payload: data.data.verifyGoogleUser.wordCount,
                           tier: data.data.verifyGoogleUser.tier,
                         });
+                        user_info = {
+                          ...user_info,
+                          accessToken: data.data.verifyGoogleUser.accessToken,
+                        };
                         chrome.storage.local.set({
                           userStatus: true,
                           userInfo: user_info,
@@ -193,7 +158,8 @@ function receiver(req, sender, sendResponse) {
       });
       break;
     case "logout":
-      // log user out
+      logout();
+      sendResponse("logged out");
       break;
     case "sendSelectedText":
       retrieveSelectedText().then((response) => {
@@ -272,44 +238,8 @@ function receiver(req, sender, sendResponse) {
       break;
     case "summarize":
       const action = req.payload;
-      retrieveSummaryParameters(action).then((initObj) => {
-        const email = initObj.user.email;
-        const sub = initObj.user.sub;
-        const text = initObj.text;
-        const url = initObj.url;
-        if (text !== "") {
-          const query = `mutation Summarize($options: SummaryInputObj!) {
-            summarize(options: $options) {
-              summary
-              remainingSummaries
-            }
-          }`;
-          const summaryBody = JSON.stringify({
-            query,
-            variables: {
-              options: {
-                email,
-                sub,
-                text,
-                url,
-              },
-            },
-          });
-          fetch("http://localhost:4000/graphql", {
-            headers: { "content-type": "application/json" },
-            method: "POST",
-            body: summaryBody,
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              const url = data.data.summarize.url;
-              const summary = data.data.summarize.summary;
-              chrome.storage.local.set({ summaryUrl: url, summary });
-              sendResponse(data);
-            });
-        } else {
-          sendResponse("not enough text");
-        }
+      summarizeFunc(action).then((result) => {
+        sendResponse(result);
       });
       break;
     case "manualSaveText":
@@ -407,6 +337,36 @@ const storePDFText = (text, filename) => {
   chrome.storage.local.set({ file: text, url: filename });
 };
 
+// used upon every load up process to verify user status.
+const confirmUserStatus = async (userInfo) => {
+  let token = userInfo.accessToken;
+  const { exp } = parseJwt(token);
+  if (Date.now() >= exp * 1000) {
+    token = await refreshAccessToken(userInfo);
+  }
+  const body = JSON.stringify({
+    query: `query {
+        me {
+          wordCount
+          paymentTier
+        }
+      }`,
+  });
+  const response = await fetch("http://localhost:4000/graphql", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body,
+  });
+  const data = await response.json();
+
+  const payload = data.data.me.wordCount;
+  const tier = data.data.me.paymentTier;
+  return { key: "loginTrue", payload, tier };
+};
+
 // responsible for launching google login.
 const create_oauth2_url = () => {
   let nonce = encodeURIComponent(
@@ -495,15 +455,131 @@ const retrieveManualText = () => {
   });
 };
 
+// logout
+const logout = () => {
+  const query = `mutation Logout {
+    logout
+  }`;
+  const summaryBody = JSON.stringify({
+    query,
+  });
+  fetch("http://localhost:4000/graphql", {
+    headers: { "content-type": "application/json" },
+    method: "POST",
+    body: summaryBody,
+  }).then((res) => {
+    res.json().then((data) => {
+      if (data.data && data.data.logout) {
+        chrome.storage.local.clear();
+      }
+    });
+  });
+  return "done";
+};
+
+// request a new access token
+const refreshAccessToken = async (userInfo) => {
+  // token has expired. Request new token.
+  let token;
+  const response = await fetch("http://localhost:4000/refresh_token", {
+    method: "POST",
+    credentials: "include",
+  });
+  const { ok, accessToken } = await response.json();
+
+  // if token was a success, replace the old accesstoken with the new.
+  if (ok) {
+    token = accessToken;
+    chrome.storage.local.set({ userInfo: { ...userInfo, accessToken } });
+  }
+
+  // if token wasn't a success, log out the user.
+
+  return token;
+};
+
+const summarizeFunc = async (action, retries = 0) => {
+  // retrieve fails depending on the action required.
+  const initObj = await retrieveSummaryParameters(action);
+  const email = initObj.user.email;
+  const sub = initObj.user.sub;
+  const text = initObj.text;
+  const url = initObj.url;
+  let token = initObj.user.accessToken;
+  if (token) {
+    // parse the token
+    const { exp } = parseJwt(token);
+    // if the token is known to be expired, request new token.
+    if (Date.now() >= exp * 1000) {
+      token = await refreshAccessToken(initObj.user);
+    }
+  }
+
+  // if the text isn't blank, hit the backend with a summarization request.
+  if (text !== "") {
+    const query = `mutation Summarize($options: SummaryInputObj!) {
+      summarize(options: $options) {
+        summary
+        remainingSummaries
+      }
+    }`;
+    const summaryBody = JSON.stringify({
+      query,
+      variables: {
+        options: {
+          email,
+          sub,
+          text,
+          url,
+        },
+      },
+    });
+    const response = await fetch("http://localhost:4000/graphql", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      method: "POST",
+      body: summaryBody,
+    });
+    const data = await response.json();
+
+    // if authentication still fails, try one more time.
+    if (
+      data.errors &&
+      data.errors[0].message === "Not authenticated." &&
+      retries == 0
+    ) {
+      await refreshAccessToken(initObj.user);
+      summarizeFunc(action, 1);
+    }
+    if (data.data && data.data.summarize) {
+      const summary = data.data.summarize.summary;
+      chrome.storage.local.set({ summaryUrl: url, summary });
+      return data;
+    }
+  } else {
+    return "not enough text";
+  }
+};
+
 // when summarizing, use this function to return the appropriate data for the action type.
 const retrieveSummaryParameters = (action) => {
   return new Promise((resolve) => {
     verifyUserStatus().then((data) => {
       let userParams = {};
       if (data.userInfo.email) {
-        userParams = { email: data.userInfo.email, sub: undefined };
+        userParams = {
+          email: data.userInfo.email,
+          sub: undefined,
+          accessToken: data.userInfo.accessToken,
+        };
       } else if (data.userInfo.sub) {
-        userParams = { email: undefined, sub: data.userInfo.sub };
+        userParams = {
+          email: undefined,
+          sub: data.userInfo.sub,
+          accessToken: data.userInfo.accessToken,
+        };
       }
       switch (action) {
         case "entire":

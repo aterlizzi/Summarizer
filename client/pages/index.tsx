@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../components/layout";
 import GoogleLogin from "react-google-login";
 import { useMutation } from "urql";
@@ -12,7 +12,6 @@ const GoogleLoginMutation = `
 
 function Home() {
   const [googleLoginResult, googleLogin] = useMutation(GoogleLoginMutation);
-
   const handleResponseGoogle = (response) => {
     const variables = {
       token: response.tokenId,

@@ -27,6 +27,9 @@ function MyApp({ Component, pageProps, isLoggedIn }) {
         }),
         multipartFetchExchange,
       ],
+      fetchOptions: {
+        credentials: "include",
+      },
     });
   }, [isLoggedIn]);
 

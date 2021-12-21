@@ -15,12 +15,12 @@ import { Settings } from "../../entities/Settings";
 
 @Resolver()
 export class RegisterResolver {
-  @Mutation(() => Boolean)
+  @Mutation(() => ConfirmUserOutput)
   async registerGoogleUser(
     @Arg("token") token: string,
     @Arg("usecase") usecase: string,
     @Ctx() ctx: MyContext
-  ): Promise<{ accessToken: string }> {
+  ): Promise<ConfirmUserOutput> {
     const parsedToken: any = jwtDecode(token);
     if (parsedToken.iss !== "accounts.google.com") return { accessToken: "" };
     const sub = parsedToken.sub;

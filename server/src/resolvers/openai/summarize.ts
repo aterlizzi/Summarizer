@@ -1,9 +1,10 @@
+import { MyContext } from "./../../types/MyContext";
 import { isAuth } from "./../../middlewares/isAuth";
 import { Summary } from "./../../entities/Summary";
 import { SummaryInputObj } from "./../../types/SummaryInputObj";
 import { SummaryReturnObj } from "./../../types/SummaryReturnObj";
 import { User } from "../../entities/User";
-import { Arg, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 const OpenAI = require("openai-api");
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
@@ -12,16 +13,15 @@ export class SummarizeResolver {
   @Mutation(() => SummaryReturnObj, { nullable: true })
   @UseMiddleware(isAuth)
   async summarize(
-    @Arg("options") { email, sub, text, url }: SummaryInputObj
+    @Arg("options") { email, sub, text, url }: SummaryInputObj,
+    @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
     let wordCount = countWords(text);
     console.log(text, wordCount);
-    let user;
-    if (email) {
-      user = await User.findOne({ where: { email } });
-    } else if (sub) {
-      user = await User.findOne({ where: { googleSubKey: sub } });
-    }
+
+    // payload is not undefined because of authentication process.
+    const user = await User.findOne({ where: { id: payload!.userId } });
+
     if (!user) return undefined;
     if (!user.prem) await handleCooldown(user);
     if (user.wordCount <= 0) return undefined;

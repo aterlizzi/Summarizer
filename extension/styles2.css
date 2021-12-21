@@ -24,6 +24,24 @@
   margin: 0;
   font-size: 1.25em;
 }
+.main .logoutCircle {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  position: absolute;
+  bottom: 10px;
+  left: 45px;
+  cursor: pointer;
+}
+.main .logoutCircle i {
+  color: #bb86fc;
+  margin: 0;
+  font-size: 1.25em;
+}
 .main .loginWrapper .buttonContainer .divider {
   position: relative;
   margin-top: 1em;

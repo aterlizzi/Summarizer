@@ -29,10 +29,6 @@ export class Settings extends BaseEntity {
   @Column({ default: true })
   saveInDatabase: boolean;
 
-  @Field(() => String)
-  @Column({ default: "" })
-  zoteroApiKey: string;
-
   @Field(() => Number)
   @Column({ default: Date.now(), type: "bigint" })
   timeInStorage: number;
@@ -40,4 +36,24 @@ export class Settings extends BaseEntity {
   @Field(() => User)
   @OneToOne(() => User)
   user: User;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  zoteroAPIKey: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  zoteroUserId: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  zoteroRequestToken: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  zoteroRequestSecret: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  zoteroConnected: boolean;
 }

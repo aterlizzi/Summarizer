@@ -35,6 +35,7 @@ const hTrashBtn = document.querySelector(".hTrash");
 const summaryContainer = document.querySelector(".container");
 const bookmark = document.querySelector(".save");
 const saveRejectContainer = document.querySelector(".saveRejectContainer");
+const logoutCircle = document.querySelector(".logoutCircle");
 
 // icons
 const pdfIcon = document.querySelector(".pdficon");
@@ -86,6 +87,14 @@ window.onload = () => {
     });
   });
 };
+
+logoutCircle.addEventListener("click", () => {
+  chrome.runtime.sendMessage({ key: "logout" }, (response) => {
+    if (response === "logged out") {
+      window.close();
+    }
+  });
+});
 
 // clear and save manual text
 mTrashBtn.addEventListener("click", () => {
@@ -201,13 +210,14 @@ const handleSaveText = () => {
 const handleOnLoadClassChanges = () => {
   sumWrapper.classList.remove("none");
   settingsCircle.classList.remove("none");
+  logoutCircle.classList.remove("none");
   circle.classList.remove("none");
 };
 
 // if cookie is found for website, navigate to settings, else navigate to login
 const checkCookies = () => {
   chrome.cookies.get(
-    { url: "http://localhost:3000/", name: "uid" },
+    { url: "http://localhost:3000/", name: "jid" },
     (cookie) => {
       if (cookie) {
         chrome.tabs.create({ url: "http://localhost:3000/settings" });

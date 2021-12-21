@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import Layout from "../components/layout";
-import styles from "../styles/Welcome.module.scss";
-import { useMutation } from "urql";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import SelectUsecaseComp from "../components/welcome/SelectUsecaseComp";
-import ReturnButtonComp from "../components/welcome/ReturnButtonComp";
+import React, { useState } from "react";
+import { useMutation } from "urql";
+import Layout from "../components/layout";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
+import styles from "../styles/Welcome.module.scss";
 
 const RegisterWebUser = `
     mutation($options: registerUserInput!) {
@@ -21,9 +19,7 @@ const RegisterWebUser = `
 `;
 const RegisterGoogleUser = `
     mutation($token: String!, $usecase: String!) {
-        registerGoogleUser(token: $token, usecase: $usecase) {
-          accessToken
-        }
+        registerGoogleUser(token: $token, usecase: $usecase)
     }
 `;
 const VerifyGoogleUser = `
@@ -46,15 +42,14 @@ const VerifyWebUser = `
     }
 `;
 
-function Welcome() {
+function Login() {
   const router = useRouter();
   const [usecase, setUseCase] = useState("");
-  const [section, setSection] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [revealPass, setRevealPass] = useState(false);
   const [slide, setSlide] = useState(1);
-  const [signin, setSignin] = useState(true);
+  const [signin, setSignin] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -72,7 +67,6 @@ function Welcome() {
         usecase: usecaseVariable,
       };
       registerGoogleUser(variables).then((response) => {
-        console.log(response);
         if (response) {
           if (response.data) {
             if (response.data.registerGoogleUser.accessToken === "") {
@@ -98,7 +92,7 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyGoogleUser.accessToken
                 );
-                router.push("/begin");
+                router.push("/");
               } else {
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
@@ -152,6 +146,7 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyUser.accessToken
                 );
+                router.push("/");
               }
             }
           }
@@ -159,45 +154,30 @@ function Welcome() {
       });
     }
   };
-
   return (
     <main className={styles.main}>
-      {section === 0 ? (
-        <SelectUsecaseComp
-          setUseCase={setUseCase}
-          setSection={setSection}
-          section={section}
-        />
-      ) : (
-        <>
-          <ReturnButtonComp setSection={setSection} section={section} />
-          <div className={styles.accountType}>
-            <p className={styles.type}>{usecase}</p>
-          </div>
-          <MainSigninLoginComp
-            setSignin={setSignin}
-            signin={signin}
-            handleSubmit={handleSubmit}
-            setEmail={setEmail}
-            setError={setError}
-            setPassword={setPassword}
-            revealPass={revealPass}
-            setRevealPass={setRevealPass}
-            slide={slide}
-            error={error}
-            errorMsg={errorMsg}
-            handleResponseGoogle={handleResponseGoogle}
-            handleResponseGoogleFailure={handleResponseGoogleFailure}
-            setSlide={setSlide}
-          />
-        </>
-      )}
+      <MainSigninLoginComp
+        setSignin={setSignin}
+        signin={signin}
+        handleSubmit={handleSubmit}
+        setEmail={setEmail}
+        setError={setError}
+        setPassword={setPassword}
+        revealPass={revealPass}
+        setRevealPass={setRevealPass}
+        slide={slide}
+        error={error}
+        errorMsg={errorMsg}
+        handleResponseGoogle={handleResponseGoogle}
+        handleResponseGoogleFailure={handleResponseGoogleFailure}
+        setSlide={setSlide}
+      />
     </main>
   );
 }
 
-Welcome.getLayout = (page) => {
-  return <Layout title="Welcome! - Summarizer">{page}</Layout>;
+Login.getLayout = (page) => {
+  return <Layout title="Login - Untanglify">{page}</Layout>;
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (req.cookies.hasOwnProperty("jid")) {
@@ -212,4 +192,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     props: {},
   };
 };
-export default Welcome;
+export default Login;
