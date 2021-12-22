@@ -56,4 +56,32 @@ export class Settings extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   zoteroConnected: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  notionAccessToken: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  notionBotId: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  notionWorkspaceName: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  notionWorkspaceIcon: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  notionWorkspaceId: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  notionUserId: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  notionConnected: boolean;
 }

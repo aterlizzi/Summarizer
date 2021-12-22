@@ -161,7 +161,7 @@ export class ZoteroResolver {
       where: { id: payload!.userId },
       relations: ["settings"],
     });
-    if (!user) return false;
+    if (!user || !user.settings.zoteroConnected) return false;
     user.settings.zoteroConnected = false;
     user.settings.zoteroAPIKey = "";
     user.settings.zoteroRequestSecret = "";

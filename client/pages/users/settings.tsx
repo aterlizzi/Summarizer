@@ -2,19 +2,25 @@ import { GetServerSideProps } from "next";
 import React from "react";
 import { useMutation } from "urql";
 import Layout from "../../components/layout";
-import ZoteroContainerComp from "../../components/settings/zoteroContainerComp";
 import styles from "../../styles/Settings.module.scss";
 import { useRouter } from "next/router";
+import AuthContainerComp from "../../components/settings/authContainerComp";
 
 const AuthZotero = `
   mutation{
     authZotero
   }
 `;
+const AuthNotion = `
+  mutation{
+    authNotion
+  }
+`;
 
 function Settings() {
   const router = useRouter();
   const [zoteroResult, authZotero] = useMutation(AuthZotero);
+  const [notionResult, authNotion] = useMutation(AuthNotion);
 
   const handleZoteroAuth = () => {
     authZotero().then((res) => {
@@ -25,9 +31,19 @@ function Settings() {
     });
   };
 
+  const handleNotionAuth = () => {
+    authNotion().then((res) => {
+      if (res.data && res.data.authNotion !== "") {
+        const url = res.data.authNotion;
+        router.push(url);
+      }
+    });
+  };
+
   return (
     <main className={styles.main}>
-      <ZoteroContainerComp handleZoteroAuth={handleZoteroAuth} />
+      <AuthContainerComp handleAuth={handleZoteroAuth} name={"Zotero"} />
+      <AuthContainerComp handleAuth={handleNotionAuth} name={"Notion"} />
     </main>
   );
 }
