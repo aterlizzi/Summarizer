@@ -17,10 +17,17 @@ const AuthNotion = `
   }
 `;
 
+const AuthGoogle = `
+  mutation{
+    authGoogle
+  }
+`;
+
 function Settings() {
   const router = useRouter();
   const [zoteroResult, authZotero] = useMutation(AuthZotero);
   const [notionResult, authNotion] = useMutation(AuthNotion);
+  const [googleResult, authGoogle] = useMutation(AuthGoogle);
 
   const handleZoteroAuth = () => {
     authZotero().then((res) => {
@@ -40,10 +47,20 @@ function Settings() {
     });
   };
 
+  const handleGoogleAuth = () => {
+    authGoogle().then((res) => {
+      if (res.data && res.data.authGoogle !== "") {
+        const url = res.data.authGoogle;
+        router.push(url);
+      }
+    });
+  };
+
   return (
     <main className={styles.main}>
       <AuthContainerComp handleAuth={handleZoteroAuth} name={"Zotero"} />
       <AuthContainerComp handleAuth={handleNotionAuth} name={"Notion"} />
+      <AuthContainerComp handleAuth={handleGoogleAuth} name={"Google"} />
     </main>
   );
 }

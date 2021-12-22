@@ -1,5 +1,5 @@
 import { User } from "./User";
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -84,4 +84,28 @@ export class Settings extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   notionConnected: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  googleConnected: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  googleAccessToken: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  googleRefreshToken: string;
+
+  @Field(() => Number, { nullable: true })
+  @Column({ nullable: true })
+  googleExpiresIn?: number;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  googleUserId: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  googleMainEmail: string;
 }
