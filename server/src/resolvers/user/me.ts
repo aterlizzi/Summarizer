@@ -1,7 +1,7 @@
 import { isAuth } from "./../../middlewares/isAuth";
 import { MyContext } from "../../types/MyContext";
 import { User } from "../../entities/User";
-import { Arg, Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Ctx, Query, Resolver, UseMiddleware } from "type-graphql";
 
 @Resolver()
 export class MeResolver {
@@ -10,6 +10,7 @@ export class MeResolver {
   async me(@Ctx() { payload }: MyContext): Promise<User | undefined> {
     const user = await User.findOne({
       where: { id: payload!.userId },
+      relations: ["settings"],
     });
     if (!user) return undefined;
     return user;

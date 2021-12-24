@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@postlight/mercury-parser": "^2.2.0",
+    "@zalando/oauth2-client-js": "^0.0.18",
     "argon2": "^0.28.2",
     "axios": "^0.24.0",
     "connect-redis": "^6.0.0",

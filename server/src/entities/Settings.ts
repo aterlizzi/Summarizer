@@ -1,5 +1,5 @@
 import { User } from "./User";
-import { Field, ID, Int, ObjectType } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -108,4 +108,8 @@ export class Settings extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   googleMainEmail: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  evernoteConnected: boolean;
 }
