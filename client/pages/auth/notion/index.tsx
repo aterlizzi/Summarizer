@@ -18,12 +18,12 @@ function Notion() {
   console.log(result);
   useEffect(() => {
     if (error) {
-      router.push("/users/settings");
+      router.push("/users/settings?auth=true");
     }
     if (code) {
       retrieveNotionToken({ code }).then((res) => {
         if (res) {
-          router.push("/users/settings");
+          router.push("/users/settings?auth=true");
         }
       });
     }

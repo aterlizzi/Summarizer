@@ -1,66 +1,39 @@
 import { GetServerSideProps } from "next";
-import React from "react";
-import { useMutation } from "urql";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import styles from "../../styles/Settings.module.scss";
+import BannerComp from "../../components/settings/bannerComp";
+import SideBar from "../../components/settings/sidebarComp";
+import Info from "../../components/settings/infoComp";
 import { useRouter } from "next/router";
-import AuthContainerComp from "../../components/settings/authContainerComp";
-
-const AuthZotero = `
-  mutation{
-    authZotero
-  }
-`;
-const AuthNotion = `
-  mutation{
-    authNotion
-  }
-`;
-
-const AuthGoogle = `
-  mutation{
-    authGoogle
-  }
-`;
 
 function Settings() {
   const router = useRouter();
-  const [zoteroResult, authZotero] = useMutation(AuthZotero);
-  const [notionResult, authNotion] = useMutation(AuthNotion);
-  const [googleResult, authGoogle] = useMutation(AuthGoogle);
+  const { auth, status, personal, account } = router.query;
+  const [section, setSection] = useState(0);
 
-  const handleZoteroAuth = () => {
-    authZotero().then((res) => {
-      if (res.data && res.data.authZotero !== "") {
-        const url = res.data.authZotero;
-        router.push(url);
-      }
-    });
-  };
-
-  const handleNotionAuth = () => {
-    authNotion().then((res) => {
-      if (res.data && res.data.authNotion !== "") {
-        const url = res.data.authNotion;
-        router.push(url);
-      }
-    });
-  };
-
-  const handleGoogleAuth = () => {
-    authGoogle().then((res) => {
-      if (res.data && res.data.authGoogle !== "") {
-        const url = res.data.authGoogle;
-        router.push(url);
-      }
-    });
-  };
+  useEffect(() => {
+    if (auth) {
+      setSection(5);
+    }
+    if (status) {
+      setSection(6);
+    }
+    if (personal) {
+      setSection(1);
+    }
+    if (account) {
+      setSection(0);
+    }
+  }, [auth, status, personal, account]);
 
   return (
     <main className={styles.main}>
-      <AuthContainerComp handleAuth={handleZoteroAuth} name={"Zotero"} />
-      <AuthContainerComp handleAuth={handleNotionAuth} name={"Notion"} />
-      <AuthContainerComp handleAuth={handleGoogleAuth} name={"Google"} />
+      <BannerComp />
+      <div className={styles.columnContainer}>
+        <SideBar setSection={setSection} section={section} />
+        <Info section={section} />
+      </div>
     </main>
   );
 }
@@ -72,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!req.cookies.hasOwnProperty("jid")) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/login?target_url=%2Fusers%2Fsettings",
         permanent: false,
       },
     };

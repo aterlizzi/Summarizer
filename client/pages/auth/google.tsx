@@ -20,7 +20,7 @@ function Google() {
     if (code) {
       retrieveGoogleToken({ code }).then((res) => {
         if (res.data && res.data.retrieveGoogleToken) {
-          router.push("/users/settings");
+          router.push("/users/settings?auth=true");
         }
       });
     }

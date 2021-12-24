@@ -34,7 +34,7 @@ export class Settings extends BaseEntity {
   timeInStorage: number;
 
   @Field(() => User)
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: "CASCADE" })
   user: User;
 
   @Field(() => String)

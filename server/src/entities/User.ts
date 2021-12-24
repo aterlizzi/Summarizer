@@ -28,6 +28,10 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  admin: boolean;
+
   @Field(() => String)
   @Column()
   accountType: string;
@@ -93,8 +97,8 @@ export class User extends BaseEntity {
   @Field(() => Settings, { nullable: true })
   @OneToOne(() => Settings, {
     cascade: true,
-    onDelete: "CASCADE",
     nullable: true,
+    onDelete: "CASCADE",
   }) // cascade makes it such that I only need to save user to save settings, ondelete makes it so if a user is deleted, so are the settings.
   @JoinColumn()
   settings: Settings;

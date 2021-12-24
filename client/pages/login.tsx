@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "urql";
 import Layout from "../components/layout";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
@@ -44,6 +44,9 @@ const VerifyWebUser = `
 
 function Login() {
   const router = useRouter();
+
+  const { target_url } = router.query;
+
   const [usecase, setUseCase] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,11 +55,18 @@ function Login() {
   const [signin, setSignin] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [url, setUrl] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
   const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
+
+  useEffect(() => {
+    if (target_url) {
+      setUrl(decodeURIComponent(target_url as any));
+    }
+  }, [target_url]);
 
   const handleResponseGoogle = (data) => {
     const token = data.tokenId;
@@ -92,7 +102,7 @@ function Login() {
                   "accessToken",
                   response.data.verifyGoogleUser.accessToken
                 );
-                router.push("/");
+                router.push(url);
               } else {
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
@@ -146,7 +156,7 @@ function Login() {
                   "accessToken",
                   response.data.verifyUser.accessToken
                 );
-                router.push("/");
+                router.push(url);
               }
             }
           }

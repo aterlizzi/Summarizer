@@ -15,13 +15,14 @@ function Zotero() {
   const router = useRouter();
   const [result, zotero] = useMutation(ZoteroAPI);
   const { oauth_verifier } = router.query;
+  console.log(result);
   useEffect(() => {
     if (oauth_verifier) {
       zotero({
         verifier: oauth_verifier,
       }).then((res) => {
         if (res.data && res.data.getAccessTokenZotero) {
-          router.push("/users/settings");
+          router.push("/users/settings?auth=true");
         }
       });
     }

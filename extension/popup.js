@@ -220,7 +220,7 @@ const checkCookies = () => {
     { url: "http://localhost:3000/", name: "jid" },
     (cookie) => {
       if (cookie) {
-        chrome.tabs.create({ url: "http://localhost:3000/settings" });
+        chrome.tabs.create({ url: "http://localhost:3000/users/settings" });
       } else {
         chrome.tabs.create({ url: "http://localhost:3000/welcome" });
       }

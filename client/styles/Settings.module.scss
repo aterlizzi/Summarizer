@@ -1,6 +1,23 @@
 @import "utils/variables";
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
 
+$base-font-size: 10px;
+
+$switch-width: 4em;
+$switch-size: 2em;
+$switch-space: 0.2em;
+
+$switch-off-padding: 0em;
+$switch-on-padding: $switch-size - $switch-space;
+$switch-button-size: $switch-size - ($switch-space * 2);
+
+$switch-off-border: #eee;
+// $switch-on-color: #00c169;
+$switch-on-color: $clr-primaryVariant;
+$switch-toggle-color: #fff;
+
+$switch-animation-bounce-distance: 0.4em;
+
 .main {
   box-sizing: border-box;
   padding: 0;
@@ -9,4 +26,399 @@
   color: $clr-highEmpha;
   min-height: 100vh;
   background: $clr-bg;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  .banner {
+    width: 100%;
+    height: 3.5em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: $clr-bg1;
+    .logo {
+      max-width: 30px;
+      margin: 0em 0.5em 0em 3em;
+      cursor: pointer;
+    }
+    .companyName {
+      font-size: 1.125rem;
+    }
+  }
+  .columnContainer {
+    display: flex;
+    .infoContainer {
+      min-height: 50em;
+      width: 40em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: $clr-bg2;
+      .header {
+        width: 85%;
+        border-bottom: 1px solid $clr-bg4;
+        margin-left: 3em;
+        margin-right: 3em;
+        margin-bottom: 3em;
+        .infoName {
+          font-family: "Raleway", sans-serif;
+          font-weight: 400;
+          color: $clr-medEmpha;
+          letter-spacing: 1.5px;
+        }
+      }
+      .infoMain {
+        display: flex;
+        justify-content: center;
+        .grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          width: 90%;
+          gap: 2em;
+          .card {
+            background: $clr-bg2;
+            border-radius: 1em;
+            display: flex;
+            flex-direction: column;
+            .top {
+              padding: 1em;
+              display: flex;
+              flex-direction: column;
+              border-bottom: 1px solid $clr-bg3;
+              height: 75%;
+              .utility {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .image {
+                  display: flex;
+                  align-items: center;
+                  .logo {
+                    max-width: 20px;
+                    margin-right: 1em;
+                  }
+                  .app {
+                    font-family: "Roboto", sans-serif;
+                    font-weight: 400;
+                    margin: 0;
+                  }
+                }
+                .toggleContainer {
+                  .switch {
+                    font-size: $base-font-size;
+                    position: relative;
+                    display: inline-block;
+                    appearance: none;
+                    width: $switch-width;
+                    height: $switch-size;
+                    line-height: $switch-size;
+                    border-radius: $switch-size/2;
+                    margin: 0;
+                    padding: 0;
+                    box-shadow: inset 0 0 0 $switch-space $switch-off-border;
+                    outline: 1px solid transparent !important;
+                    cursor: pointer;
+                    border: none;
+                    background: transparent;
+                    user-select: none;
+                    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                    -webkit-touch-callout: none;
+
+                    transition: box-shadow 0.3s ease-in-out,
+                      padding 0.25s ease-in-out;
+                    transition-delay: 0.1s, 0s;
+
+                    &:checked {
+                      transition-delay: 0s, 0s;
+                      box-shadow: inset 0 0 0 $switch-size/1.75 $switch-on-color !important;
+                      padding-left: $switch-on-padding;
+                    }
+                    /* Animations if supported */
+                    &.hit {
+                      animation: slide-off 0.35s ease both;
+                    }
+                    &.hit:checked {
+                      animation: slide-on 0.35s ease both 0.05s;
+                    }
+
+                    &::before,
+                    &::after {
+                      content: "";
+                    }
+
+                    &::after {
+                      /* Increases hit area */
+                      $size-adjust: -($switch-button-size/3);
+                      position: absolute;
+                      top: $size-adjust;
+                      left: $size-adjust;
+                      bottom: $size-adjust;
+                      right: $size-adjust;
+                    }
+
+                    &::before {
+                      display: inline-block;
+                      height: $switch-button-size;
+                      width: $switch-button-size;
+                      margin: $switch-space 0 0 $switch-space;
+                      background-color: $switch-toggle-color;
+                      border-radius: $switch-button-size/2;
+                      box-shadow: 0 $switch-space ($switch-space * 2) 0
+                          rgba(0, 0, 0, 0.2),
+                        0 0 ($switch-space/2) ($switch-space/2)
+                          rgba(0, 0, 0, 0.1);
+                      transition: all 0.1s ease 0.1s;
+                    }
+
+                    &:active::before {
+                      transition: all 0.1s ease 0.05s;
+                    }
+                    &.touch:hover::before {
+                      transition: all 0s ease 0s;
+                    }
+
+                    &:active::before,
+                    &.touch:hover::before {
+                      width: $switch-button-size + ($switch-space * 4);
+                    }
+
+                    &:active:checked::before,
+                    &.touch:hover:checked::before {
+                      margin-left: -($switch-space * 3);
+                    }
+                  }
+                }
+              }
+              .desc {
+                font-weight: 400;
+                font-size: 0.85rem;
+                color: $clr-medEmpha;
+                line-height: 20px;
+                margin: 1em 0em 0em 0em;
+              }
+            }
+            .bottom {
+              padding: 1em;
+              display: flex;
+              justify-content: space-between;
+              justify-self: flex-end;
+              font-size: 0.85rem;
+              height: 25%;
+              .connected {
+                margin: 0;
+              }
+              .info {
+                margin: 0;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+        .status {
+          display: flex;
+          flex-direction: column;
+          padding: 0em 2em;
+          .statusHeader {
+            .title {
+              font-weight: 400;
+              margin: 0;
+            }
+          }
+          .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .text {
+              font-size: 0.85rem;
+              margin-right: 1em;
+              color: $clr-medEmpha;
+            }
+            .btn {
+              background: $clr-primaryVariant;
+              margin-right: 1em;
+              border-radius: 0.5em;
+              padding: 0.5em 1em;
+              cursor: pointer;
+              color: $clr-highEmpha;
+              outline: none;
+              border: none;
+            }
+          }
+          .confirm {
+            .features {
+              .title {
+                font-family: "Raleway", sans-serif;
+                font-size: 1.125rem;
+              }
+              .message {
+                color: $clr-medEmpha;
+                font-size: 0.95rem;
+                line-height: 20px;
+                padding-bottom: 1em;
+                border-bottom: 1px solid $clr-bg4;
+              }
+              .extra {
+                font-size: 0.95rem;
+              }
+              .list {
+                padding-bottom: 1em;
+                border-bottom: 1px solid $clr-bg4;
+                .item {
+                  color: $clr-medEmpha;
+                  &:not(:last-of-type) {
+                    margin-bottom: 0.5em;
+                  }
+                  .redirect {
+                    color: $clr-primary;
+                    cursor: pointer;
+                  }
+                }
+              }
+            }
+            .form {
+              display: flex;
+              flex-direction: column;
+              .label {
+                margin-bottom: 1em;
+              }
+              .input {
+                width: 50%;
+                background: transparent;
+                color: $clr-highEmpha;
+                border: 2px solid $clr-bg5;
+                outline: none;
+                margin-bottom: 1em;
+                font-size: 1rem;
+                padding: 0.5em;
+                border-radius: 0.5em;
+              }
+              .btnContainer {
+                margin-bottom: 1em;
+                .confirmBtn {
+                  cursor: pointer;
+                  background: $clr-primaryVariant;
+                  color: $clr-highEmpha;
+                  border: none;
+                  outline: none;
+                  padding: 0.5em 1em;
+                  border-radius: 0.5em;
+                  margin-right: 1em;
+                }
+                .cancel {
+                  cursor: pointer;
+                  background: transparent;
+                  color: $clr-highEmpha;
+                  border: 1px solid $clr-bg5;
+                  outline: none;
+                  padding: 0.5em 1em;
+                  border-radius: 0.5em;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .sidebar {
+      background: $clr-bg1;
+      width: 12.5em;
+      min-height: 50em;
+      border-right: solid 1px $clr-bg;
+      .subSections {
+        .sectionHeader {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          .icon {
+            margin-right: 1em;
+            margin-left: 1em;
+            font-size: 0.85rem;
+          }
+          .sectionTitle {
+            font-family: "Raleway", sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            margin: 0em;
+          }
+        }
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes slide-on {
+  0% {
+    padding-left: $switch-off-padding;
+  }
+  60% {
+    padding-left: $switch-on-padding + $switch-animation-bounce-distance;
+  }
+  100% {
+    padding-left: $switch-on-padding;
+  }
+}
+@keyframes slide-off {
+  0% {
+    padding-left: $switch-on-padding;
+    text-indent: 0;
+  }
+  60% {
+    padding-left: $switch-off-padding;
+    text-indent: -$switch-animation-bounce-distance;
+  }
+  100% {
+    padding-left: $switch-off-padding;
+    text-indent: 0;
+  }
+}
+
+@media (max-width: 650px) {
+  .main {
+    .columnContainer {
+      .sidebar {
+        display: none;
+      }
+    }
+  }
+}
+@media (max-width: 480px) {
+  .main {
+    .columnContainer {
+      .infoContainer {
+        .infoMain {
+          .grid {
+            grid-template-columns: 1fr;
+            .card {
+              &:last-of-type {
+                margin-bottom: 2em;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
