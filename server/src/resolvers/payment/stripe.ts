@@ -1,19 +1,21 @@
+import { isAuth } from "./../../middlewares/isAuth";
 import { MyContext } from "./../../types/MyContext";
 
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { User } from "../../entities/User";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 @Resolver()
 export class StripeResolver {
   @Mutation(() => String)
+  @UseMiddleware(isAuth)
   async createStripeSession(
-    @Ctx() ctx: MyContext,
+    @Ctx() { payload }: MyContext,
     @Arg("mode") mode: string,
     @Arg("tier") tier: string
   ): Promise<string> {
-    const user = await User.findOne({ where: { id: ctx.req.cookies.uid } });
-    if (!user) return "/welcome";
+    const user = await User.findOne({ where: { id: payload!.userId } });
+    if (!user) return "/welcome?target_url=%2Fbegin";
     let session;
     switch (mode) {
       case "monthly":

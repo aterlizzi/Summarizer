@@ -48,6 +48,10 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
           console.log(event);
           await handleInvoicePaid(event);
           break;
+        case "customer.subscription.updated":
+          reply.send({ received: true });
+          await handleSubscriptionUpdated(event);
+          break;
         default:
           console.log(`Unhandled event type: ${event.type}`);
           return reply.status(400).end();
@@ -60,6 +64,36 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
 };
 
 // handle functions
+const handleSubscriptionUpdated = async (event: any) => {
+  const customer = event.data.customer;
+  const priceId = event.data.items.data[0].price.id;
+  const user = await User.findOne({ where: { custKey: customer } });
+  if (!user) return;
+  switch (priceId) {
+    case process.env.STRIPE_STUDENT_MONTH_KEY:
+      user.wordCount = 500000;
+      user.prem = true;
+      user.paymentTier = "Student";
+      break;
+    case process.env.STRIPE_STUDENT_YEAR_KEY:
+      user.wordCount = 6000000;
+      user.prem = true;
+      user.paymentTier = "Student";
+      break;
+    case process.env.STRIPE_RESEARCH_MONTH_KEY:
+      user.wordCount = 1000000;
+      user.prem = true;
+      user.paymentTier = "Researcher";
+      break;
+    case process.env.STRIPE_RESEARCH_YEAR_KEY:
+      user.wordCount = 12000000;
+      user.prem = true;
+      user.paymentTier = "Researcher";
+      break;
+  }
+  user.current_period = Date.now();
+  await user.save();
+};
 const handleCompleteSession = async (event: any) => {
   const checkoutId = event.data.object.id;
   let uid = event.data.object.client_reference_id;

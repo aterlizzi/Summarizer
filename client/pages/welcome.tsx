@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Welcome.module.scss";
 import { useMutation } from "urql";
@@ -48,6 +48,8 @@ const VerifyWebUser = `
 
 function Welcome() {
   const router = useRouter();
+
+  const { target_url } = router.query;
   const [usecase, setUseCase] = useState("");
   const [section, setSection] = useState(0);
   const [email, setEmail] = useState("");
@@ -57,11 +59,18 @@ function Welcome() {
   const [signin, setSignin] = useState(true);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [url, setUrl] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
   const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
+
+  useEffect(() => {
+    if (target_url) {
+      setUrl(decodeURIComponent(target_url as any));
+    }
+  }, [target_url]);
 
   const handleResponseGoogle = (data) => {
     const token = data.tokenId;
@@ -83,7 +92,11 @@ function Welcome() {
                 "accessToken",
                 response.data.registerGoogleUser.accessToken
               );
-              router.push("/begin");
+              if (url) {
+                router.push(url);
+              } else {
+                router.push("/begin");
+              }
             }
           }
         }
@@ -98,7 +111,11 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyGoogleUser.accessToken
                 );
-                router.push("/begin");
+                if (url) {
+                  router.push(url);
+                } else {
+                  router.push("/begin");
+                }
               } else {
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
@@ -129,7 +146,11 @@ function Welcome() {
                 setError(true);
                 setErrorMsg(response.data.registerWebUser.error.message);
               } else {
-                router.push("/begin");
+                if (url) {
+                  router.push(url);
+                } else {
+                  router.push("/begin");
+                }
               }
             }
           }
@@ -152,6 +173,11 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyUser.accessToken
                 );
+                if (url) {
+                  router.push(url);
+                } else {
+                  router.push("/begin");
+                }
               }
             }
           }

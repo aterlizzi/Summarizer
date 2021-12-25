@@ -70,6 +70,8 @@ $switch-animation-bounce-distance: 0.4em;
       .infoMain {
         display: flex;
         justify-content: center;
+        align-self: flex-start;
+        width: 100%;
         .grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -317,6 +319,150 @@ $switch-animation-bounce-distance: 0.4em;
             }
           }
         }
+        .account {
+          padding: 0em 2em;
+          width: 100%;
+          .accountInfoContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            &:not(:last-of-type) {
+              border-bottom: 1px solid $clr-bg4;
+            }
+            width: 100%;
+            .title {
+              margin-right: 4em;
+              font-family: "Raleway", sans-serif;
+              font-weight: 400;
+              font-size: 1rem;
+            }
+            .textContainer {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              .info {
+                margin: 0em 0em 0.5em 0em;
+                color: $clr-medEmpha;
+                font-size: 0.95rem;
+              }
+              .special {
+                font-size: 0.75rem;
+                color: $clr-primary;
+                cursor: pointer;
+                margin: 0;
+              }
+            }
+          }
+        }
+        .personal {
+          padding: 0em 2em;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          .personalContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1em;
+            margin-bottom: 1em;
+            border-bottom: 1px solid $clr-bg4;
+            .contact {
+              font-family: "Raleway", sans-serif;
+            }
+            .contactForm {
+              width: 60%;
+              display: flex;
+              flex-direction: column;
+              .customerPortal {
+                background: $clr-primaryVariant;
+                color: $clr-highEmpha;
+                outline: none;
+                border: none;
+                cursor: pointer;
+                height: 30px;
+                border-radius: 0.5em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .loading {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 50%;
+                  border-top: 2px solid;
+                  /*border-right: 8px solid; */
+                  border-color: white transparent;
+                  animation: spin 1s linear infinite;
+                }
+              }
+              .label {
+                color: $clr-medEmpha;
+                font-size: 0.85em;
+                margin-bottom: 0.5em;
+              }
+              .input {
+                outline: none;
+                background: transparent;
+                border: 2px solid $clr-bg4;
+                color: $clr-highEmpha;
+                padding: 0.5em 1em;
+                border-radius: 0.5em;
+                &::placeholder {
+                  color: $clr-medEmpha;
+                }
+              }
+              .desc {
+                font-size: 0.85rem;
+                color: $clr-medEmpha;
+              }
+              .error {
+                font-size: 0.85rem;
+                color: $clr-error;
+              }
+              .success {
+                font-size: 0.85rem;
+                color: $clr-secondary;
+              }
+            }
+          }
+          .btnContainer {
+            align-self: flex-end;
+            display: flex;
+            align-items: center;
+            .save {
+              background: $clr-primaryVariant;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 0.5em;
+              height: 30px;
+              width: 90px;
+              outline: none;
+              border: none;
+              cursor: pointer;
+              color: $clr-highEmpha;
+              margin-right: 1em;
+              .loading {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                border-top: 2px solid;
+                /*border-right: 8px solid; */
+                border-color: white transparent;
+                animation: spin 1s linear infinite;
+              }
+            }
+            .cancel {
+              background: transparent;
+              outline: none;
+              border: 1px solid $clr-bg4;
+              color: $clr-highEmpha;
+              cursor: pointer;
+              height: 30px;
+              width: 70px;
+              border-radius: 0.5em;
+            }
+          }
+        }
       }
     }
     .sidebar {
@@ -369,6 +515,15 @@ $switch-animation-bounce-distance: 0.4em;
   }
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
+  }
+}
 @keyframes slide-on {
   0% {
     padding-left: $switch-off-padding;

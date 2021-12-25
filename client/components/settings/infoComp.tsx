@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "../../styles/Settings.module.scss";
+import Account from "./accountComp";
 import AuthorizeApps from "./authAppsComp";
+import Personal from "./personalComp";
 import Status from "./statusComp";
 
 function Info({ section }) {
@@ -24,7 +26,15 @@ function Info({ section }) {
         </h2>
       </header>
       <section className={styles.infoMain}>
-        {section === 5 ? <AuthorizeApps /> : section === 6 ? <Status /> : null}
+        {section === 0 ? (
+          <Account />
+        ) : section === 1 ? (
+          <Personal />
+        ) : section === 5 ? (
+          <AuthorizeApps />
+        ) : section === 6 ? (
+          <Status />
+        ) : null}
       </section>
     </section>
   );

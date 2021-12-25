@@ -3,6 +3,7 @@ import { User } from "./../../entities/User";
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "../../middlewares/isAuth";
 import { Settings } from "../../entities/Settings";
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 @Resolver()
 export class DeleteResolver {
@@ -22,6 +23,13 @@ export class DeleteResolver {
       });
     }
     if (!user || user.admin) return false;
+    if (user.subKey !== "") {
+      try {
+        await stripe.subscriptions.del(user.subKey);
+      } catch {
+        return false;
+      }
+    }
     const settingsId = user.settings.id;
     await Settings.delete(settingsId);
     await User.delete(user.id);

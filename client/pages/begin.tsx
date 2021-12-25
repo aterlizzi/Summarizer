@@ -243,7 +243,8 @@ function Begin() {
             {!meResult.fetching ? (
               meResult.data ? (
                 meResult.data.me ? (
-                  meResult.data.me.paymentTier === "Student" ? (
+                  meResult.data.me.paymentTier === "Student" ||
+                  meResult.data.me.paymentTier === "Researcher" ? (
                     <button
                       className={styles.paymentBtn}
                       style={{

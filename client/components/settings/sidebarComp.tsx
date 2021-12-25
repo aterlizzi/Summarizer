@@ -23,11 +23,6 @@ function SideBar({ setSection, section }) {
           setSection={setSection}
         />
         <SidebarLink
-          text={"Profile"}
-          section={section}
-          setSection={setSection}
-        />
-        <SidebarLink
           text={"Reminders"}
           section={section}
           setSection={setSection}
