@@ -1,3 +1,4 @@
+import { EmailSettings } from "./../../entities/EmailSettings";
 import { ConfirmUserOutput } from "./../../types/confirmUserOutput";
 import { sign } from "jsonwebtoken";
 import { registerUserInput } from "./../../types/registerUserInput";
@@ -39,6 +40,10 @@ export class RegisterResolver {
         reason: usecase ? usecase : "Personal",
       });
       const userSettings = Settings.create({ user: newUser });
+      const userEmailSettings = EmailSettings.create({
+        settings: userSettings,
+      });
+      userSettings.emailSettings = userEmailSettings;
       newUser.settings = userSettings;
       await newUser.save();
       ctx.reply.setCookie(
@@ -96,6 +101,8 @@ export class RegisterResolver {
       reason: reason ? reason : "Personal",
     });
     const userSettings = Settings.create({ user });
+    const userEmailSettings = EmailSettings.create({ settings: userSettings });
+    userSettings.emailSettings = userEmailSettings;
     user.settings = userSettings;
     await user.save();
     const token = v4();

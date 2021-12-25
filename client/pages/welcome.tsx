@@ -66,6 +66,8 @@ function Welcome() {
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
   const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
 
+  console.log(webResult);
+
   useEffect(() => {
     if (target_url) {
       setUrl(decodeURIComponent(target_url as any));

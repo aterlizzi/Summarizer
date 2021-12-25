@@ -1,3 +1,4 @@
+import { EmailSettings } from "./EmailSettings";
 import { User } from "./User";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
@@ -5,6 +6,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -112,4 +114,9 @@ export class Settings extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   evernoteConnected: boolean;
+
+  @Field(() => EmailSettings)
+  @OneToOne(() => EmailSettings, { onDelete: "CASCADE", cascade: true })
+  @JoinColumn()
+  emailSettings: EmailSettings;
 }

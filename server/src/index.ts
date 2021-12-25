@@ -1,3 +1,4 @@
+import { EmailSettings } from "./entities/EmailSettings";
 import { Settings } from "./entities/Settings";
 import { SavedSummary } from "./entities/SavedSummary";
 import { MyContext } from "./types/MyContext";
@@ -28,7 +29,7 @@ const main = async () => {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
     database: "summarizer",
-    entities: [User, Summary, SavedSummary, Settings],
+    entities: [User, Summary, SavedSummary, Settings, EmailSettings],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",
   });

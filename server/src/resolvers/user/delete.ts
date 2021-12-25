@@ -1,3 +1,4 @@
+import { EmailSettings } from "./../../entities/EmailSettings";
 import { MyContext } from "./../../types/MyContext";
 import { User } from "./../../entities/User";
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
@@ -15,11 +16,14 @@ export class DeleteResolver {
   ): Promise<boolean> {
     let user;
     if (email) {
-      user = await User.findOne({ where: { email }, relations: ["settings"] });
+      user = await User.findOne({
+        where: { email },
+        relations: ["settings", "settings.emailSettings"],
+      });
     } else {
       user = await User.findOne({
         where: { id: payload!.userId },
-        relations: ["settings"],
+        relations: ["settings", "settings.emailSettings"],
       });
     }
     if (!user || user.admin) return false;
@@ -31,6 +35,8 @@ export class DeleteResolver {
       }
     }
     const settingsId = user.settings.id;
+    const emailSettingsId = user.settings.emailSettings.id;
+    await EmailSettings.delete(emailSettingsId);
     await Settings.delete(settingsId);
     await User.delete(user.id);
     reply.clearCookie("jid", { path: "/" });

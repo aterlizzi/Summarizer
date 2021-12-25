@@ -429,18 +429,18 @@ $switch-animation-bounce-distance: 0.4em;
             display: flex;
             align-items: center;
             .save {
+              cursor: pointer;
+              outline: none;
+              border: none;
               background: $clr-primaryVariant;
+              color: $clr-highEmpha;
+              border-radius: 0.5em;
+              height: 30px;
+              width: 70px;
+              margin-right: 1em;
               display: flex;
               justify-content: center;
               align-items: center;
-              border-radius: 0.5em;
-              height: 30px;
-              width: 90px;
-              outline: none;
-              border: none;
-              cursor: pointer;
-              color: $clr-highEmpha;
-              margin-right: 1em;
               .loading {
                 width: 20px;
                 height: 20px;
@@ -452,14 +452,14 @@ $switch-animation-bounce-distance: 0.4em;
               }
             }
             .cancel {
-              background: transparent;
+              cursor: pointer;
               outline: none;
               border: 1px solid $clr-bg4;
+              background: transparent;
               color: $clr-highEmpha;
-              cursor: pointer;
-              height: 30px;
-              width: 70px;
               border-radius: 0.5em;
+              height: 30px;
+              width: 60px;
             }
           }
         }
@@ -490,11 +490,21 @@ $switch-animation-bounce-distance: 0.4em;
                   margin-bottom: 0.5em;
                   .checkbox {
                     margin-right: 1em;
+                    cursor: pointer;
                   }
                   .optionLabel {
                     font-size: 0.85rem;
                     color: $clr-medEmpha;
+                    cursor: pointer;
                   }
+                }
+                .success {
+                  font-size: 0.95rem;
+                  color: $clr-secondary;
+                }
+                .error {
+                  font-size: 0.95rem;
+                  color: $clr-error;
                 }
               }
             }

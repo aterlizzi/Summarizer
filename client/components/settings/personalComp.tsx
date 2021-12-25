@@ -178,20 +178,32 @@ function Personal() {
           </div>
         </div>
       ) : null}
-      {changed ? (
-        <div className={styles.btnContainer}>
-          <button className={styles.save} onClick={handleSave}>
-            {emailResult.fetching ? (
-              <div className={styles.loading}></div>
-            ) : (
-              "Save"
-            )}
-          </button>
-          <button className={styles.cancel} onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
-      ) : null}
+      <div className={styles.btnContainer}>
+        <button
+          disabled={!changed}
+          style={
+            !changed
+              ? { cursor: "default", background: "rgba(255, 255, 255, 0.08)" }
+              : null
+          }
+          className={styles.save}
+          onClick={handleSave}
+        >
+          {emailResult.fetching ? (
+            <div className={styles.loading}></div>
+          ) : (
+            "Save"
+          )}
+        </button>
+        <button
+          disabled={!changed}
+          style={!changed ? { cursor: "default" } : null}
+          className={styles.cancel}
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
+      </div>
     </section>
   );
 }
