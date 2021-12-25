@@ -73,8 +73,6 @@ function AuthorizeApps() {
 
   const [meResult, reexecuteMe] = useQuery({ query: Me });
 
-  console.log(meResult);
-
   const handleClearZotero = () => {
     clearZotero();
   };

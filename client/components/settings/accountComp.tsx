@@ -20,7 +20,6 @@ query {
 function Account() {
   const [meResult, reexecuteMe] = useQuery({ query: Me });
 
-  console.log(meResult);
   return (
     <section className={styles.account}>
       {!meResult.fetching && !meResult.error ? (

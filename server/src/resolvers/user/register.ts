@@ -36,7 +36,7 @@ export class RegisterResolver {
         username: name,
         googleSubKey: sub,
         accountType: "google",
-        reason: usecase,
+        reason: usecase ? usecase : "Personal",
       });
       const userSettings = Settings.create({ user: newUser });
       newUser.settings = userSettings;
@@ -93,7 +93,7 @@ export class RegisterResolver {
       email,
       password: hash,
       accountType: "web",
-      reason,
+      reason: reason ? reason : "Personal",
     });
     const userSettings = Settings.create({ user });
     user.settings = userSettings;

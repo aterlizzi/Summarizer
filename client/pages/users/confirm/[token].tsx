@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useMutation, useQuery } from "urql";
 import Layout from "../../../components/layout";
+import Loader from "../../../components/zoteroAuth/loaderComp";
 import styles from "../../../styles/ConfirmToken.module.scss";
 
 const ConfirmUser = `
@@ -12,19 +13,6 @@ const ConfirmUser = `
   }
 `;
 
-const ClickMe = `
-  mutation{
-    clickMe
-  }
-`;
-
-const Logout = `
-  mutation{
-    logout
-  }
-
-`;
-
 function Token() {
   const router = useRouter();
   const token = router.query.token;
@@ -33,35 +21,20 @@ function Token() {
     variables: { token },
     pause: !token,
   });
-  const [clickResult, clickme] = useMutation(ClickMe);
-  const [logoutResult, logout] = useMutation(Logout);
   useEffect(() => {
-    if (result.data) {
-      if (result.data.confirmUser.accessToken !== "") {
-        localStorage.setItem(
-          "accessToken",
-          result.data.confirmUser.accessToken
-        );
-      }
+    if (
+      result.data &&
+      result.data.confirmUser &&
+      result.data.confirmUser.accessToken !== ""
+    ) {
+      localStorage.setItem("accessToken", result.data.confirmUser.accessToken);
+      router.push("/begin");
     }
   }, [result]);
 
-  const handleClick = () => {
-    clickme().then((result) => console.log(result));
-  };
-
-  const handleLogout = () => {
-    logout().then((result) => {
-      if (result) {
-        localStorage.clear();
-      }
-    });
-  };
   return (
     <main className={styles.main}>
-      {result.data ? result.data.confirmUser.accessToken : null}
-      <button onClick={handleClick}>Click me</button>
-      <button onClick={handleLogout}>logout</button>
+      <Loader />
     </main>
   );
 }

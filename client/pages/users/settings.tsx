@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 function Settings() {
   const router = useRouter();
-  const { auth, status, personal, account } = router.query;
+  const { auth, status, personal, account, reminder } = router.query;
   const [section, setSection] = useState(0);
 
   useEffect(() => {
@@ -25,7 +25,10 @@ function Settings() {
     if (account) {
       setSection(0);
     }
-  }, [auth, status, personal, account]);
+    if (reminder) {
+      setSection(3);
+    }
+  }, [auth, status, personal, account, reminder]);
 
   return (
     <main className={styles.main}>

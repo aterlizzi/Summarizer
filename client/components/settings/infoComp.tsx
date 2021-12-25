@@ -3,6 +3,7 @@ import styles from "../../styles/Settings.module.scss";
 import Account from "./accountComp";
 import AuthorizeApps from "./authAppsComp";
 import Personal from "./personalComp";
+import Reminders from "./reminderComp";
 import Status from "./statusComp";
 
 function Info({ section }) {
@@ -14,8 +15,6 @@ function Info({ section }) {
             ? "Account Summary"
             : section === 1
             ? "Personal Settings"
-            : section === 2
-            ? "Profile"
             : section === 3
             ? "Reminders"
             : section === 5
@@ -30,6 +29,8 @@ function Info({ section }) {
           <Account />
         ) : section === 1 ? (
           <Personal />
+        ) : section === 3 ? (
+          <Reminders />
         ) : section === 5 ? (
           <AuthorizeApps />
         ) : section === 6 ? (

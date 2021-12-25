@@ -9,17 +9,4 @@
   color: $clr-highEmpha;
   min-height: 100vh;
   background: $clr-bg;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .loader {
-    margin: 0 0 2em;
-    height: 100px;
-    width: 20%;
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto 1em;
-    display: inline-block;
-    vertical-align: top;
-  }
 }

@@ -23,7 +23,7 @@ export class DeleteResolver {
       });
     }
     if (!user || user.admin) return false;
-    if (user.subKey !== "") {
+    if (user.subKey !== "" && user.prem) {
       try {
         await stripe.subscriptions.del(user.subKey);
       } catch {
