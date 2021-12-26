@@ -5,6 +5,7 @@ import notion from "../../public/notion.png";
 import google from "../../public/gmail.png";
 import zotero from "../../public/zotero.png";
 import evernote from "../../public/evernote.png";
+import mendeley from "../../public/mendeleylogo.png";
 
 function AuthContainerComp({
   handleAuth,
@@ -28,6 +29,8 @@ function AuthContainerComp({
                     ? evernote
                     : name === "Google"
                     ? google
+                    : name === "Mendeley"
+                    ? mendeley
                     : null
                 }
               ></Image>
@@ -54,6 +57,8 @@ function AuthContainerComp({
             ? "Seamlessly email your favorite summaries around the world."
             : name === "Evernote"
             ? "Save precious time by quickly adding summaries as notes in Evernote with the click of a button."
+            : name === "Mendeley"
+            ? "Save precious time by quickly adding summaries as notes in Evernote with the click of a button."
             : null}
         </p>
       </div>
@@ -72,6 +77,8 @@ function AuthContainerComp({
               ? "https://support.google.com/a/users/answer/9297685?hl=en"
               : name === "Evernote"
               ? "https://evernote.com/"
+              : name === "Mendeley"
+              ? "https://www.mendeley.com/?interaction_required=true"
               : ""
           }
         >

@@ -115,8 +115,16 @@ export class Settings extends BaseEntity {
   @Column({ default: false })
   evernoteConnected: boolean;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  mendeleyConnected: boolean;
+
   @Field(() => EmailSettings)
   @OneToOne(() => EmailSettings, { onDelete: "CASCADE", cascade: true })
   @JoinColumn()
   emailSettings: EmailSettings;
+
+  @Field(() => String)
+  @Column({ nullable: true })
+  ABTest: string;
 }

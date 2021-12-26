@@ -1,7 +1,17 @@
+import { ZoteroFindItemsOutput } from "./../../types/zotero/ZoteroFindItemsOutput";
+import { CreateWPInput } from "./../../types/zotero/ZoteroCreateWPInput";
+import { Collection } from "../../types/zotero/ZoteroCollectionsReturnObj";
 import { MyContext } from "./../../types/MyContext";
 import { isAuth } from "./../../middlewares/isAuth";
 import { User } from "./../../entities/User";
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import crypto from "crypto";
 import axios from "axios";
 
@@ -169,5 +179,144 @@ export class ZoteroResolver {
     user.settings.zoteroUserId = "";
     await user.save();
     return true;
+  }
+  @Query(() => [Collection], { nullable: true })
+  @UseMiddleware(isAuth)
+  async returnZoteroCollections(
+    @Ctx() { payload }: MyContext
+  ): Promise<Collection[] | undefined> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: ["settings"],
+    });
+    if (!user || !user.settings.zoteroConnected) return undefined;
+    const newTemplateResponse = await axios({
+      headers: {
+        Authorization: `Bearer ${user.settings.zoteroAPIKey}`,
+      },
+      method: "GET",
+      url: `https://api.zotero.org/users/${user.settings.zoteroUserId}/collections`,
+    });
+    const collections = newTemplateResponse.data;
+    return collections.map((collection: any) => ({
+      collectionName: collection.data.name,
+      collectionKey: collection.data.key,
+    }));
+  }
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async createNewWebPageZotero(
+    @Ctx() { payload }: MyContext,
+    @Arg("options") options: CreateWPInput
+  ): Promise<boolean> {
+    let attachedNoteResponse;
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: ["settings"],
+    });
+    if (!user || !user.settings.zoteroConnected) return false;
+    const newTemplateResponse = await axios({
+      method: "GET",
+      url: "https://api.zotero.org/items/new?itemType=webpage",
+    });
+    const template = newTemplateResponse.data;
+    template.collections = [options.collection];
+    template.title = options.title;
+    template.url = options.url;
+    template.accessDate = new Date().toISOString;
+
+    const newItemResponse = await axios({
+      headers: {
+        Authorization: `Bearer ${user.settings.zoteroAPIKey}`,
+      },
+      method: "POST",
+      url: `https://api.zotero.org/users/${user.settings.zoteroUserId}/items`,
+      data: [template],
+    });
+    if (newItemResponse.data.successful) {
+      const itemKey = newItemResponse.data.successful["0"].key;
+      const noteTemplate = {
+        itemType: "note",
+        note: options.summary,
+        tags: [],
+        parentItem: itemKey,
+        relations: {},
+      };
+      attachedNoteResponse = await axios({
+        headers: {
+          Authorization: `Bearer ${user.settings.zoteroAPIKey}`,
+        },
+        method: "POST",
+        url: `https://api.zotero.org/users/${user.settings.zoteroUserId}/items`,
+        data: [noteTemplate],
+      });
+    }
+    if (attachedNoteResponse?.data.successful) {
+      return true;
+    }
+    return false;
+  }
+
+  @Query(() => [ZoteroFindItemsOutput], { nullable: true })
+  @UseMiddleware(isAuth)
+  async findZoteroItems(
+    @Ctx() { payload }: MyContext,
+    @Arg("collection") collection: string
+  ): Promise<ZoteroFindItemsOutput[] | undefined> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: ["settings"],
+    });
+    if (!user || !user.settings.zoteroConnected) return undefined;
+    const findItemsResponse = await axios({
+      headers: {
+        Authorization: `Bearer ${user.settings.zoteroAPIKey}`,
+      },
+      method: "GET",
+      url: `https://api.zotero.org/users/${user.settings.zoteroUserId}/collections/${collection}/items`,
+    });
+    const items = findItemsResponse.data.filter((item: any) => {
+      if (item.data.itemType === "note") return false;
+      return true;
+    });
+    return items.map((item: any) => ({
+      title: item.data.title,
+      key: item.data.key,
+      itemType: item.data.itemType,
+    }));
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async addNoteToItemZotero(
+    @Ctx() { payload }: MyContext,
+    @Arg("item") item: string,
+    @Arg("summary") summary: string
+  ): Promise<boolean> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: ["settings"],
+    });
+    if (!user || !user.settings.zoteroConnected) return false;
+
+    const noteTemplate = {
+      itemType: "note",
+      note: summary,
+      tags: [],
+      parentItem: item,
+      relations: {},
+    };
+    const attachedNoteResponse = await axios({
+      headers: {
+        Authorization: `Bearer ${user.settings.zoteroAPIKey}`,
+      },
+      method: "POST",
+      url: `https://api.zotero.org/users/${user.settings.zoteroUserId}/items`,
+      data: [noteTemplate],
+    });
+    if (attachedNoteResponse.data.successful) {
+      return true;
+    }
+    return false;
   }
 }

@@ -24,7 +24,7 @@ export class NotionResolver {
     return url;
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async retrieveNotionToken(
     @Arg("code") code: string,

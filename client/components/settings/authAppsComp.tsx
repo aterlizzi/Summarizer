@@ -26,6 +26,12 @@ const AuthEvernote = `
     authEvernote
   }
 `;
+
+const AuthMendeley = `
+  mutation{
+    authMendeley
+  }
+`;
 const ClearEvernote = `
   mutation{
     clearEvernote
@@ -66,6 +72,7 @@ function AuthorizeApps() {
   const [notionResult, authNotion] = useMutation(AuthNotion);
   const [googleResult, authGoogle] = useMutation(AuthGoogle);
   const [evernoteResult, authEvernote] = useMutation(AuthEvernote);
+  const [mendeleyResult, authMendeley] = useMutation(AuthMendeley);
   const [clearZoteroResult, clearZotero] = useMutation(ClearZotero);
   const [clearNotionResult, clearNotion] = useMutation(ClearNotion);
   const [clearEvernoteResult, clearEvernote] = useMutation(ClearEvernote);
@@ -122,6 +129,15 @@ function AuthorizeApps() {
     });
   };
 
+  const handleMendeleyAuth = () => {
+    authMendeley().then((res) => {
+      if (res.data && res.data.authMendeley !== "") {
+        const url = res.data.authMendeley;
+        router.push(url);
+      }
+    });
+  };
+
   return (
     <div className={styles.grid}>
       {meResult.fetching || meResult.error ? null : (
@@ -148,6 +164,12 @@ function AuthorizeApps() {
             handleAuth={handleEvernoteAuth}
             connection={meResult.data.me.settings.evernoteConnected}
             name={"Evernote"}
+            handleDisableAuth={handleClearEvernote}
+          />
+          <AuthContainerComp
+            handleAuth={handleMendeleyAuth}
+            connection={meResult.data.me.settings.evernoteConnected}
+            name={"Mendeley"}
             handleDisableAuth={handleClearEvernote}
           />
         </>

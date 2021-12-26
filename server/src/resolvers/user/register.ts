@@ -39,7 +39,11 @@ export class RegisterResolver {
         accountType: "google",
         reason: usecase ? usecase : "Personal",
       });
-      const userSettings = Settings.create({ user: newUser });
+      console.log(newUser.id % 2 === 0);
+      const userSettings = Settings.create({
+        user: newUser,
+        ABTest: newUser.id % 2 == 0 ? "A" : "B",
+      });
       const userEmailSettings = EmailSettings.create({
         settings: userSettings,
       });
@@ -100,7 +104,10 @@ export class RegisterResolver {
       accountType: "web",
       reason: reason ? reason : "Personal",
     });
-    const userSettings = Settings.create({ user });
+    const userSettings = Settings.create({
+      user,
+      ABTest: user.id % 2 === 0 ? "A" : "B",
+    });
     const userEmailSettings = EmailSettings.create({ settings: userSettings });
     userSettings.emailSettings = userEmailSettings;
     user.settings = userSettings;
