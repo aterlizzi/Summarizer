@@ -43,13 +43,14 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
           reply.send({ recevied: true });
           await handleCustomerSubDeleted(event);
           break;
-        case "invoice.paid":
+        case "invoice.payment_succeeded":
           reply.send({ recevied: true });
           console.log(event);
           await handleInvoicePaid(event);
           break;
         case "customer.subscription.updated":
           reply.send({ received: true });
+          console.log(event);
           await handleSubscriptionUpdated(event);
           break;
         default:
@@ -65,8 +66,8 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
 
 // handle functions
 const handleSubscriptionUpdated = async (event: any) => {
-  const customer = event.data.customer;
-  const priceId = event.data.items.data[0].price.id;
+  const customer = event.data.object.customer;
+  const priceId = event.data.object.items.data[0].price.id;
   const user = await User.findOne({ where: { custKey: customer } });
   if (!user) return;
   switch (priceId) {
@@ -96,10 +97,22 @@ const handleSubscriptionUpdated = async (event: any) => {
 };
 const handleCompleteSession = async (event: any) => {
   const checkoutId = event.data.object.id;
+  const metadata = event.data.object.metadata;
   let uid = event.data.object.client_reference_id;
   if (!uid) return;
   let user = await User.findOne({ where: { id: uid } });
   if (!user) return;
+  if (metadata.trial) {
+    user.freeTrialed = true;
+    const cards = await stripe.customers.listSources(
+      event.data.object.customer,
+      { object: "card", limit: 1 }
+    );
+    const fingerprint = cards.data[0].fingerprint;
+    // if the users card exists in the database then the user has already activated a free trial with this credit card, cancel the transaction.
+    if (fingerprint === user.creditCardFingerprint) return;
+    user.creditCardFingerprint = fingerprint;
+  }
   const line_items = await stripe.checkout.sessions.listLineItems(checkoutId);
   const price_id = line_items.data[0].price.id;
   switch (price_id) {
@@ -142,6 +155,8 @@ const handleCustomerSubDeleted = async (event: any) => {
 };
 const handleInvoicePaid = async (event: any) => {
   let custKey = event.data.object.customer;
+  const billing_reason = event.data.object.billing_reason;
+  if (billing_reason === "subscription_create") return;
   let user = await User.findOne({ where: { custKey } });
   if (!user) return;
   const currentWordCount = user.wordCount;

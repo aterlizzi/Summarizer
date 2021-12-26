@@ -102,4 +102,12 @@ export class User extends BaseEntity {
   }) // cascade makes it such that I only need to save user to save settings, ondelete makes it so if a user is deleted, so are the settings.
   @JoinColumn()
   settings: Settings;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  freeTrialed: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  creditCardFingerprint: string;
 }

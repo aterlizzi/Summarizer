@@ -24,6 +24,9 @@ export class StripeResolver {
             session = await stripe.checkout.sessions.create({
               payment_method_types: ["card"],
               client_reference_id: `${user.id}`,
+              subscription_data: {
+                trial_period_days: 7,
+              },
               line_items: [
                 {
                   price: process.env.STRIPE_RESEARCH_MONTH_KEY,
@@ -31,8 +34,11 @@ export class StripeResolver {
                 },
               ],
               mode: "subscription",
+              metadata: {
+                trial: true,
+              },
               success_url:
-                "http://localhost:3000/applications/payments/success?session_id={CHECKOUT_SESSION_ID}",
+                "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
               cancel_url: "http://localhost:3000/begin",
             });
             return session.url;
@@ -40,15 +46,21 @@ export class StripeResolver {
             session = await stripe.checkout.sessions.create({
               payment_method_types: ["card"],
               client_reference_id: `${user.id}`,
+              subscription_data: {
+                trial_period_days: 7,
+              },
               line_items: [
                 {
                   price: process.env.STRIPE_STUDENT_MONTH_KEY,
                   quantity: 1,
                 },
               ],
+              metadata: {
+                trial: true,
+              },
               mode: "subscription",
               success_url:
-                "http://localhost:3000/applications/payments/success?session_id={CHECKOUT_SESSION_ID}",
+                "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
               cancel_url: "http://localhost:3000/begin",
             });
             return session.url;
@@ -62,15 +74,21 @@ export class StripeResolver {
             session = await stripe.checkout.sessions.create({
               payment_method_types: ["card"],
               client_reference_id: `${user.id}`,
+              subscription_data: {
+                trial_period_days: 7,
+              },
               line_items: [
                 {
                   price: process.env.STRIPE_RESEARCH_YEAR_KEY,
                   quantity: 1,
                 },
               ],
+              metadata: {
+                trial: true,
+              },
               mode: "subscription",
               success_url:
-                "http://localhost:3000/applications/payments/success?session_id={CHECKOUT_SESSION_ID}",
+                "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
               cancel_url: "http://localhost:3000/begin",
             });
             return session.url;
@@ -78,15 +96,21 @@ export class StripeResolver {
             session = await stripe.checkout.sessions.create({
               payment_method_types: ["card"],
               client_reference_id: `${user.id}`,
+              subscription_data: {
+                trial_period_days: 7,
+              },
               line_items: [
                 {
                   price: process.env.STRIPE_STUDENT_YEAR_KEY,
                   quantity: 1,
                 },
               ],
+              metadata: {
+                trial: true,
+              },
               mode: "subscription",
               success_url:
-                "http://localhost:3000/applications/payments/success?session_id={CHECKOUT_SESSION_ID}",
+                "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
               cancel_url: "http://localhost:3000/begin",
             });
             return session.url;

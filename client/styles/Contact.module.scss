@@ -1,0 +1,173 @@
+@import "utils/variables";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
+
+.main {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: $clr-highEmpha;
+  min-height: 100vh;
+  background: $clr-bg;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  .banner {
+    width: 100%;
+    height: 3.5em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: $clr-bg1;
+    .logo {
+      max-width: 30px;
+      margin: 0em 0.5em 0em 3em;
+      cursor: pointer;
+    }
+    .companyName {
+      font-size: 1.125rem;
+    }
+  }
+  .columns {
+    align-self: center;
+    justify-self: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    place-items: center;
+    padding: 2em;
+    gap: 2em;
+    .formContainer {
+      display: flex;
+      flex-direction: column;
+      width: 70%;
+      .header {
+        .title {
+          color: $clr-highEmpha;
+          font-weight: 400;
+          font-size: 2rem;
+        }
+      }
+      .form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .nameContainer {
+          display: flex;
+          justify-content: space-between;
+          max-width: 100%;
+          .labelContainer {
+            display: flex;
+            flex-direction: column;
+            &:first-of-type {
+              margin-right: 0.5em;
+            }
+            .input {
+              width: 100%;
+            }
+          }
+        }
+        .label {
+          font-size: 0.85rem;
+          color: $clr-medEmpha;
+          margin-bottom: 0.5em;
+          .special {
+            color: $clr-primary;
+          }
+        }
+        .input {
+          margin-bottom: 1em;
+          background: transparent;
+          border: 2px solid $clr-bg4;
+          padding: 0.5em 0.5em;
+          outline: none;
+          color: $clr-highEmpha;
+          font-size: 1rem;
+          border-radius: 0.25em;
+        }
+        .textarea {
+          resize: none;
+          height: 150px;
+          background: transparent;
+          border: 2px solid $clr-bg4;
+          color: $clr-highEmpha;
+          outline: none;
+          font-size: 1rem;
+          font-family: "Roboto", sans-serif;
+          padding: 0.5em;
+          border-radius: 0.25em;
+        }
+        .success {
+          font-size: 0.85rem;
+          color: $clr-secondary;
+          margin-bottom: 1em;
+          text-align: center;
+        }
+        .btn {
+          background: $clr-primaryVariant;
+          color: $clr-highEmpha;
+          border: none;
+          outline: none;
+          padding: 1em 1em;
+          border-radius: 0.25em;
+          cursor: pointer;
+          font-weight: "Roboto", sans-serif;
+          font-size: 0.85rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .loading {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border-top: 2px solid;
+            border-color: white transparent;
+            animation: spin 1s linear infinite;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 1300px) {
+  .main {
+    .columns {
+      place-items: center;
+      .svg {
+        width: 512.42371362px;
+        height: 427.41044658px;
+      }
+      .formContainer {
+        width: 100%;
+      }
+    }
+  }
+}
+@media (max-width: 800px) {
+  .main {
+    .columns {
+      .svg {
+        width: 279.50166px;
+        height: 304.5px;
+      }
+    }
+  }
+}
+@media (max-width: 700px) {
+  .main {
+    .columns {
+      display: block;
+      .svg {
+        display: none;
+      }
+    }
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
+  }
+}
