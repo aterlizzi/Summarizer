@@ -8,8 +8,8 @@ export class CreateWPInput {
   @Field(() => String)
   summary: string;
 
-  @Field(() => String)
-  url: string;
+  @Field(() => String, { nullable: true })
+  url?: string;
 
   @Field(() => String)
   title: string;

@@ -222,7 +222,9 @@ export class ZoteroResolver {
     const template = newTemplateResponse.data;
     template.collections = [options.collection];
     template.title = options.title;
-    template.url = options.url;
+    if (options.url) {
+      template.url = options.url;
+    }
     template.accessDate = new Date().toISOString;
 
     const newItemResponse = await axios({
