@@ -334,4 +334,75 @@
       }
     }
   }
+  .card {
+    // background: $clr-bg2;
+    padding: 2em;
+    max-width: 25em;
+    display: flex;
+    flex-direction: column;
+    .header {
+      display: flex;
+      justify-content: center;
+      border-bottom: 3px dashed $clr-bg4;
+      padding-bottom: 1em;
+      margin-bottom: 2em;
+      .title {
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 0;
+      }
+    }
+    .content {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      .icon {
+        font-size: 4rem;
+        color: $clr-primaryVariant;
+      }
+      .instructions {
+        text-align: center;
+        font-size: 0.95rem;
+        color: $clr-medEmpha;
+        font-family: "Raleway", sans-serif;
+        margin: 2em 0em;
+      }
+      .verify {
+        background: $clr-primaryVariant;
+        color: $clr-highEmpha;
+        cursor: pointer;
+        margin-top: 2em;
+        outline: none;
+        border: none;
+        width: 65%;
+        padding: 0.5em 0em;
+        border-radius: 0.5em;
+        font-size: 1rem;
+      }
+      .container {
+        height: 50px;
+        width: 225px;
+      }
+      .character {
+        line-height: 50px;
+        font-size: 36px;
+        color: $clr-highEmpha;
+        background-color: $clr-bg3;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        margin-left: 8px;
+        cursor: pointer;
+      }
+      .character:first-child {
+        margin-left: 0;
+      }
+      .characterInactive {
+        background-color: $clr-bg2;
+      }
+      .characterSelected {
+        border: 1px solid $clr-primaryVariant;
+      }
+    }
+  }
 }

@@ -7,6 +7,9 @@ import { useRouter } from "next/router";
 import SelectUsecaseComp from "../components/welcome/SelectUsecaseComp";
 import ReturnButtonComp from "../components/welcome/ReturnButtonComp";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserLock } from "@fortawesome/free-solid-svg-icons";
+import VerificationInput from "react-verification-input";
 
 const RegisterWebUser = `
     mutation($options: registerUserInput!) {
@@ -60,13 +63,12 @@ function Welcome() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
+  const [code, setCode] = useState(0);
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
   const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
-
-  console.log(webResult);
 
   useEffect(() => {
     if (target_url) {
@@ -94,11 +96,7 @@ function Welcome() {
                 "accessToken",
                 response.data.registerGoogleUser.accessToken
               );
-              if (url) {
-                router.push(url);
-              } else {
-                router.push("/begin");
-              }
+              setSection(2);
             }
           }
         }
@@ -113,11 +111,7 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyGoogleUser.accessToken
                 );
-                if (url) {
-                  router.push(url);
-                } else {
-                  router.push("/begin");
-                }
+                setSection(2);
               } else {
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
@@ -148,11 +142,7 @@ function Welcome() {
                 setError(true);
                 setErrorMsg(response.data.registerWebUser.error.message);
               } else {
-                if (url) {
-                  router.push(url);
-                } else {
-                  router.push("/begin");
-                }
+                setSection(2);
               }
             }
           }
@@ -175,11 +165,7 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyUser.accessToken
                 );
-                if (url) {
-                  router.push(url);
-                } else {
-                  router.push("/begin");
-                }
+                setSection(2);
               }
             }
           }
@@ -187,6 +173,8 @@ function Welcome() {
       });
     }
   };
+
+  const handleVerificationCode = () => {};
 
   return (
     <main className={styles.main}>
@@ -196,7 +184,7 @@ function Welcome() {
           setSection={setSection}
           section={section}
         />
-      ) : (
+      ) : section === 1 ? (
         <>
           <ReturnButtonComp setSection={setSection} section={section} />
           <div className={styles.accountType}>
@@ -219,6 +207,33 @@ function Welcome() {
             setSlide={setSlide}
           />
         </>
+      ) : (
+        <div className={styles.card}>
+          <header className={styles.header}>
+            <h3 className={styles.title}>Verification</h3>
+          </header>
+          <div className={styles.content}>
+            <FontAwesomeIcon icon={faUserLock} className={styles.icon} />
+            <p className={styles.instructions}>
+              Please enter the verification code we sent to {email}.
+            </p>
+            <VerificationInput
+              validChars="0-9"
+              onChange={(value: any) => setCode(value)}
+              length={4}
+              removeDefaultStyles={true}
+              classNames={{
+                container: styles.container,
+                character: styles.character,
+                characterInactive: styles.characterInactive,
+                characterSelected: styles.characterSelected,
+              }}
+            />
+            <button className={styles.verify} onClick={handleVerificationCode}>
+              Verify
+            </button>
+          </div>
+        </div>
       )}
     </main>
   );
