@@ -110,4 +110,8 @@ export class User extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   creditCardFingerprint: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  onboardCompleted: boolean;
 }

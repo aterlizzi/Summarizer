@@ -1,3 +1,4 @@
+import { CreditCard } from "./../entities/CreditCard";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 import rawBody from "raw-body";
@@ -45,12 +46,10 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
           break;
         case "invoice.payment_succeeded":
           reply.send({ recevied: true });
-          console.log(event);
           await handleInvoicePaid(event);
           break;
         case "customer.subscription.updated":
           reply.send({ received: true });
-          console.log(event);
           await handleSubscriptionUpdated(event);
           break;
         default:
@@ -97,21 +96,33 @@ const handleSubscriptionUpdated = async (event: any) => {
 };
 const handleCompleteSession = async (event: any) => {
   const checkoutId = event.data.object.id;
-  const metadata = event.data.object.metadata;
   let uid = event.data.object.client_reference_id;
   if (!uid) return;
   let user = await User.findOne({ where: { id: uid } });
   if (!user) return;
-  if (metadata.trial) {
-    user.freeTrialed = true;
-    const cards = await stripe.customers.listSources(
-      event.data.object.customer,
-      { object: "card", limit: 1 }
-    );
-    const fingerprint = cards.data[0].fingerprint;
-    // if the users card exists in the database then the user has already activated a free trial with this credit card, cancel the transaction.
-    if (fingerprint === user.creditCardFingerprint) return;
-    user.creditCardFingerprint = fingerprint;
+
+  // assign free-trialed to user, allows them to bypass trials.
+  user.freeTrialed = true;
+
+  // retrieve subscription to retrieve payment method
+  const subscription = await stripe.subscriptions.retrieve(
+    event.data.object.subscription
+  );
+
+  // retrieve full payment method to have access to fingerprint
+  const paymentMethod = await stripe.paymentMethods.retrieve(
+    subscription.default_payment_method
+  );
+  const fingerprint = paymentMethod.card.fingerprint;
+
+  // if card exists in database with that fingerprint, dont distribute product to user.
+  const card = await CreditCard.findOne({ where: { fingerprint } });
+
+  // cancel the transaction
+  if (card) {
+    await user.save();
+    stripe.subscriptions.del(event.data.object.subscription);
+    return;
   }
   const line_items = await stripe.checkout.sessions.listLineItems(checkoutId);
   const price_id = line_items.data[0].price.id;
@@ -142,6 +153,10 @@ const handleCompleteSession = async (event: any) => {
   }
   user.custKey = event.data.object.customer;
   user.subKey = event.data.object.subscription;
+
+  // since transaction succeeded, add credit card to the database.
+  const newCard = CreditCard.create({ fingerprint: fingerprint });
+  await newCard.save();
   await user.save();
 };
 const handleCustomerSubDeleted = async (event: any) => {
@@ -151,10 +166,13 @@ const handleCustomerSubDeleted = async (event: any) => {
   user.prem = false;
   user.wordCount = 25000;
   user.paymentTier = "Free";
+  user.subKey = "";
+  user.custKey = "";
   await user.save();
 };
 const handleInvoicePaid = async (event: any) => {
   let custKey = event.data.object.customer;
+  console.log(event.data.object.payment_settings);
   const billing_reason = event.data.object.billing_reason;
   if (billing_reason === "subscription_create") return;
   let user = await User.findOne({ where: { custKey } });

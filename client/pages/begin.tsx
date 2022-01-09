@@ -10,6 +10,7 @@ const Me = `
   query {
     me {
       paymentTier
+      freeTrialed
     }
   }
 `;
@@ -160,7 +161,11 @@ function Begin() {
                       disabled={true}
                     >
                       {!loading1 ? (
-                        "Try for free"
+                        meResult.data.me.freeTrialed ? (
+                          "Begin now"
+                        ) : (
+                          "Try for free"
+                        )
                       ) : (
                         <div className={styles.loading2}></div>
                       )}
@@ -171,7 +176,11 @@ function Begin() {
                       onClick={handleResearcherClick}
                     >
                       {!loading1 ? (
-                        "Try for free"
+                        meResult.data.me.freeTrialed ? (
+                          "Begin now"
+                        ) : (
+                          "Try for free"
+                        )
                       ) : (
                         <div className={styles.loading2}></div>
                       )}
@@ -183,7 +192,11 @@ function Begin() {
                     onClick={handleResearcherClick}
                   >
                     {!loading1 ? (
-                      "Try for free"
+                      meResult.data.me.freeTrialed ? (
+                        "Begin now"
+                      ) : (
+                        "Try for free"
+                      )
                     ) : (
                       <div className={styles.loading2}></div>
                     )}
@@ -254,7 +267,11 @@ function Begin() {
                       disabled={true}
                     >
                       {!loading2 ? (
-                        "Try for free"
+                        meResult.data.me.freeTrialed ? (
+                          "Begin now"
+                        ) : (
+                          "Try for free"
+                        )
                       ) : (
                         <div className={styles.loading2}></div>
                       )}
@@ -265,7 +282,11 @@ function Begin() {
                       onClick={handleStudentClick}
                     >
                       {!loading2 ? (
-                        "Try for free"
+                        meResult.data.me.freeTrialed ? (
+                          "Begin now"
+                        ) : (
+                          "Try for free"
+                        )
                       ) : (
                         <div className={styles.loading2}></div>
                       )}
@@ -277,7 +298,11 @@ function Begin() {
                     onClick={handleStudentClick}
                   >
                     {!loading2 ? (
-                      "Try for free"
+                      meResult.data.me.freeTrialed ? (
+                        "Begin now"
+                      ) : (
+                        "Try for free"
+                      )
                     ) : (
                       <div className={styles.loading2}></div>
                     )}

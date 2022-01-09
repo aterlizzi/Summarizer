@@ -32,19 +32,24 @@ export class MendeleyResolver {
     const credential = Buffer.from(
       process.env.MENDELEY_CLIENT_ID + ":" + process.env.MENDELEY_CLIENT_SECRET
     ).toString("base64");
-    console.log(credential, code);
-    const responseObject = await axios({
-      headers: {
-        Authorization: `Basic ${credential}`,
-      },
-      data: {
-        grant_type: "authorization_code",
-        code: code,
-        redirect_uri: "http://localhost:3000/auth/mendeley",
-      },
-      url: "https://api.mendeley.com/oauth/token",
-      method: "POST",
-    });
+
+    // retrieve accesstoken from notion.
+    try {
+      const responseObject = await axios({
+        headers: {
+          Authorization: `Basic ${credential}`,
+        },
+        data: {
+          grant_type: "authorization_code",
+          code: code,
+          redirect_uri: "http://localhost:3000/auth/mendeley",
+        },
+        url: "https://api.mendeley.com/oauth/token",
+        method: "POST",
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
     console.log(responseObject);
   }
