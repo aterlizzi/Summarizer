@@ -157,7 +157,7 @@ export class RegisterResolver {
 }
 
 const handleEmailSend = async (user: User) => {
-  const CODE = Math.floor(Math.random() * 9999);
+  const CODE = Math.floor(Math.random() * (9999 - 1000) + 1000);
   await redis.set(registerUserToken + CODE, user.id, "ex", 60 * 60 * 24);
   sendConfirmationMail(user.email, user.username!, CODE.toString());
 };

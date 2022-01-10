@@ -10,6 +10,7 @@ import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserLock } from "@fortawesome/free-solid-svg-icons";
 import VerificationInput from "react-verification-input";
+import Verification from "../components/welcome/VerificationComp";
 
 const RegisterWebUser = `
     mutation($options: registerUserInput!) {
@@ -77,16 +78,11 @@ function Welcome() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
-  const [code, setCode] = useState(0);
-  const [codeError, setCodeError] = useState("");
-  const [resendSuccess, setResendSuccess] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
   const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
-  const [confirmResult, confirmUser] = useMutation(ConfirmUser);
-  const [resendResult, resend] = useMutation(Resend);
 
   useEffect(() => {
     if (target_url) {
@@ -204,37 +200,6 @@ function Welcome() {
     }
   };
 
-  const handleVerificationCode = () => {
-    setResendSuccess("");
-    if (code.toString().length === 4) {
-      confirmUser({ code: code.toString() }).then((res) => {
-        if (res.data && res.data.confirmUser.accessToken !== "") {
-          localStorage.setItem("accessToken", res.data.confirmUser.accessToken);
-          if (url) {
-            router.push(url);
-          } else {
-            router.push("/begin");
-          }
-        } else {
-          setCodeError("Incorrect verification code, please try again.");
-        }
-      });
-    } else {
-      setCodeError("Code must be 4 characters long.");
-    }
-  };
-
-  const handleResend = () => {
-    setResendSuccess("");
-    resend({ email }).then((res) => {
-      if (res.data && res.data.resend) {
-        setResendSuccess("Successfully resent verification code.");
-      } else {
-        setCodeError("Failed to resend verification code.");
-      }
-    });
-  };
-
   return (
     <main className={styles.main}>
       {section === 0 ? (
@@ -267,49 +232,7 @@ function Welcome() {
           />
         </>
       ) : (
-        <div className={styles.card}>
-          <header className={styles.header}>
-            <h3 className={styles.title}>Verification</h3>
-          </header>
-          <div className={styles.content}>
-            <FontAwesomeIcon icon={faUserLock} className={styles.icon} />
-            <p className={styles.instructions}>
-              Please enter the verification code we sent to {email}.
-            </p>
-            <VerificationInput
-              validChars="0-9"
-              onChange={(value: any) => setCode(value)}
-              length={4}
-              removeDefaultStyles={true}
-              classNames={{
-                container: styles.container,
-                character: styles.character,
-                characterInactive: styles.characterInactive,
-                characterSelected: styles.characterSelected,
-              }}
-            />
-            {codeError !== "" ? (
-              <p className={styles.error}>{codeError}</p>
-            ) : null}
-            {resendSuccess !== "" ? (
-              <p className={styles.success}>{resendSuccess}</p>
-            ) : null}
-            <button className={styles.verify} onClick={handleVerificationCode}>
-              {confirmResult.fetching ? (
-                <div className={styles.loader}></div>
-              ) : (
-                "Verify"
-              )}
-            </button>
-            {resendResult.fetching ? (
-              <div className={styles.loader}></div>
-            ) : (
-              <p className={styles.resend} onClick={handleResend}>
-                Resend code
-              </p>
-            )}
-          </div>
-        </div>
+        <Verification email={email} url={url} />
       )}
     </main>
   );

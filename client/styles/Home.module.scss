@@ -14,7 +14,7 @@
   overflow-x: hidden;
   .banner {
     width: 100%;
-    height: 4em;
+    height: 3.5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,10 +39,17 @@
         border: 2px solid $clr-bg4;
         cursor: pointer;
         color: $clr-highEmpha;
-        font-size: .85rem;
+        font-size: 0.85rem;
         font-family: "Roboto", sans-serif;
-        border-radius: 0.25em;
-        padding: 0.5em 1em;
+        border-radius: 0.65em;
+        padding: 0.45em 1em;
+        &:first-of-type {
+          margin-right: 1em;
+        }
+        &:hover {
+          background: $clr-bg2;
+          transition: background 100ms ease-in;
+        }
       }
       .try {
         background: $clr-primaryVariant;
@@ -51,10 +58,27 @@
         font-size: 1rem;
         border: none;
         outline: none;
-        padding: 0.5em 1em;
+        padding: 0.45em 1em;
         border-radius: 0.25em;
         cursor: pointer;
         margin: 0em 1em;
+      }
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .main {
+    .banner {
+      justify-content: center;
+      .left {
+        display: none;
+      }
+      .right {
+        margin: 0;
+        .try {
+          margin: 0em 0em 0em 1em;
+        }
       }
     }
   }
