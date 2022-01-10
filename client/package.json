@@ -15,6 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@urql/exchange-auth": "^0.1.7",
     "@urql/exchange-multipart-fetch": "^0.1.13",
+    "hamburger-react": "^2.4.1",
     "jwt-decode": "^3.1.2",
     "next": "11.1.2",
     "react": "17.0.2",

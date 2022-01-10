@@ -1,33 +1,15 @@
 import { GetServerSideProps } from "next";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Layout from "../components/layout";
-import GoogleLogin from "react-google-login";
-import { useMutation } from "urql";
 import styles from "../styles/Home.module.scss";
-
-const GoogleLoginMutation = `
-  mutation($token: String!){
-    registerGoogleUser(token: $token)
-  }
-`;
+import BannerComp from "../components/home/bannerComp";
 
 function Home() {
-  const [googleLoginResult, googleLogin] = useMutation(GoogleLoginMutation);
-  const handleResponseGoogle = (response) => {
-    const variables = {
-      token: response.tokenId,
-    };
-    googleLogin(variables);
-  };
-  const handleResponseGoogleFailure = (response) => {};
+  const [isOpen, setOpen] = useState(false);
+
   return (
     <main className={styles.main}>
-      <GoogleLogin
-        clientId="210066948522-7af1f1tshqc33ku849gdjflhlv6df3dc.apps.googleusercontent.com"
-        buttonText="Login with Google"
-        onSuccess={handleResponseGoogle}
-        onFailure={handleResponseGoogleFailure}
-      />
+      <BannerComp />
     </main>
   );
 }

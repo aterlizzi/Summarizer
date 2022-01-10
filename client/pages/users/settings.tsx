@@ -6,11 +6,14 @@ import BannerComp from "../../components/settings/bannerComp";
 import SideBar from "../../components/settings/sidebarComp";
 import Info from "../../components/settings/infoComp";
 import { useRouter } from "next/router";
+import MobileMenu from "../../components/settings/mobileMenuComp";
 
 function Settings() {
   const router = useRouter();
   const { auth, status, personal, account, reminders } = router.query;
+
   const [section, setSection] = useState(0);
+  const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
     if (auth) {
@@ -32,11 +35,17 @@ function Settings() {
 
   return (
     <main className={styles.main}>
-      <BannerComp />
-      <div className={styles.columnContainer}>
+      <BannerComp
+        setOpen={setOpen}
+        isOpen={isOpen}
+        burger={true}
+        tryFree={false}
+      />
+      <div className={styles.columnContainer} onClick={() => setOpen(false)}>
         <SideBar setSection={setSection} section={section} />
         <Info section={section} />
       </div>
+      <MobileMenu isOpen={isOpen} section={section} setSection={setSection} />
     </main>
   );
 }

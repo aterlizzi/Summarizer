@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import styles from "../../styles/Settings.module.scss";
+import styles from "../../styles/Home.module.scss";
 import logo from "../../public/logo.png";
-import { Sling as Hamburger } from "hamburger-react";
 
-function BannerComp({ setOpen, isOpen, burger, tryFree }) {
+function BannerComp() {
   const router = useRouter();
 
   const handleClick = () => {
     router.push("/");
   };
+
   return (
     <header className={styles.banner}>
       <div className={styles.left}>
@@ -20,11 +20,15 @@ function BannerComp({ setOpen, isOpen, burger, tryFree }) {
         <p className={styles.companyName}>Untanglify</p>
       </div>
       <div className={styles.right}>
-        {burger ? (
-          <div className={styles.burgerContainer}>
-            <Hamburger size={25} toggled={isOpen} toggle={setOpen} />
-          </div>
-        ) : null}
+        <button
+          className={styles.contact}
+          onClick={() => router.push("/contact")}
+        >
+          Contact
+        </button>
+        <a href="https://www.youtube.com" target="_blank">
+          <button className={styles.try}>Try for Free</button>
+        </a>
       </div>
     </header>
   );
