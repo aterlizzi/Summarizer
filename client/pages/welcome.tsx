@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Welcome.module.scss";
-import { useMutation } from "urql";
+import { useMutation, useQuery } from "urql";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import SelectUsecaseComp from "../components/welcome/SelectUsecaseComp";
@@ -49,6 +49,20 @@ const VerifyWebUser = `
     }
 `;
 
+const ConfirmUser = `
+    mutation($code: String!){
+      confirmUser(code: $code){
+        accessToken
+      }
+    }
+`;
+
+const Resend = `
+    mutation($email: String!){
+      resend(email: $email)
+    }
+`;
+
 function Welcome() {
   const router = useRouter();
 
@@ -64,11 +78,15 @@ function Welcome() {
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
   const [code, setCode] = useState(0);
+  const [codeError, setCodeError] = useState("");
+  const [resendSuccess, setResendSuccess] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
   const [verifyGoogleResult, verifyGoogleUser] = useMutation(VerifyGoogleUser);
   const [verifyWebResult, verifyWebUser] = useMutation(VerifyWebUser);
+  const [confirmResult, confirmUser] = useMutation(ConfirmUser);
+  const [resendResult, resend] = useMutation(Resend);
 
   useEffect(() => {
     if (target_url) {
@@ -96,7 +114,11 @@ function Welcome() {
                 "accessToken",
                 response.data.registerGoogleUser.accessToken
               );
-              setSection(2);
+              if (url) {
+                router.push(url);
+              } else {
+                router.push("/begin");
+              }
             }
           }
         }
@@ -111,7 +133,11 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyGoogleUser.accessToken
                 );
-                setSection(2);
+                if (url) {
+                  router.push(url);
+                } else {
+                  router.push("/begin");
+                }
               } else {
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
@@ -165,7 +191,11 @@ function Welcome() {
                   "accessToken",
                   response.data.verifyUser.accessToken
                 );
-                setSection(2);
+                if (url) {
+                  router.push(url);
+                } else {
+                  router.push("/begin");
+                }
               }
             }
           }
@@ -174,7 +204,36 @@ function Welcome() {
     }
   };
 
-  const handleVerificationCode = () => {};
+  const handleVerificationCode = () => {
+    setResendSuccess("");
+    if (code.toString().length === 4) {
+      confirmUser({ code: code.toString() }).then((res) => {
+        if (res.data && res.data.confirmUser.accessToken !== "") {
+          localStorage.setItem("accessToken", res.data.confirmUser.accessToken);
+          if (url) {
+            router.push(url);
+          } else {
+            router.push("/begin");
+          }
+        } else {
+          setCodeError("Incorrect verification code, please try again.");
+        }
+      });
+    } else {
+      setCodeError("Code must be 4 characters long.");
+    }
+  };
+
+  const handleResend = () => {
+    setResendSuccess("");
+    resend({ email }).then((res) => {
+      if (res.data && res.data.resend) {
+        setResendSuccess("Successfully resent verification code.");
+      } else {
+        setCodeError("Failed to resend verification code.");
+      }
+    });
+  };
 
   return (
     <main className={styles.main}>
@@ -229,9 +288,26 @@ function Welcome() {
                 characterSelected: styles.characterSelected,
               }}
             />
+            {codeError !== "" ? (
+              <p className={styles.error}>{codeError}</p>
+            ) : null}
+            {resendSuccess !== "" ? (
+              <p className={styles.success}>{resendSuccess}</p>
+            ) : null}
             <button className={styles.verify} onClick={handleVerificationCode}>
-              Verify
+              {confirmResult.fetching ? (
+                <div className={styles.loader}></div>
+              ) : (
+                "Verify"
+              )}
             </button>
+            {resendResult.fetching ? (
+              <div className={styles.loader}></div>
+            ) : (
+              <p className={styles.resend} onClick={handleResend}>
+                Resend code
+              </p>
+            )}
           </div>
         </div>
       )}

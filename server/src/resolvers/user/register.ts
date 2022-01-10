@@ -7,8 +7,7 @@ import { registerUserToken } from "./../../constants/redisPrefixes";
 import { redis } from "./../../redis";
 import argon2 from "argon2";
 import { User } from "./../../entities/User";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { v4 } from "uuid";
+import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
@@ -112,26 +111,31 @@ export class RegisterResolver {
     userSettings.emailSettings = userEmailSettings;
     user.settings = userSettings;
     await user.save();
-    const token = v4();
-    await redis.set(registerUserToken + token, user.id, "ex", 60 * 60 * 24);
-    sendConfirmationMail(user.email, user.username!, token);
+    await handleEmailSend(user);
     return {
       registered: true,
       error: {},
     };
   }
-  @Query(() => ConfirmUserOutput)
+  @Mutation(() => Boolean)
+  async resend(@Arg("email") email: string): Promise<boolean> {
+    const user = await User.findOne({ where: { email } });
+    if (!user) return false;
+    await handleEmailSend(user);
+    return true;
+  }
+  @Mutation(() => ConfirmUserOutput)
   async confirmUser(
-    @Arg("token") token: string,
+    @Arg("code") code: string,
     @Ctx() ctx: MyContext
   ): Promise<ConfirmUserOutput> {
-    const userId = await redis.get(registerUserToken + token);
+    const userId = await redis.get(registerUserToken + code);
     if (!userId) return { accessToken: "" };
     const user = await User.findOne(userId);
     if (!user || user.confirmed) return { accessToken: "" };
     user.confirmed = true;
     await user.save();
-    await redis.del(registerUserToken + token);
+    await redis.del(registerUserToken + code);
     ctx.reply.setCookie(
       "jid",
       sign({ userId: user.id }, process.env.JWT_RT_SECRET_TOKEN!, {
@@ -151,3 +155,9 @@ export class RegisterResolver {
     };
   }
 }
+
+const handleEmailSend = async (user: User) => {
+  const CODE = Math.floor(Math.random() * 9999);
+  await redis.set(registerUserToken + CODE, user.id, "ex", 60 * 60 * 24);
+  sendConfirmationMail(user.email, user.username!, CODE.toString());
+};

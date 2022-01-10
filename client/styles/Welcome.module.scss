@@ -335,7 +335,6 @@
     }
   }
   .card {
-    // background: $clr-bg2;
     padding: 2em;
     max-width: 25em;
     display: flex;
@@ -375,10 +374,21 @@
         margin-top: 2em;
         outline: none;
         border: none;
-        width: 65%;
-        padding: 0.5em 0em;
+        width: 200px;
+        height: 40px;
         border-radius: 0.5em;
         font-size: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .loader {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border-top: 2px solid;
+          border-color: white transparent;
+          animation: spin 1s linear infinite;
+        }
       }
       .container {
         height: 50px;
@@ -403,6 +413,43 @@
       .characterSelected {
         border: 1px solid $clr-primaryVariant;
       }
+      .error {
+        font-size: 0.95rem;
+        font-family: "Raleway", sans-serif;
+        color: $clr-error;
+        text-align: center;
+      }
+      .success {
+        font-size: 0.95rem;
+        font-family: "Raleway", sans-serif;
+        color: $clr-secondary;
+        text-align: center;
+      }
+      .resend {
+        font-size: 0.85rem;
+        cursor: pointer;
+        color: $clr-highEmpha;
+        font-family: "Raleway", sans-serif;
+        text-align: center;
+      }
+      .loader {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border-top: 2px solid;
+        border-color: white transparent;
+        animation: spin 1s linear infinite;
+      }
     }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
   }
 }

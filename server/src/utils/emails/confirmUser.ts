@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 export async function sendConfirmationMail(
   email: string,
   username: string,
-  token: string
+  code: string
 ) {
   const testAccount = await nodemailer.createTestAccount();
 
@@ -23,7 +23,7 @@ export async function sendConfirmationMail(
     to: email, // list of receivers
     subject: `Confirm your account.`, // Subject line
     text: "", // plain text body
-    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/><a href="http://localhost:3000/users/confirm/${token}">Click me</a>`, // html body
+    html: `Hi ${username}, <br/><p>Your verification code is: </p><br/><h1>${code}</h1><br/><p>If you did not request a verification code, you can ignore this email.</p>`, // html body
   };
 
   let info = await transporter.sendMail(mailOptions);
