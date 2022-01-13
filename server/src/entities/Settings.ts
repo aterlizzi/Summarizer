@@ -127,4 +127,16 @@ export class Settings extends BaseEntity {
   @Field(() => String)
   @Column({ nullable: true })
   ABTest: string;
+
+  @Field(() => Number)
+  @Column({ default: 0 })
+  totalRefers: number;
+
+  @Field(() => Number)
+  @Column({ default: 0 })
+  referralDiscount: number;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  freePrem: boolean;
 }

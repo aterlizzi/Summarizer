@@ -11,4 +11,7 @@ export class registerUserInput implements Partial<User> {
 
   @Field()
   reason: string;
+
+  @Field({ nullable: true })
+  referral?: string;
 }

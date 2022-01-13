@@ -98,7 +98,7 @@ const handleCompleteSession = async (event: any) => {
   const checkoutId = event.data.object.id;
   let uid = event.data.object.client_reference_id;
   if (!uid) return;
-  let user = await User.findOne({ where: { id: uid } });
+  const user = await User.findOne({ where: { id: uid } });
   if (!user) return;
 
   // assign free-trialed to user, allows them to bypass trials.
@@ -151,6 +151,7 @@ const handleCompleteSession = async (event: any) => {
       console.log("failed");
       break;
   }
+  user.current_period = Date.now();
   user.custKey = event.data.object.customer;
   user.subKey = event.data.object.subscription;
 
@@ -161,7 +162,7 @@ const handleCompleteSession = async (event: any) => {
 };
 const handleCustomerSubDeleted = async (event: any) => {
   let custKey = event.data.object.customer;
-  let user = await User.findOne({ where: { custKey } });
+  const user = await User.findOne({ where: { custKey } });
   if (!user) return;
   user.prem = false;
   user.wordCount = 25000;
@@ -175,7 +176,7 @@ const handleInvoicePaid = async (event: any) => {
   console.log(event.data.object.payment_settings);
   const billing_reason = event.data.object.billing_reason;
   if (billing_reason === "subscription_create") return;
-  let user = await User.findOne({ where: { custKey } });
+  const user = await User.findOne({ where: { custKey } });
   if (!user) return;
   const currentWordCount = user.wordCount;
   const price_id = event.data.object.lines.data[0].price.id;
@@ -204,6 +205,7 @@ const handleInvoicePaid = async (event: any) => {
       console.log("failed");
       break;
   }
+  user.current_period = Date.now();
   await user.save();
 };
 module.exports = stripeWebhook;

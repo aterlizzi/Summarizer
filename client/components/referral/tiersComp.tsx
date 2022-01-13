@@ -179,7 +179,14 @@ function Tiers() {
                   : "You must login to send an invite to a friend."
               }
               className={styles.copyLink}
-              style={{ cursor: "pointer" }}
+              style={
+                result &&
+                result.data &&
+                result.data.me &&
+                result.data.me.referralCode
+                  ? { cursor: "pointer" }
+                  : null
+              }
             />
             <button
               className={styles.copyBtn}
