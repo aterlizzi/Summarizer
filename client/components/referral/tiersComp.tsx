@@ -4,7 +4,7 @@ import Svg3 from "./svg3";
 import ListItem from "./listItemComp";
 import Svg2 from "./svg2";
 import Svg4 from "./svg4";
-import { useQuery } from "urql";
+import { useMutation, useQuery } from "urql";
 import router from "next/router";
 
 const Me = `
@@ -15,12 +15,21 @@ const Me = `
     }
 `;
 
+const SendEmail = `
+    mutation($email: String!){
+      sendReferralEmail(email: $email)
+    }
+`;
+
 function Tiers() {
   const [email, setEmail] = useState("");
   const [copy, setCopy] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState("");
+  const [emailFailure, setEmailFailure] = useState("");
   const inputRef = useRef(null);
 
   const [result, reexecuteMe] = useQuery({ query: Me });
+  const [emailResult, sendEmail] = useMutation(SendEmail);
 
   const handleCopy = (e) => {
     if (result.error) return;
@@ -31,7 +40,17 @@ function Tiers() {
     setCopy(true);
   };
 
-  const handleSendEmail = () => {};
+  const handleSendEmail = () => {
+    setEmailFailure("");
+    setEmailSuccess("");
+    sendEmail({ email }).then((res) => {
+      if (res.data && res.data.sendReferralEmail) {
+        setEmailSuccess("Successfully sent an invite!");
+      } else {
+        setEmailFailure("Whoops, something went wrong. Try again.");
+      }
+    });
+  };
 
   return (
     <>
