@@ -61,6 +61,11 @@ function MobileMenu({ isOpen, section, setSection }) {
             section={section}
             setSection={setSection}
           />
+          <SidebarLink
+            text={"Logout"}
+            section={section}
+            setSection={setSection}
+          />
         </section>
       </section>
     </div>

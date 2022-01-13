@@ -12,6 +12,7 @@ import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
 import { Settings } from "../../entities/Settings";
+const voucher_codes = require("voucher-code-generator");
 
 @Resolver()
 export class RegisterResolver {
@@ -110,6 +111,8 @@ export class RegisterResolver {
     const userEmailSettings = EmailSettings.create({ settings: userSettings });
     userSettings.emailSettings = userEmailSettings;
     user.settings = userSettings;
+    const code = await generateCode();
+    user.referralCode = code;
     await user.save();
     await handleEmailSend(user);
     return {
@@ -160,4 +163,17 @@ const handleEmailSend = async (user: User) => {
   const CODE = Math.floor(Math.random() * (9999 - 1000) + 1000);
   await redis.set(registerUserToken + CODE, user.id, "ex", 60 * 60 * 24);
   sendConfirmationMail(user.email, user.username!, CODE.toString());
+};
+
+const generateCode = async () => {
+  const [code] = voucher_codes.generate({
+    length: 8,
+    count: 1,
+  });
+  const user = await User.findOne({ where: { referralCode: code } });
+  if (user) {
+    generateCode();
+  } else {
+    return code;
+  }
 };

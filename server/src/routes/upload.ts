@@ -47,7 +47,7 @@ const spawnProcess = async (childPython: ChildProcessWithoutNullStreams) => {
       clearTimeout(id);
       console.log("killed");
       resolve("Ran out of allotted time to extract text from PDF.");
-    }, 10000);
+    }, 60000);
   });
   const promise = new Promise((resolve) => {
     childPython.stdout.on("data", (data) => {

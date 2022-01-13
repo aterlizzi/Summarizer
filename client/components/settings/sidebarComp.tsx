@@ -54,6 +54,11 @@ function SideBar({ setSection, section }) {
           section={section}
           setSection={setSection}
         />
+        <SidebarLink
+          text={"Logout"}
+          section={section}
+          setSection={setSection}
+        />
       </section>
     </section>
   );

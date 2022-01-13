@@ -114,4 +114,8 @@ export class User extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   onboardCompleted: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  referralCode: string;
 }

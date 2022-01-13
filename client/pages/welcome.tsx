@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Welcome.module.scss";
-import { useMutation, useQuery } from "urql";
+import { useMutation } from "urql";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import SelectUsecaseComp from "../components/welcome/SelectUsecaseComp";
 import ReturnButtonComp from "../components/welcome/ReturnButtonComp";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserLock } from "@fortawesome/free-solid-svg-icons";
-import VerificationInput from "react-verification-input";
 import Verification from "../components/welcome/VerificationComp";
 
 const RegisterWebUser = `
@@ -67,7 +64,7 @@ const Resend = `
 function Welcome() {
   const router = useRouter();
 
-  const { target_url } = router.query;
+  const { target_url, referral } = router.query;
   const [usecase, setUseCase] = useState("");
   const [section, setSection] = useState(0);
   const [email, setEmail] = useState("");

@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 import styles from "../../styles/Settings.module.scss";
 import { useRouter } from "next/router";
+import { useMutation } from "urql";
+
+const Logout = `
+  mutation{
+    logout
+  }
+`;
 
 function SidebarLink({ section, setSection, text }) {
   const router = useRouter();
+
+  const [result, logout] = useMutation(Logout);
+
   const handleClick = () => {
     switch (text) {
       case "Upgrade":
@@ -27,10 +37,23 @@ function SidebarLink({ section, setSection, text }) {
       case "Status":
         setSection(6);
         break;
+      case "Logout":
+        handleLogout();
+        break;
       default:
         break;
     }
   };
+
+  const handleLogout = () => {
+    logout().then((res) => {
+      if (res.data && res.data.logout) {
+        localStorage.clear();
+        router.push("/");
+      }
+    });
+  };
+
   return (
     <div
       className={styles.linkBox}
