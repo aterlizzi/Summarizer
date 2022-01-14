@@ -16,7 +16,7 @@ export class SummarizeResolver {
     @Arg("options") { email, sub, text, url }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
-    let wordCount = countWords(text);
+    const wordCount = countWords(text);
     console.log(text, wordCount);
 
     // payload is not undefined because of authentication process.
@@ -26,7 +26,7 @@ export class SummarizeResolver {
     if (!user.prem) await handleCooldown(user);
     if (user.wordCount <= 0) return undefined;
     if (wordCount > 1200) {
-      spliceLargeText(text);
+      spliceLargeText(text, wordCount);
     }
     return undefined;
 
@@ -38,82 +38,6 @@ export class SummarizeResolver {
     //   temperature: 0.9,
     //   topP: 1,
     // });
-    // const gtpResponse = await openai.complete({
-    //   engine: "curie",
-    //   prompt: `My student asked me what the main point of this passage was:\n"""\n${text}\n"""\nI rephrased it for him, in plain language a college student can understand:\n"""`,
-    //   maxTokens: 150,
-    //   temperature: 0.3,
-    //   topP: 1,
-    //   presencePenalty: 0,
-    //   frequencyPenalty: 1,
-    //   stop: [`"""`],
-    // });
-    // const gtpResponse = await openai.complete({
-    //   engine: "curie",
-    //   prompt: `${text}\nI rephrased this for my student, in plain language a twelfth grader can understand:`,
-    //   maxTokens: 100,
-    //   temperature: 0,
-    //   topP: 1,
-    //   presencePenalty: 0,
-    //   frequencyPenalty: 1,
-    // });
-    // const gtpResponse = await openai.complete({
-    //   engine: "curie",
-    //   prompt: `${text}\ntl;dr:`,
-    //   maxTokens: 100,
-    //   temperature: 0,
-    //   topP: 1,
-    //   presencePenalty: 0,
-    //   frequencyPenalty: 1,
-    // });
-    // const gtpResponse = await openai.complete({
-    //   engine: "curie-instruct-beta",
-    //   prompt: `${text}\ntl;dr:\n`,
-    //   maxTokens: 150,
-    //   temperature: 0.1,
-    //   topP: 1,
-    //   presencePenalty: 0,
-    //   frequencyPenalty: 0,
-    // });
-    // const gtpResponse = await openai.complete({
-    //   engine: "curie-instruct-beta",
-    //   prompt: `Write a unique summary of the following text:\n${text}\nSummary:`,
-    //   maxTokens: 125,
-    //   temperature: 0,
-    //   topP: 1,
-    //   presencePenalty: 0,
-    //   frequencyPenalty: 0,
-    // });
-    //   return gtpResponse;
-    // };
-    // const rawResult = await request(text);
-    // let summary = await parseResponseData(rawResult, text);
-    // if (summary === "") {
-    //   summary = "I'm sorry, we were unable to summarize this text.";
-    // }
-    // console.log(rawResult.data.choices[0].text, "___________________", summary);
-    // if (summary !== "I'm sorry, we were unable to summarize this text.") {
-    //   if (user.wordCount - wordCount <= 0) {
-    //     user.wordCount = 0;
-    //   } else {
-    //     user.wordCount = user.wordCount - wordCount;
-    //   }
-    // }
-    // const newSummary = Summary.create({
-    //   email: user.email,
-    //   url,
-    //   summary: rawResult.data.choices[0].text as string,
-    //   baseText: text,
-    // });
-    //   await newSummary.save();
-    //   await user.save();
-    //   const returnObj = {
-    //     summary: summary as string,
-    //     remainingSummaries: user.wordCount,
-    //     url,
-    //   };
-    //   return returnObj;
-    // }
   }
 }
 const handleCooldown = async (user: User) => {
@@ -125,8 +49,7 @@ const handleCooldown = async (user: User) => {
   }
   await user.save();
 };
-const spliceLargeText = (text: string) => {
-  const wordCount = countWords(text);
+const spliceLargeText = (text: string, wordCount: number) => {
   const [largestFactor, newWordCount] = determineLargestFactor(wordCount);
   console.log(largestFactor);
   const hashmap = sectionalizeText(largestFactor, newWordCount, text);
@@ -141,7 +64,7 @@ const sectionalizeText = (
   // const newWord = removeChar.trim().split(" ");
   const newWord = text.split(" ");
   const smallerFac = Math.floor(newWordCount / largestFactor); // wont always return a whole number due to strange rounding, therefore floor is necessary.
-  const hash: summaryHash = {}; // preallocation of hash map to store relevant words used in word search.
+  let hash: summaryHash = {}; // preallocation of hash map to store relevant words used in word search.
   let increment = largestFactor;
   // minus one because the last section doesn't need to be split.
   for (let i = 0; i < smallerFac - 1; i++) {
@@ -154,6 +77,10 @@ const sectionalizeText = (
     ];
     increment += largestFactor;
   }
+
+  // parse the hash for any symbols that throw off the regex.
+  hash = handleParseHash(hash);
+
   let editableText = text.trim();
   const finalPassageArr = [];
   for (let j = 0; j < smallerFac - 1; j++) {
@@ -273,4 +200,41 @@ const countWords = (text: string): number => {
 
   // return the array length to get the word count.
   return newWord.length;
+};
+
+// need to parse hash for any symbols that might mess up the regex.
+const handleParseHash = (hash: summaryHash) => {
+  for (let i in hash) {
+    for (let key in hash[i]) {
+      let indexOf = hash[i][key].indexOf("(");
+      if (indexOf !== -1) {
+        const arr = hash[i][key].split("");
+        // add \ to the word to avoid regex mishaps.
+        arr.splice(indexOf, 0, "\\");
+        hash[i][key] = arr.join("");
+      }
+      indexOf = hash[i][key].indexOf(")");
+      if (indexOf !== -1) {
+        const arr = hash[i][key].split("");
+        // add \ to the word to avoid regex mishaps.
+        arr.splice(indexOf, 0, "\\");
+        hash[i][key] = arr.join("");
+      }
+      indexOf = hash[i][key].indexOf("[");
+      if (indexOf !== -1) {
+        const arr = hash[i][key].split("");
+        // add \ to the word to avoid regex mishaps.
+        arr.splice(indexOf, 0, "\\");
+        hash[i][key] = arr.join("");
+      }
+      indexOf = hash[i][key].indexOf("]");
+      if (indexOf !== -1) {
+        const arr = hash[i][key].split("");
+        // add \ to the word to avoid regex mishaps.
+        arr.splice(indexOf, 0, "\\");
+        hash[i][key] = arr.join("");
+      }
+    }
+  }
+  return hash;
 };
