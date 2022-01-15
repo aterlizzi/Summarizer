@@ -26,13 +26,14 @@ function Begin() {
 
   const [meResult, reexecuteMe] = useQuery({ query: Me });
   const [sessionResult, createSession] = useMutation(CreateSession);
+  console.log(sessionResult);
 
   const [monthly, setMonthly] = useState(true);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
   const handleFreeClick = () => {
-    router.push("/welcome");
+    router.push(`/welcome?target_url=${encodeURIComponent("/begin")}`);
   };
   const handleStudentClick = () => {
     setLoading2(true);
@@ -47,11 +48,13 @@ function Begin() {
       mode,
     };
     createSession(variables).then((res) => {
-      setLoading2(true);
+      setLoading2(false);
       if (res.data) {
         if (res.data.createStripeSession) {
           router.push(res.data.createStripeSession);
         }
+      } else if (res.error) {
+        router.push(`/welcome?target_url=${encodeURIComponent("/begin")}`);
       }
     });
   };
@@ -73,6 +76,8 @@ function Begin() {
         if (res.data.createStripeSession) {
           router.push(res.data.createStripeSession);
         }
+      } else if (res.error) {
+        router.push(`/welcome?target_url=${encodeURIComponent("/begin")}`);
       }
     });
   };
@@ -161,6 +166,8 @@ function Begin() {
                       disabled={true}
                     >
                       {!loading1 ? (
+                        meResult.data &&
+                        meResult.data.me &&
                         meResult.data.me.freeTrialed ? (
                           "Begin now"
                         ) : (
@@ -192,6 +199,8 @@ function Begin() {
                     onClick={handleResearcherClick}
                   >
                     {!loading1 ? (
+                      meResult.data &&
+                      meResult.data.me &&
                       meResult.data.me.freeTrialed ? (
                         "Begin now"
                       ) : (
@@ -267,6 +276,8 @@ function Begin() {
                       disabled={true}
                     >
                       {!loading2 ? (
+                        meResult.data &&
+                        meResult.data.me &&
                         meResult.data.me.freeTrialed ? (
                           "Begin now"
                         ) : (
@@ -282,6 +293,8 @@ function Begin() {
                       onClick={handleStudentClick}
                     >
                       {!loading2 ? (
+                        meResult.data &&
+                        meResult.data.me &&
                         meResult.data.me.freeTrialed ? (
                           "Begin now"
                         ) : (
@@ -298,6 +311,8 @@ function Begin() {
                     onClick={handleStudentClick}
                   >
                     {!loading2 ? (
+                      meResult.data &&
+                      meResult.data.me &&
                       meResult.data.me.freeTrialed ? (
                         "Begin now"
                       ) : (

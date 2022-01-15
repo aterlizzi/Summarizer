@@ -1,6 +1,5 @@
 import { MyContext } from "./../../types/MyContext";
 import { isAuth } from "./../../middlewares/isAuth";
-import { Summary } from "./../../entities/Summary";
 import { SummaryInputObj } from "./../../types/SummaryInputObj";
 import { SummaryReturnObj } from "./../../types/SummaryReturnObj";
 import { User } from "../../entities/User";
@@ -24,20 +23,31 @@ export class SummarizeResolver {
 
     if (!user) return undefined;
     if (!user.prem) await handleCooldown(user);
-    if (user.wordCount <= 0) return undefined;
+    if (user.wordCount < wordCount) return undefined;
     if (wordCount > 1200) {
-      spliceLargeText(text, wordCount);
+      // construct an appropriately sized textarr to make digesting the text easier.
+      const textArr = spliceLargeText(text, wordCount);
+      // parses the textarr into a promise chain that is resolved.
+      // const summary = await handlePromiseChain(textArr);
+      // subtract the word count.
+      user.wordCount = user.wordCount - wordCount;
+      await user.save();
+      return { summary, remainingSummaries: user.wordCount, url };
+    } else {
+      // const response = await openai.complete({
+      //   engine: "babbage-instruct-beta",
+      //   prompt: `In a paragraph, summarize the following text.\n\nText: ${text.trim()} \n\nSummary:`,
+      //   temperature: 0,
+      //   max_tokens: 245,
+      //   top_p: 1,
+      //   frequency_penalty: 0,
+      //   presence_penalty: 0,
+      // });
+      const summary = response.data.choices[0].text;
+      user.wordCount = user.wordCount - wordCount;
+      await user.save();
+      return { summary, remainingSummaries: user.wordCount, url };
     }
-    return undefined;
-
-    // const request = async (text: string) => {
-    // const gtpResponse = await openai.complete({
-    //   engine: "ada",
-    //   prompt: `I think therefore I`,
-    //   maxTokens: 2,
-    //   temperature: 0.9,
-    //   topP: 1,
-    // });
   }
 }
 const handleCooldown = async (user: User) => {
@@ -54,14 +64,13 @@ const spliceLargeText = (text: string, wordCount: number) => {
   console.log(largestFactor);
   const hashmap = sectionalizeText(largestFactor, newWordCount, text);
   console.log(hashmap);
+  return hashmap;
 };
 const sectionalizeText = (
   largestFactor: number,
   newWordCount: number,
   text: string
 ) => {
-  // const removeChar = text.replace(/[^A-Za-z]\s+/g, " ");
-  // const newWord = removeChar.trim().split(" ");
   const newWord = text.split(" ");
   const smallerFac = Math.floor(newWordCount / largestFactor); // wont always return a whole number due to strange rounding, therefore floor is necessary.
   let hash: summaryHash = {}; // preallocation of hash map to store relevant words used in word search.
@@ -79,6 +88,7 @@ const sectionalizeText = (
   }
 
   // parse the hash for any symbols that throw off the regex.
+  console.log(hash);
   hash = handleParseHash(hash);
 
   let editableText = text.trim();
@@ -178,9 +188,11 @@ const determineFactors = (n: number) => {
 };
 const determineLargestFactor = (wordCount: number) => {
   let factors: number[] | undefined = [];
+  let largestFactor = 0;
   let newWordCount = wordCount;
-  while (factors.length < 3) {
+  while (factors.length < 3 && largestFactor > 100) {
     factors = determineFactors(newWordCount);
+    console.log(factors);
     if (!factors) return [];
     newWordCount += 1;
   }
@@ -188,8 +200,8 @@ const determineLargestFactor = (wordCount: number) => {
     if (factor > 1200) return false;
     return true;
   });
-  const largestInt = Math.max(...newFactors);
-  return [largestInt, newWordCount];
+  largestFactor = Math.max(...newFactors);
+  return [largestFactor, newWordCount];
 };
 const countWords = (text: string): number => {
   // remove any excess characters that are not A-Z or a-z
@@ -237,4 +249,29 @@ const handleParseHash = (hash: summaryHash) => {
     }
   }
   return hash;
+};
+
+// used for large word counts.
+const handlePromiseChain = async (textArr: string[]) => {
+  const promiseArr = new Array(textArr.length);
+  for (let i in textArr) {
+    promiseArr[i] = new Promise(async (resolve, reject) => {
+      const response = await openai.complete({
+        engine: "babbage-instruct-beta",
+        prompt: `In a paragraph, summarize the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
+        temperature: 0,
+        max_tokens: 245,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
+      if (response.data.choices[0].text) {
+        resolve(response.data.choices[0].text);
+      } else {
+        reject("reject");
+      }
+    });
+  }
+  const summaries = await Promise.all([...promiseArr]);
+  return summaries.join(" ");
 };

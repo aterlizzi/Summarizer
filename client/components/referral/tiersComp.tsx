@@ -194,7 +194,7 @@ function Tiers() {
                 result.data &&
                 result.data.me &&
                 result.data.me.referralCode
-                  ? "jane.doe@example.com"
+                  ? "Your friend's email."
                   : "You must login to send an invite to a friend."
               }
               className={styles.copyLink}
