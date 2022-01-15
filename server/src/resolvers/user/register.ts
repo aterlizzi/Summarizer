@@ -40,7 +40,6 @@ export class RegisterResolver {
       accountType: "google",
       reason: usecase ? usecase : "Personal",
     });
-    console.log(newUser.id % 2 === 0);
     const userSettings = Settings.create({
       user: newUser,
       ABTest: newUser.id % 2 == 0 ? "A" : "B",
@@ -50,10 +49,12 @@ export class RegisterResolver {
     });
     userSettings.emailSettings = userEmailSettings;
     newUser.settings = userSettings;
-    if (referral) {
-      await handleReferralCode(referral, newUser);
-    }
+    const code = await generateCode();
+    newUser.referralCode = code;
     await newUser.save();
+    if (referral) {
+      await handleReferralCode(referral, newUser.id);
+    }
     ctx.reply.setCookie(
       "jid",
       sign({ userId: newUser.id }, process.env.JWT_RT_SECRET_TOKEN!, {
@@ -114,10 +115,10 @@ export class RegisterResolver {
     user.settings = userSettings;
     const code = await generateCode();
     user.referralCode = code;
-    if (referral) {
-      handleReferralCode(referral, user);
-    }
     await user.save();
+    if (referral) {
+      handleReferralCode(referral, user.id);
+    }
     await handleEmailSend(user);
     return {
       registered: true,
@@ -182,7 +183,12 @@ const generateCode = async () => {
   }
 };
 
-const handleReferralCode = async (referral: string, user: User) => {
+const handleReferralCode = async (referral: string, userId: number) => {
+  const user = await User.findOne({
+    where: { id: userId },
+    relations: ["settings"],
+  });
+  if (!user) return;
   const referralUser = await User.findOne({
     where: { referralCode: referral },
     relations: ["settings"],
@@ -197,7 +203,7 @@ const handleReferralCode = async (referral: string, user: User) => {
   if (totalRefers === 15) {
     referralUser.wordCount += 20000;
     user.settings.referralDiscount = 10;
-    await handleFreePremium(referralUser);
+    await handleFreePremium(referralUser.id);
   }
   if (totalRefers < 15 && totalRefers >= 10) {
     referralUser.wordCount += 15000;
@@ -213,7 +219,9 @@ const handleReferralCode = async (referral: string, user: User) => {
   await user.save();
 };
 
-const handleFreePremium = async (user: User) => {
+const handleFreePremium = async (userId: number) => {
+  const user = await User.findOne({ where: { id: userId } });
+  if (!user) return;
   user.prem = true;
   user.paymentTier = "Student";
   user.wordCount = 150000;

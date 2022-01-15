@@ -21,8 +21,8 @@ const RegisterWebUser = `
     }
 `;
 const RegisterGoogleUser = `
-    mutation($token: String!, $usecase: String!) {
-        registerGoogleUser(token: $token, usecase: $usecase) {
+    mutation($token: String!, $usecase: String!, $referral: String) {
+        registerGoogleUser(token: $token, usecase: $usecase, referral: $referral) {
           accessToken
         }
     }
@@ -94,6 +94,7 @@ function Welcome() {
       const variables = {
         token,
         usecase: usecaseVariable,
+        referral,
       };
       registerGoogleUser(variables).then((response) => {
         console.log(response);
@@ -151,6 +152,7 @@ function Welcome() {
           email,
           password,
           reason: usecase,
+          referral,
         },
       };
       registerWebUser(variables).then((response) => {

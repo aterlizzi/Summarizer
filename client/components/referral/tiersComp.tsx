@@ -31,6 +31,8 @@ function Tiers() {
   const [result, reexecuteMe] = useQuery({ query: Me });
   const [emailResult, sendEmail] = useMutation(SendEmail);
 
+  console.log(result);
+
   const handleCopy = (e) => {
     if (result.error) return;
     if (!result.data || !result.data.me || !result.data.me.referralCode) return;
