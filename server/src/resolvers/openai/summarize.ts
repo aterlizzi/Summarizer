@@ -13,7 +13,7 @@ export class SummarizeResolver {
   @Mutation(() => SummaryReturnObj, { nullable: true })
   @UseMiddleware(isAuth)
   async summarize(
-    @Arg("options") { email, sub, text, url }: SummaryInputObj,
+    @Arg("options") { text, url }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
     const wordCount = countWords(text);
@@ -22,7 +22,7 @@ export class SummarizeResolver {
     // payload is not undefined because of authentication process.
     const user = await User.findOne({
       where: { id: payload!.userId },
-      relations: ["recentSummaries"],
+      relations: ["recentSummaries", "settings", "settings.extensionSettings"],
     });
 
     if (!user) return undefined;
@@ -36,8 +36,14 @@ export class SummarizeResolver {
       // subtract the word count.
       user.wordCount = user.wordCount - wordCount;
       await user.save();
-      await handleSaveRecentSummary(user.id, url, summary);
-      return { summary, remainingSummaries: user.wordCount, url };
+      const sumId = await handleSaveRecentSummary(user.id, url, summary);
+      return {
+        summary,
+        remainingSummaries: user.wordCount,
+        url,
+        id: sumId,
+        popout: user.settings.extensionSettings.popoutSummary,
+      };
     } else {
       const response = await openai.complete({
         engine: "babbage-instruct-beta",
@@ -51,8 +57,14 @@ export class SummarizeResolver {
       const summary = response.data.choices[0].text;
       user.wordCount = user.wordCount - wordCount;
       await user.save();
-      await handleSaveRecentSummary(user.id, url, summary);
-      return { summary, remainingSummaries: user.wordCount, url };
+      const sumId = await handleSaveRecentSummary(user.id, url, summary);
+      return {
+        summary,
+        remainingSummaries: user.wordCount,
+        url,
+        id: sumId,
+        popout: user.settings.extensionSettings.popoutSummary,
+      };
     }
   }
 }
@@ -341,4 +353,5 @@ const handleSaveRecentSummary = async (
       break;
   }
   await user.save();
+  return newSummary.id;
 };

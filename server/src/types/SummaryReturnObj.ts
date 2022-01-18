@@ -10,4 +10,10 @@ export class SummaryReturnObj {
 
   @Field(() => String)
   url: string;
+
+  @Field(() => Number, { nullable: true })
+  id?: number;
+
+  @Field(() => Boolean)
+  popout: boolean;
 }

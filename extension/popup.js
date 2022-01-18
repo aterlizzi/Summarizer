@@ -51,6 +51,7 @@ let logged = false;
 let manualAction = true;
 let pdfAction = true;
 let typingTimer;
+let sumId;
 
 // get status check when loading the popup, if login fails show login if login succeeds, proceed to application.
 // also retrieves the remaining word count from backend
@@ -275,6 +276,14 @@ button.addEventListener("click", () => {
             sumNum.textContent = checkText(
               response.data.summarize.remainingSummaries
             );
+            sumId = response.data.summarize.id;
+
+            // if user wants the summary to popout, this will automatically handle that action.
+            if (response.data.summarize.popout) {
+              chrome.tabs.create({
+                url: `http://localhost:3000/summaries/${sumId}`,
+              });
+            }
           } else {
             spinner.classList.toggle("hidden");
             button.classList.toggle("hidden");

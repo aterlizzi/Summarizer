@@ -521,6 +521,8 @@ const summarizeFunc = async (action, retries = 0) => {
       summarize(options: $options) {
         summary
         remainingSummaries
+        id
+        popout
       }
     }`;
     const summaryBody = JSON.stringify({
