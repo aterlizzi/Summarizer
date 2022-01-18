@@ -10,7 +10,11 @@ export class MeResolver {
   async me(@Ctx() { payload }: MyContext): Promise<User | undefined> {
     const user = await User.findOne({
       where: { id: payload!.userId },
-      relations: ["settings", "settings.emailSettings"],
+      relations: [
+        "settings",
+        "settings.emailSettings",
+        "settings.extensionSettings",
+      ],
     });
     if (!user) return undefined;
     return user;

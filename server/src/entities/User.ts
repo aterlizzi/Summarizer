@@ -1,3 +1,4 @@
+import { RecentSummaries } from "./RecentSummaries";
 import { Settings } from "./Settings";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
@@ -118,4 +119,10 @@ export class User extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   referralCode: string;
+
+  @Field(() => [RecentSummaries])
+  @OneToMany(() => RecentSummaries, (recentSummary) => recentSummary.user, {
+    cascade: true,
+  })
+  recentSummaries: RecentSummaries[];
 }

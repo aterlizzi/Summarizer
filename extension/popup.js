@@ -272,6 +272,9 @@ button.addEventListener("click", () => {
               saveRejectContainer.classList.remove("none");
             }
             emptyTag.textContent = response.data.summarize.summary;
+            sumNum.textContent = checkText(
+              response.data.summarize.remainingSummaries
+            );
           } else {
             spinner.classList.toggle("hidden");
             button.classList.toggle("hidden");

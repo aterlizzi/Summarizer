@@ -1,3 +1,5 @@
+import { ExtensionSettings } from "./entities/ExtensionSettings";
+import { RecentSummaries } from "./entities/RecentSummaries";
 import { CreditCard } from "./entities/CreditCard";
 import { EmailSettings } from "./entities/EmailSettings";
 import { Settings } from "./entities/Settings";
@@ -37,6 +39,8 @@ const main = async () => {
       Settings,
       EmailSettings,
       CreditCard,
+      RecentSummaries,
+      ExtensionSettings,
     ],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",

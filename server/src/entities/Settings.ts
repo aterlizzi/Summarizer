@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { ExtensionSettings } from "./ExtensionSettings";
 
 @ObjectType()
 @Entity()
@@ -120,9 +121,21 @@ export class Settings extends BaseEntity {
   mendeleyConnected: boolean;
 
   @Field(() => EmailSettings)
-  @OneToOne(() => EmailSettings, { onDelete: "CASCADE", cascade: true })
+  @OneToOne(() => EmailSettings, (emailSettings) => emailSettings.settings, {
+    onDelete: "CASCADE",
+    cascade: true,
+  })
   @JoinColumn()
   emailSettings: EmailSettings;
+
+  @Field(() => ExtensionSettings, { nullable: true })
+  @OneToOne(
+    () => ExtensionSettings,
+    (extensionSettings) => extensionSettings.settings,
+    { onDelete: "CASCADE", cascade: true }
+  )
+  @JoinColumn()
+  extensionSettings: ExtensionSettings;
 
   @Field(() => String)
   @Column({ nullable: true })

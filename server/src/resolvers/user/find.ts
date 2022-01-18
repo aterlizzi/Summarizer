@@ -6,7 +6,12 @@ export class FindUsersResolver {
   @Query(() => [User])
   async findUsers(): Promise<User[]> {
     const users = await User.find({
-      relations: ["settings", "settings.emailSettings"],
+      relations: [
+        "settings",
+        "settings.emailSettings",
+        "recentSummaries",
+        "settings.extensionSettings",
+      ],
     });
     return users;
   }

@@ -1,4 +1,3 @@
-import { Settings } from "./Settings";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -9,10 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Settings } from "./Settings";
 
 @ObjectType()
 @Entity()
-export class EmailSettings extends BaseEntity {
+export class ExtensionSettings extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,24 +26,16 @@ export class EmailSettings extends BaseEntity {
   updatedAt: Date;
 
   @Field(() => Settings)
-  @OneToOne(() => Settings, (settings) => settings.emailSettings, {
+  @OneToOne(() => Settings, (settings) => settings.extensionSettings, {
     onDelete: "CASCADE",
   })
   settings: Settings;
 
   @Field(() => Boolean)
   @Column({ default: true })
-  monthlyNews: boolean;
+  othersCanViewSummaries: boolean;
 
   @Field(() => Boolean)
-  @Column({ default: true })
-  improvementSurveys: boolean;
-
-  @Field(() => Boolean)
-  @Column({ default: true })
-  businessEmails: boolean;
-
-  @Field(() => Boolean)
-  @Column({ default: true })
-  featureReleases: boolean;
+  @Column({ default: false })
+  popoutSummary: boolean;
 }

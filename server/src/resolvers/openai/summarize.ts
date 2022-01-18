@@ -1,3 +1,4 @@
+import { RecentSummaries } from "./../../entities/RecentSummaries";
 import { MyContext } from "./../../types/MyContext";
 import { isAuth } from "./../../middlewares/isAuth";
 import { SummaryInputObj } from "./../../types/SummaryInputObj";
@@ -19,7 +20,10 @@ export class SummarizeResolver {
     console.log(text, wordCount);
 
     // payload is not undefined because of authentication process.
-    const user = await User.findOne({ where: { id: payload!.userId } });
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: ["recentSummaries"],
+    });
 
     if (!user) return undefined;
     if (!user.prem) await handleCooldown(user);
@@ -28,24 +32,26 @@ export class SummarizeResolver {
       // construct an appropriately sized textarr to make digesting the text easier.
       const textArr = spliceLargeText(text, wordCount);
       // parses the textarr into a promise chain that is resolved.
-      // const summary = await handlePromiseChain(textArr);
+      const summary = await handlePromiseChain(textArr);
       // subtract the word count.
       user.wordCount = user.wordCount - wordCount;
       await user.save();
+      await handleSaveRecentSummary(user.id, url, summary);
       return { summary, remainingSummaries: user.wordCount, url };
     } else {
-      // const response = await openai.complete({
-      //   engine: "babbage-instruct-beta",
-      //   prompt: `In a paragraph, summarize the following text.\n\nText: ${text.trim()} \n\nSummary:`,
-      //   temperature: 0,
-      //   max_tokens: 245,
-      //   top_p: 1,
-      //   frequency_penalty: 0,
-      //   presence_penalty: 0,
-      // });
+      const response = await openai.complete({
+        engine: "babbage-instruct-beta",
+        prompt: `Summarize the following text.\n\nText: ${text.trim()} \n\nSummary:`,
+        temperature: 0,
+        max_tokens: 160,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
       const summary = response.data.choices[0].text;
       user.wordCount = user.wordCount - wordCount;
       await user.save();
+      await handleSaveRecentSummary(user.id, url, summary);
       return { summary, remainingSummaries: user.wordCount, url };
     }
   }
@@ -59,8 +65,12 @@ const handleCooldown = async (user: User) => {
   }
   await user.save();
 };
-const spliceLargeText = (text: string, wordCount: number) => {
-  const [largestFactor, newWordCount] = determineLargestFactor(wordCount);
+const spliceLargeText: any = (text: string, wordCount: number) => {
+  let [largestFactor, newWordCount] = determineLargestFactor(wordCount);
+  // if word count is "some what" prime, return the function again to find a better factor.
+  if (largestFactor < 400) {
+    return spliceLargeText(text, wordCount + 10);
+  }
   console.log(largestFactor);
   const hashmap = sectionalizeText(largestFactor, newWordCount, text);
   console.log(hashmap);
@@ -190,7 +200,7 @@ const determineLargestFactor = (wordCount: number) => {
   let factors: number[] | undefined = [];
   let largestFactor = 0;
   let newWordCount = wordCount;
-  while (factors.length < 3 && largestFactor > 100) {
+  while (factors.length < 3) {
     factors = determineFactors(newWordCount);
     console.log(factors);
     if (!factors) return [];
@@ -260,7 +270,7 @@ const handlePromiseChain = async (textArr: string[]) => {
         engine: "babbage-instruct-beta",
         prompt: `In a paragraph, summarize the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
         temperature: 0,
-        max_tokens: 245,
+        max_tokens: 160,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
@@ -274,4 +284,61 @@ const handlePromiseChain = async (textArr: string[]) => {
   }
   const summaries = await Promise.all([...promiseArr]);
   return summaries.join(" ");
+};
+
+// used for handling recent summary saving
+const handleSaveRecentSummary = async (
+  userId: number,
+  url: string | undefined,
+  summary: string
+) => {
+  const user = await User.findOne({
+    where: { id: userId },
+    relations: ["recentSummaries"],
+  });
+  if (!user) return;
+  const summaries = user.recentSummaries;
+  const newSummary = RecentSummaries.create({
+    url,
+    summary,
+  });
+  switch (user.paymentTier) {
+    case "Free":
+      if (summaries.length >= 5) {
+        const deletedSummary = summaries.shift();
+        await RecentSummaries.delete(deletedSummary!.id);
+        summaries.push(newSummary);
+        user.recentSummaries = [...summaries];
+      } else if (summaries.length > 0) {
+        summaries.push(newSummary);
+        user.recentSummaries = [...summaries];
+      } else {
+        user.recentSummaries = [newSummary];
+      }
+      break;
+    case "Student":
+      if (summaries.length >= 50) {
+        const deletedSummary = summaries.shift();
+        await RecentSummaries.delete(deletedSummary!.id);
+        summaries.push(newSummary);
+        user.recentSummaries = [...summaries];
+      } else if (summaries.length > 0) {
+        summaries.push(newSummary);
+        user.recentSummaries = [...summaries];
+      } else {
+        user.recentSummaries = [newSummary];
+      }
+      break;
+    case "Researcher":
+      if (summaries.length > 0) {
+        summaries.push(newSummary);
+        user.recentSummaries = [...summaries];
+      } else {
+        user.recentSummaries = [newSummary];
+      }
+      break;
+    default:
+      break;
+  }
+  await user.save();
 };

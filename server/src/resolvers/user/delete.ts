@@ -1,3 +1,5 @@
+import { RecentSummaries } from "./../../entities/RecentSummaries";
+import { ExtensionSettings } from "./../../entities/ExtensionSettings";
 import { EmailSettings } from "./../../entities/EmailSettings";
 import { MyContext } from "./../../types/MyContext";
 import { User } from "./../../entities/User";
@@ -18,12 +20,23 @@ export class DeleteResolver {
     if (email) {
       user = await User.findOne({
         where: { email },
-        relations: ["settings", "settings.emailSettings"],
+        relations: [
+          "settings",
+          "settings.emailSettings",
+          "recentSummaries",
+
+          // "settings.extensionSettings",
+        ],
       });
     } else {
       user = await User.findOne({
         where: { id: payload!.userId },
-        relations: ["settings", "settings.emailSettings"],
+        relations: [
+          "settings",
+          "settings.emailSettings",
+          "recentSummaries",
+          // "settings.extensionSettings",
+        ],
       });
     }
     if (!user || user.admin) return false;
@@ -36,9 +49,15 @@ export class DeleteResolver {
     }
     const settingsId = user.settings.id;
     const emailSettingsId = user.settings.emailSettings.id;
+    // const extensionSettingsId = user.settings.extensionSettings.id;
     await EmailSettings.delete(emailSettingsId);
+    // await ExtensionSettings.delete(extensionSettingsId);
     await Settings.delete(settingsId);
-    await User.delete(user.id);
+    try {
+      await User.delete(user.id);
+    } catch (err) {
+      console.log(err);
+    }
     reply.clearCookie("jid", { path: "/" });
     return true;
   }

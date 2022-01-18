@@ -1,3 +1,4 @@
+import { ExtensionSettings } from "./../../entities/ExtensionSettings";
 import { EmailSettings } from "./../../entities/EmailSettings";
 import { ConfirmUserOutput } from "./../../types/confirmUserOutput";
 import { sign } from "jsonwebtoken";
@@ -47,7 +48,11 @@ export class RegisterResolver {
     const userEmailSettings = EmailSettings.create({
       settings: userSettings,
     });
+    const userExtensionSettings = ExtensionSettings.create({
+      settings: userSettings,
+    });
     userSettings.emailSettings = userEmailSettings;
+    userSettings.extensionSettings = userExtensionSettings;
     newUser.settings = userSettings;
     const code = await generateCode();
     newUser.referralCode = code;
@@ -111,7 +116,11 @@ export class RegisterResolver {
       ABTest: user.id % 2 === 0 ? "A" : "B",
     });
     const userEmailSettings = EmailSettings.create({ settings: userSettings });
+    const userExtensionSettings = ExtensionSettings.create({
+      settings: userSettings,
+    });
     userSettings.emailSettings = userEmailSettings;
+    userSettings.extensionSettings = userExtensionSettings;
     user.settings = userSettings;
     const code = await generateCode();
     user.referralCode = code;
