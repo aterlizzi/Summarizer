@@ -56,6 +56,7 @@ function Login() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
+  const [disabledLoginAttempt, setDisableLoginAttempt] = useState(false);
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
@@ -93,6 +94,7 @@ function Login() {
         }
       });
     } else {
+      if (disabledLoginAttempt) return;
       verifyGoogleUser({ token }).then((response) => {
         if (response) {
           if (response.data) {
@@ -104,9 +106,13 @@ function Login() {
                 );
                 router.push(url);
               } else {
+                setDisableLoginAttempt(true);
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
                 );
+                setTimeout(() => {
+                  setDisableLoginAttempt(false);
+                }, 5000);
               }
             }
           }
@@ -144,13 +150,18 @@ function Login() {
         email,
         password,
       };
+      if (disabledLoginAttempt) return;
       verifyWebUser(variables).then((response) => {
         if (response) {
           if (response.data) {
             if (response.data.verifyUser) {
               if (!response.data.verifyUser.logged) {
+                setDisableLoginAttempt(true);
                 setError(true);
                 setErrorMsg(response.data.verifyUser.error.message);
+                setTimeout(() => {
+                  setDisableLoginAttempt(false);
+                }, 5000);
               } else {
                 localStorage.setItem(
                   "accessToken",
@@ -181,6 +192,7 @@ function Login() {
         handleResponseGoogle={handleResponseGoogle}
         handleResponseGoogleFailure={handleResponseGoogleFailure}
         setSlide={setSlide}
+        disabledLoginAttempt={disabledLoginAttempt}
       />
     </main>
   );

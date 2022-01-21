@@ -32,10 +32,18 @@ export class ExtensionSettings extends BaseEntity {
   settings: Settings;
 
   @Field(() => Boolean)
-  @Column({ default: true })
+  @Column({ default: false })
   othersCanViewSummaries: boolean;
 
   @Field(() => Boolean)
   @Column({ default: false })
   popoutSummary: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  autoPostEverySummary: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  defaultPostMessage: string;
 }

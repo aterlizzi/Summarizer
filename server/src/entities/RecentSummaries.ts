@@ -38,4 +38,8 @@ export class RecentSummaries extends BaseEntity {
   @Field(() => String)
   @Column()
   summary: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  title: string;
 }

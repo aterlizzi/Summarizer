@@ -26,7 +26,6 @@ function Begin() {
 
   const [meResult, reexecuteMe] = useQuery({ query: Me });
   const [sessionResult, createSession] = useMutation(CreateSession);
-  console.log(sessionResult);
 
   const [monthly, setMonthly] = useState(true);
   const [loading1, setLoading1] = useState(false);

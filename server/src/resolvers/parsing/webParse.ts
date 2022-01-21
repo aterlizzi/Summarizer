@@ -16,10 +16,12 @@ export class WebParserResolver {
       text = response.content.replace(/\n/g, " ").replace(/\s(?=\s)/g, "");
       wordCount = text.split(" ").length;
     }
+    console.log(response);
     const returnObj = {
       text,
       interpreter: "mercury",
       wordCount,
+      title: response.title as any,
     };
     return returnObj;
   }

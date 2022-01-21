@@ -176,6 +176,7 @@ function receiver(req, sender, sendResponse) {
           text
           interpreter
           wordCount
+          title
         }
       }`,
       });
@@ -187,6 +188,12 @@ function receiver(req, sender, sendResponse) {
         .then((response) => response.json())
         .then((data) => {
           if (data.data) {
+            // if there is a title, save the title.
+            if (data.data.webParse.title) {
+              chrome.storage.local.set({
+                articleTitle: data.data.webParse.title,
+              });
+            }
             if (data.data.webParse.text.split(" ").length < 200) {
               chrome.runtime.sendMessage({ key: "parseWeb" }, (response) => {
                 // check to see if manually parse has more words. If not, stick with default.
@@ -239,6 +246,7 @@ function receiver(req, sender, sendResponse) {
     case "summarize":
       const action = req.payload;
       summarizeFunc(action).then((result) => {
+        console.log(result);
         sendResponse(result);
       });
       break;
@@ -422,6 +430,21 @@ const retrieveSummaryAndUrl = () => {
     });
   });
 };
+// returns article title
+const retrieveArticleTitle = () => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["articleTitle"], (response) => {
+      if (chrome.runtime.lastError) {
+        resolve({ articleTitle: "" });
+      }
+      resolve(
+        response.articleTitle === undefined
+          ? { articleTitle: "" }
+          : { articleTitle: response.articleTitle }
+      );
+    });
+  });
+};
 
 // returns the stored selected text.
 const retrieveSelectedText = () => {
@@ -501,8 +524,7 @@ const refreshAccessToken = async (userInfo) => {
 const summarizeFunc = async (action, retries = 0) => {
   // retrieve fails depending on the action required.
   const initObj = await retrieveSummaryParameters(action);
-  const email = initObj.user.email;
-  const sub = initObj.user.sub;
+  const titleObj = await retrieveArticleTitle();
   const text = initObj.text;
   const url = initObj.url;
   let token = initObj.user.accessToken;
@@ -529,10 +551,9 @@ const summarizeFunc = async (action, retries = 0) => {
       query,
       variables: {
         options: {
-          email,
-          sub,
           text,
           url,
+          title: titleObj.articleTitle,
         },
       },
     });
@@ -557,6 +578,7 @@ const summarizeFunc = async (action, retries = 0) => {
     }
     if (data.data && data.data.summarize) {
       const summary = data.data.summarize.summary;
+      console.log(data);
       chrome.storage.local.set({ summaryUrl: url, summary });
       return data;
     }

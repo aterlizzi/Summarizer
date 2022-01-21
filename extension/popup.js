@@ -36,6 +36,7 @@ const summaryContainer = document.querySelector(".container");
 const bookmark = document.querySelector(".save");
 const saveRejectContainer = document.querySelector(".saveRejectContainer");
 const logoutCircle = document.querySelector(".logoutCircle");
+const popoutBtn = document.querySelector(".reject");
 
 // icons
 const pdfIcon = document.querySelector(".pdficon");
@@ -223,7 +224,11 @@ const checkCookies = () => {
       if (cookie) {
         chrome.tabs.create({ url: "http://localhost:3000/users/settings" });
       } else {
-        chrome.tabs.create({ url: "http://localhost:3000/welcome" });
+        chrome.tabs.create({
+          url: `http://localhost:3000/welcome?return_url=${encodeURIComponent(
+            "/users/settings"
+          )}`,
+        });
       }
     }
   );
@@ -251,6 +256,12 @@ manualTextArea.addEventListener("keydn", () => {
 
 // button responses and functionalities
 // this is the majority of the summarizer functionality section.
+
+popoutBtn.addEventListener("click", () => {
+  chrome.tabs.create({
+    url: `http://localhost:3000/summaries/${sumId}`,
+  });
+});
 
 button.addEventListener("click", () => {
   saveRejectContainer.classList.add("none");

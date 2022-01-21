@@ -28,6 +28,7 @@ function MainSigninLoginComp({
   handleResponseGoogle,
   handleResponseGoogleFailure,
   setSlide,
+  disabledLoginAttempt,
 }) {
   return (
     <div className={styles.gridWrap}>
@@ -86,9 +87,13 @@ function MainSigninLoginComp({
             value={signin ? "Sign up" : "Sign in"}
             className={styles.submitBtn}
           />
-          {error ? (
+          {error || disabledLoginAttempt ? (
             <div className={styles.errorContainer}>
-              <p className={styles.error}>{errorMsg}</p>
+              <p className={styles.error}>
+                {error
+                  ? errorMsg
+                  : "Whoops, please wait a few seconds before trying to login."}
+              </p>
             </div>
           ) : null}
           <div className={styles.divider}>

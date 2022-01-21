@@ -10,4 +10,7 @@ export class ParsedTextOutputObj {
 
   @Field(() => Number)
   wordCount: number;
+
+  @Field(() => String, { nullable: true })
+  title?: string;
 }

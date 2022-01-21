@@ -75,6 +75,7 @@ function Welcome() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
+  const [disabledLoginAttempt, setDisableLoginAttempt] = useState(false);
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
@@ -118,6 +119,7 @@ function Welcome() {
         }
       });
     } else {
+      if (disabledLoginAttempt) return;
       verifyGoogleUser({ token }).then((response) => {
         if (response) {
           if (response.data) {
@@ -133,9 +135,13 @@ function Welcome() {
                   router.push("/begin");
                 }
               } else {
+                setDisableLoginAttempt(true);
                 setErrorMsg(
                   "No user with that Google account exists. Create an account first."
                 );
+                setTimeout(() => {
+                  setDisableLoginAttempt(false);
+                }, 5000);
               }
             }
           }
@@ -174,13 +180,18 @@ function Welcome() {
         email,
         password,
       };
+      if (disabledLoginAttempt) return;
       verifyWebUser(variables).then((response) => {
         if (response) {
           if (response.data) {
             if (response.data.verifyUser) {
               if (!response.data.verifyUser.logged) {
+                setDisableLoginAttempt(true);
                 setError(true);
                 setErrorMsg(response.data.verifyUser.error.message);
+                setTimeout(() => {
+                  setDisableLoginAttempt(false);
+                }, 5000);
               } else {
                 localStorage.setItem(
                   "accessToken",
@@ -228,6 +239,7 @@ function Welcome() {
             handleResponseGoogle={handleResponseGoogle}
             handleResponseGoogleFailure={handleResponseGoogleFailure}
             setSlide={setSlide}
+            disabledLoginAttempt={disabledLoginAttempt}
           />
         </>
       ) : (

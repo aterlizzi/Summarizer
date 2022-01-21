@@ -13,7 +13,7 @@ export class SummarizeResolver {
   @Mutation(() => SummaryReturnObj, { nullable: true })
   @UseMiddleware(isAuth)
   async summarize(
-    @Arg("options") { text, url }: SummaryInputObj,
+    @Arg("options") { text, url, title }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
     const wordCount = countWords(text);
@@ -36,7 +36,14 @@ export class SummarizeResolver {
       // subtract the word count.
       user.wordCount = user.wordCount - wordCount;
       await user.save();
-      const sumId = await handleSaveRecentSummary(user.id, url, summary);
+      const sumId = await handleSaveRecentSummary(user.id, url, summary, title);
+      console.log({
+        summary,
+        remainingSummaries: user.wordCount,
+        url,
+        id: sumId,
+        popout: user.settings.extensionSettings.popoutSummary,
+      });
       return {
         summary,
         remainingSummaries: user.wordCount,
@@ -57,7 +64,12 @@ export class SummarizeResolver {
       const summary = response.data.choices[0].text;
       user.wordCount = user.wordCount - wordCount;
       await user.save();
-      const sumId = await handleSaveRecentSummary(user.id, url, summary);
+      const sumId = await handleSaveRecentSummary(user.id, url, summary, title);
+      try {
+        console.log(user.settings.extensionSettings.popoutSummary);
+      } catch (err) {
+        console.log(err);
+      }
       return {
         summary,
         remainingSummaries: user.wordCount,
@@ -127,68 +139,68 @@ const sectionalizeText = (
   finalPassageArr[smallerFac - 1] = editableText;
   return finalPassageArr;
 };
-const parseResponseData = async (rawResult: any, text: string) => {
-  // cut out unfinished sentences.
-  let summary = rawResult.data.choices[0].text
-    .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/)
-    .filter((sentence: string) => {
-      if (!sentence.match(/\.$/gm)) return false;
-      return true;
-    })
-    .join(" ")
-    .replace(/^\s/g, "")
-    .replace(/\n.*/gm, "");
-  const originalTextSentenceArr = text.split(
-    /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
-  );
-  const summaryTextSentenceArr = summary.split(
-    /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
-  );
-  const newSummaryTextSentenceArr = summaryTextSentenceArr.filter(
-    (sentence: string) => {
-      if (originalTextSentenceArr.indexOf(sentence) == -1) return true;
-      return false;
-    }
-  );
-  const originalLength = summaryTextSentenceArr.length;
-  const newLength = newSummaryTextSentenceArr.length;
-  if (newLength / originalLength < 0.333) {
-    console.log("flagged");
-    const gtpResponse = await openai.complete({
-      engine: "curie-instruct-beta",
-      prompt: `Write a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
-      maxTokens: 150,
-      temperature: 0,
-      topP: 1,
-      presencePenalty: 0,
-      frequencyPenalty: 0,
-    });
-    summary = gtpResponse.data.choices[0].text
-      .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/)
-      .filter((sentence: string) => {
-        if (!sentence.match(/\.$/gm)) return false;
-        return true;
-      })
-      .join(" ")
-      .replace(/^\s/g, "")
-      .replace(/\n.*/gm, "");
+// const parseResponseData = async (rawResult: any, text: string) => {
+//   // cut out unfinished sentences.
+//   let summary = rawResult.data.choices[0].text
+//     .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/)
+//     .filter((sentence: string) => {
+//       if (!sentence.match(/\.$/gm)) return false;
+//       return true;
+//     })
+//     .join(" ")
+//     .replace(/^\s/g, "")
+//     .replace(/\n.*/gm, "");
+//   const originalTextSentenceArr = text.split(
+//     /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
+//   );
+//   const summaryTextSentenceArr = summary.split(
+//     /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
+//   );
+//   const newSummaryTextSentenceArr = summaryTextSentenceArr.filter(
+//     (sentence: string) => {
+//       if (originalTextSentenceArr.indexOf(sentence) == -1) return true;
+//       return false;
+//     }
+//   );
+//   const originalLength = summaryTextSentenceArr.length;
+//   const newLength = newSummaryTextSentenceArr.length;
+//   if (newLength / originalLength < 0.333) {
+//     console.log("flagged");
+//     const gtpResponse = await openai.complete({
+//       engine: "curie-instruct-beta",
+//       prompt: `Write a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
+//       maxTokens: 150,
+//       temperature: 0,
+//       topP: 1,
+//       presencePenalty: 0,
+//       frequencyPenalty: 0,
+//     });
+//     summary = gtpResponse.data.choices[0].text
+//       .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/)
+//       .filter((sentence: string) => {
+//         if (!sentence.match(/\.$/gm)) return false;
+//         return true;
+//       })
+//       .join(" ")
+//       .replace(/^\s/g, "")
+//       .replace(/\n.*/gm, "");
 
-    const secondSummarySentenceArr = summary.split(
-      /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
-    );
-    const secondNewSummaryTextSentenceArr = secondSummarySentenceArr.filter(
-      (sentence: string) => {
-        if (originalTextSentenceArr.indexOf(sentence) !== -1) return true;
-        return false;
-      }
-    );
-    const secondNewLength = secondNewSummaryTextSentenceArr.length;
-    if (secondNewLength / originalLength < 0.8) {
-      summary = "I'm sorry, we were unable to summarize this text.";
-    }
-  }
-  return summary;
-};
+//     const secondSummarySentenceArr = summary.split(
+//       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
+//     );
+//     const secondNewSummaryTextSentenceArr = secondSummarySentenceArr.filter(
+//       (sentence: string) => {
+//         if (originalTextSentenceArr.indexOf(sentence) !== -1) return true;
+//         return false;
+//       }
+//     );
+//     const secondNewLength = secondNewSummaryTextSentenceArr.length;
+//     if (secondNewLength / originalLength < 0.8) {
+//       summary = "I'm sorry, we were unable to summarize this text.";
+//     }
+//   }
+//   return summary;
+// };
 const determineFactors = (n: number) => {
   if (n < 0) return;
   let sqrtn = Math.sqrt(n);
@@ -302,7 +314,8 @@ const handlePromiseChain = async (textArr: string[]) => {
 const handleSaveRecentSummary = async (
   userId: number,
   url: string | undefined,
-  summary: string
+  summary: string,
+  title: string
 ) => {
   const user = await User.findOne({
     where: { id: userId },
@@ -313,6 +326,7 @@ const handleSaveRecentSummary = async (
   const newSummary = RecentSummaries.create({
     url,
     summary,
+    title,
   });
   switch (user.paymentTier) {
     case "Free":
@@ -353,5 +367,6 @@ const handleSaveRecentSummary = async (
       break;
   }
   await user.save();
+  console.log("------------------_--------------\n", newSummary.id);
   return newSummary.id;
 };
