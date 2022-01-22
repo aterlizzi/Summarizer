@@ -12,29 +12,15 @@ import { sign } from "jsonwebtoken";
 @Resolver()
 export class PasswordResolver {
   @Mutation(() => String)
-  async forgotPassword(
-    @Arg("email", { nullable: true }) email: string,
-    @Arg("username", { nullable: true }) username: string
-  ): Promise<String> {
-    let user;
-    if (!email && !username)
-      return "Please enter either an email or a username.";
-    if (email) {
-      user = await User.findOne({ where: { email } });
-    } else if (username) {
-      user = await User.findOne({ where: { username } });
-    }
-    if (!user)
-      return `Reset password email sent to ${
-        email ? email : username ? username : "user."
-      }`;
+  async forgotPassword(@Arg("email") email: string): Promise<String> {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) return `Reset password email sent to ${email}`;
     const usersEmail = user.email;
     const token = v4();
     await redis.set(forgotPasswordToken + token, user.id, "ex", 60 * 60 * 24);
     await sendForgotPasswordEmail(usersEmail, token);
-    return `Reset password email sent to ${
-      email ? email : username ? username : "user."
-    }`;
+    return `Reset password email sent to ${email}`;
   }
   @Mutation(() => String)
   async confirmForgotPassword(@Arg("token") token: string): Promise<string> {

@@ -15,7 +15,7 @@ const ConfirmForgotPassword = `
 `;
 
 const ChangePassword = `
-  mutation($password: String!, id: Float!){
+  mutation($password: String!, $id: Float!){
     changePassword(password: $password, id: $id){
       accessToken
     }
@@ -29,12 +29,12 @@ function ForgotPassToken() {
   const [confirmResult, confirm] = useMutation(ConfirmForgotPassword);
   const [changeResult, change] = useMutation(ChangePassword);
 
-  console.log(confirmResult);
+  console.log(changeResult);
 
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const [displayPass, setDisplayPass] = useState(true);
+  const [displayPass, setDisplayPass] = useState(false);
   const [revealPass, setRevealPass] = useState(false);
   const [revealConfirmPass, setRevealConfirmPass] = useState(false);
   const [error, setError] = useState("");
@@ -56,7 +56,8 @@ function ForgotPassToken() {
 
   const handleChangePass = () => {
     if (!displayPass) return;
-    change({ id: userId, password }).then((res) => {
+    if (password.length < 8 || password !== confirmPass) return;
+    change({ id: parseInt(userId), password }).then((res) => {
       if (
         res.data &&
         res.data.changePassword &&
@@ -66,7 +67,7 @@ function ForgotPassToken() {
           "accessToken",
           res.data.changePassword.accessToken
         );
-        router.push("/users/settings");
+        router.push("/");
       }
     });
   };
@@ -127,6 +128,7 @@ function ForgotPassToken() {
                 : `${styles.activeBtn}`
             }
             disabled={password.length < 8 || password !== confirmPass}
+            onClick={handleChangePass}
           >
             {changeResult.fetching ? (
               <div className={styles.loading}></div>
