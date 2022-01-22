@@ -1,6 +1,12 @@
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "urql";
+import Layout from "../../../components/layout";
+import Loader from "../../../components/zoteroAuth/loaderComp";
+import styles from "../../../styles/ForgotPassToken.module.scss";
 
 const ConfirmForgotPassword = `
   mutation($token: String!){
@@ -23,9 +29,15 @@ function ForgotPassToken() {
   const [confirmResult, confirm] = useMutation(ConfirmForgotPassword);
   const [changeResult, change] = useMutation(ChangePassword);
 
+  console.log(confirmResult);
+
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
-  const [displayPass, setDisplayPass] = useState(false);
+  const [confirmPass, setConfirmPass] = useState("");
+  const [displayPass, setDisplayPass] = useState(true);
+  const [revealPass, setRevealPass] = useState(false);
+  const [revealConfirmPass, setRevealConfirmPass] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (forgotPassToken) {
@@ -33,6 +45,10 @@ function ForgotPassToken() {
         if (res.data && res.data.confirmForgotPassword !== "") {
           setUserId(res.data.confirmForgotPassword);
           setDisplayPass(true);
+        } else {
+          setError(
+            "Whoops! This isn't a valid page. It happens, just click me to redirect."
+          );
         }
       });
     }
@@ -55,7 +71,85 @@ function ForgotPassToken() {
     });
   };
 
-  return <div></div>;
+  return (
+    <main className={styles.main}>
+      {displayPass ? (
+        <section className={styles.passContainer}>
+          <header className={styles.head}>
+            <h1 className={styles.title}>Create new password</h1>
+            <p className={styles.desc}>
+              Enter a new password 8 characters or more. We recommend using your
+              browsers suggestion.
+            </p>
+          </header>
+          <div className={styles.inputSection}>
+            <label htmlFor="pass" className={styles.label}>
+              Password
+            </label>
+            <div className={styles.inputContainer}>
+              <input
+                name="pass"
+                id="pass"
+                type={revealPass ? "text" : "password"}
+                className={styles.input}
+                onChange={(e) => setPassword(e.currentTarget.value)}
+              />
+              <FontAwesomeIcon
+                icon={revealPass ? faEyeSlash : faEye}
+                className={styles.icon}
+                onClick={() => setRevealPass(!revealPass)}
+              />
+            </div>
+            <p className={styles.subDesc}>Must be at least 8 characters.</p>
+            <label htmlFor="confirmPass" className={styles.label}>
+              Confirm Password
+            </label>
+            <div className={styles.inputContainer}>
+              <input
+                name="confirmPass"
+                id="confirmPass"
+                type={revealConfirmPass ? "text" : "password"}
+                className={styles.input}
+                onChange={(e) => setConfirmPass(e.currentTarget.value)}
+              />
+              <FontAwesomeIcon
+                icon={revealConfirmPass ? faEyeSlash : faEye}
+                className={styles.icon}
+                onClick={() => setRevealConfirmPass(!revealConfirmPass)}
+              />
+            </div>
+            <p className={styles.subDesc}>Both passwords must match.</p>
+          </div>
+          <button
+            className={
+              password.length < 8 || password !== confirmPass
+                ? `${styles.disabledBtn}`
+                : `${styles.activeBtn}`
+            }
+            disabled={password.length < 8 || password !== confirmPass}
+          >
+            {changeResult.fetching ? (
+              <div className={styles.loading}></div>
+            ) : (
+              "Change Password"
+            )}
+          </button>
+        </section>
+      ) : error == "" ? (
+        <Loader />
+      ) : (
+        <section className={styles.errorContainer}>
+          <h1 className={styles.emoji}>( ͡❛ ︵ ͡❛)</h1>
+          <Link href="/">
+            <p className={styles.msg}>{error}</p>
+          </Link>
+        </section>
+      )}
+    </main>
+  );
 }
 
+ForgotPassToken.getLayout = (page) => {
+  return <Layout title="Forgot Password - Untanglify">{page}</Layout>;
+};
 export default ForgotPassToken;

@@ -1,0 +1,138 @@
+@import "utils/variables";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
+
+.main {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: $clr-highEmpha;
+  min-height: 100vh;
+  background: $clr-bg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .loader {
+    margin: 0 0 2em;
+    height: 100px;
+    width: 20%;
+    text-align: center;
+    padding: 1em;
+    margin: 0 auto 1em;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .errorContainer {
+    max-width: 40em;
+    text-align: center;
+    color: $clr-error;
+    padding: 0em 2em;
+    .emoji {
+      font-size: 5rem;
+    }
+    .msg {
+      font-size: 1.25rem;
+      font-family: "Roboto", sans-serif;
+      cursor: pointer;
+    }
+  }
+  .passContainer {
+    max-width: 22.5em;
+    margin: 0em 1em;
+    background: $clr-bg2;
+    padding: 2em;
+    border-radius: 0.5em;
+    .head {
+      padding-bottom: 1em;
+      margin-bottom: 1em;
+      border-bottom: dashed 3px $clr-bg4;
+      .title {
+        font-family: "Roboto", sans-serif;
+        margin: 0em 0em 0.5em 0em;
+      }
+      .desc {
+        font-size: 1rem;
+        font-family: "Raleway", sans-serif;
+        color: $clr-medEmpha;
+        margin: 0;
+        line-height: 25px;
+      }
+    }
+    .inputSection {
+      .label {
+        font-size: 0.95rem;
+      }
+      .inputContainer {
+        width: 100%;
+        background: transparent;
+        border: 2px solid $clr-bg4;
+        display: flex;
+        align-items: center;
+        border-radius: 0.25em;
+        margin-top: 0.25em;
+        .input {
+          width: 90%;
+          color: $clr-highEmpha;
+          font-size: 1rem;
+          background: transparent;
+          border: none;
+          outline: none;
+          padding: 0.5em 1em;
+        }
+        .icon {
+          color: $clr-highEmpha;
+        }
+      }
+      .subDesc {
+        font-size: 0.85rem;
+        margin: 0.5em 0em 1.5em 0em;
+        color: $clr-medEmpha;
+      }
+    }
+    .activeBtn {
+      width: 100%;
+      font-family: "Roboto", sans-serif;
+      background: $clr-primaryVariant;
+      border: none;
+      outline: none;
+      color: $clr-highEmpha;
+      height: 37.5px;
+      font-size: 1rem;
+      border-radius: 0.25em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      .loading {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border-top: 2px solid;
+        border-color: white transparent;
+        animation: spin 1s linear infinite;
+        margin-top: 0em;
+      }
+    }
+    .disabledBtn {
+      width: 100%;
+      font-family: "Roboto", sans-serif;
+      background: transparent;
+      border: 2px solid $clr-bg4;
+      color: $clr-medEmpha;
+      font-size: 1rem;
+      border-radius: 0.25em;
+      height: 37.5px;
+      outline: none;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
+  }
+}

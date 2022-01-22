@@ -132,7 +132,6 @@ export class ZoteroResolver {
         oauth_verifier: oAuthVerifier,
       },
     };
-
     // request access token from zotero.
     const tokenExchangeResponse = await axios({
       url: `https://www.zotero.org/oauth/access?oauth_token=${oAuthToken}`,

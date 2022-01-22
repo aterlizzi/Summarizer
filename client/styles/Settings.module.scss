@@ -57,6 +57,7 @@ $switch-animation-bounce-distance: 0.4em;
   }
   .columnContainer {
     display: flex;
+    min-height: 100vh;
     .infoContainer {
       min-height: 50em;
       width: 40em;
@@ -551,7 +552,6 @@ $switch-animation-bounce-distance: 0.4em;
     .sidebar {
       background: $clr-bg1;
       width: 12.5em;
-      min-height: 50em;
       border-right: solid 1px $clr-bg;
       .subSections {
         .sectionHeader {
