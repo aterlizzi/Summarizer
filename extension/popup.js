@@ -13,6 +13,7 @@ const passwordInput = document.querySelector("#password");
 const errorContainer = document.querySelector(".errorContainer");
 const circle = document.querySelector(".circle");
 const settingsCircle = document.querySelector(".settingsCircle");
+const referFriendCircle = document.querySelector(".referFriendLink");
 const sumNum = document.querySelector(".sumNum");
 const articleContainer = document.querySelector(".entireArticle");
 const highlightedContainer = document.querySelector(".highlighted");
@@ -61,6 +62,7 @@ window.onload = () => {
     if (response.key === "loginTrue") {
       checkTier(response.tier);
       handleOnLoadClassChanges();
+      checkOptions(response.options);
       sumNum.textContent = checkText(response.payload);
       textSpinner.classList.remove("none");
       logged = true;
@@ -180,6 +182,17 @@ const checkTier = (tier) => {
   }
 };
 
+// shows and disabled options depending on user settings
+const checkOptions = (options) => {
+  if (options.showSettings === false) {
+    settingsCircle.classList.add("none");
+    logoutCircle.style.left = "10px";
+  }
+  if (options.referFriendLink === false) {
+    referFriendCircle.classList.add("none");
+  }
+};
+
 // converts the wordcount into appropriate sizes.
 const checkText = (text) => {
   let number;
@@ -213,6 +226,7 @@ const handleOnLoadClassChanges = () => {
   sumWrapper.classList.remove("none");
   settingsCircle.classList.remove("none");
   logoutCircle.classList.remove("none");
+  referFriendCircle.classList.remove("none");
   circle.classList.remove("none");
 };
 
@@ -458,4 +472,9 @@ manualContainer.addEventListener("click", () => {
 // opens settings when clicked.
 settingsCircle.addEventListener("click", () => {
   checkCookies();
+});
+
+// opens refer a friend link when clicked
+referFriendCircle.addEventListener("click", () => {
+  chrome.tabs.create({ url: "http://localhost:3000/referral" });
 });

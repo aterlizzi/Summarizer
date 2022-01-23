@@ -53,6 +53,25 @@ $switch-animation-bounce-distance: 0.4em;
       .burgerContainer {
         display: none;
       }
+      .contact {
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+        color: $clr-highEmpha;
+        font-size: 0.85rem;
+        font-family: "Roboto", sans-serif;
+        border-radius: 0.65em;
+        padding: 0.45em 1em;
+        outline: none;
+        border: none;
+        &:first-of-type {
+          margin-right: 1em;
+        }
+        &:hover {
+          background: $clr-bg2;
+          transition: background 100ms ease-in;
+        }
+      }
     }
   }
   .columnContainer {
@@ -723,6 +742,7 @@ $switch-animation-bounce-distance: 0.4em;
     top: 3.5em;
     right: 0;
     pointer-events: none;
+    display: none;
     .mobileSidebar {
       pointer-events: all;
       background: #181818;
@@ -822,6 +842,9 @@ $switch-animation-bounce-distance: 0.4em;
 
 @media (max-width: 650px) {
   .main {
+    .mobileWrapper {
+      display: block;
+    }
     .columnContainer {
       .sidebar {
         display: none;
@@ -829,6 +852,9 @@ $switch-animation-bounce-distance: 0.4em;
     }
     .banner {
       .right {
+        .contact {
+          display: none;
+        }
         .burgerContainer {
           display: block;
         }

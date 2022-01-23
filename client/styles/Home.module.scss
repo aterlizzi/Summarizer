@@ -36,13 +36,14 @@
       .contact {
         background: transparent;
         outline: none;
-        border: 2px solid $clr-bg4;
         cursor: pointer;
         color: $clr-highEmpha;
         font-size: 0.85rem;
         font-family: "Roboto", sans-serif;
         border-radius: 0.65em;
         padding: 0.45em 1em;
+        outline: none;
+        border: none;
         &:first-of-type {
           margin-right: 1em;
         }

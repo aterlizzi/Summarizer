@@ -12,20 +12,150 @@
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
+  .mobileWrapper {
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 10;
+    top: 3.5em;
+    right: 0;
+    pointer-events: none;
+    display: none;
+    .mobileSidebar {
+      pointer-events: all;
+      background: #181818;
+      // background: $clr-bg1;
+      width: 12.5em;
+      min-height: 50em;
+      border-right: solid 1px $clr-bg;
+      transform: translateX(100%);
+      transition: transform 250ms ease-in;
+      &.active {
+        transform: translateX(0%);
+        transition: transform 250ms ease-in;
+      }
+      .subSections {
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+        .sectionHeader {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          &:first-of-type {
+            padding-top: 1em;
+            margin-top: 0em;
+          }
+          .icon {
+            margin-right: 1em;
+            margin-left: 1em;
+            font-size: 0.85rem;
+          }
+          .sectionTitle {
+            font-family: "Raleway", sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            margin: 0em;
+          }
+        }
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+      }
+    }
+  }
   .banner {
     width: 100%;
     height: 3.5em;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     background: $clr-bg1;
-    .logo {
-      max-width: 30px;
-      margin: 0em 0.5em 0em 3em;
-      cursor: pointer;
+    .left {
+      display: flex;
+      align-items: center;
+      .logo {
+        max-width: 30px;
+        margin: 0em 0.5em 0em 3em;
+        cursor: pointer;
+      }
+      .companyName {
+        font-size: 1.125rem;
+      }
     }
-    .companyName {
-      font-size: 1.125rem;
+    .right {
+      margin-right: 3em;
+      .burgerContainer {
+        display: none;
+      }
+      .contact {
+        background: transparent;
+        outline: none;
+        // border: 2px solid $clr-bg4;
+        border: none;
+        cursor: pointer;
+        color: $clr-highEmpha;
+        font-size: 0.85rem;
+        font-family: "Roboto", sans-serif;
+        border-radius: 0.65em;
+        padding: 0.45em 1em;
+        &:first-of-type {
+          margin-right: 1em;
+        }
+        &:hover {
+          background: $clr-bg2;
+          transition: background 100ms ease-in;
+        }
+      }
+      .try {
+        background: $clr-primaryVariant;
+        color: $clr-highEmpha;
+        font-family: "Roboto", sans-serif;
+        font-size: 1rem;
+        border: none;
+        outline: none;
+        padding: 0.45em 1em;
+        border-radius: 0.25em;
+        cursor: pointer;
+        margin: 0em 1em;
+      }
     }
   }
   .columns {
@@ -158,6 +288,26 @@
       display: block;
       .svg {
         display: none;
+      }
+    }
+  }
+}
+@media (max-width: 650px) {
+  .main {
+    .mobileWrapper {
+      display: block;
+    }
+    .banner {
+      .right {
+        .try {
+          display: none;
+        }
+        .contact {
+          display: none;
+        }
+        .burgerContainer {
+          display: block;
+        }
       }
     }
   }

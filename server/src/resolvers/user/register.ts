@@ -13,6 +13,7 @@ import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
 import { Settings } from "../../entities/Settings";
+import { v4 } from "uuid";
 const voucher_codes = require("voucher-code-generator");
 
 @Resolver()
@@ -84,7 +85,8 @@ export class RegisterResolver {
   }
   @Mutation(() => RegisterUserOutput)
   async registerWebUser(
-    @Arg("options") { email, password, reason, referral }: registerUserInput
+    @Arg("options") { email, password, reason, referral }: registerUserInput,
+    @Ctx() ctx: MyContext
   ): Promise<RegisterUserOutput> {
     let user = await User.findOne({ where: { email } });
     if (user)
@@ -125,6 +127,7 @@ export class RegisterResolver {
     const code = await generateCode();
     user.referralCode = code;
     await user.save();
+    ctx.reply.setCookie("rid", v4());
     if (referral) {
       handleReferralCode(referral, user.id);
     }
@@ -153,6 +156,7 @@ export class RegisterResolver {
     user.confirmed = true;
     await user.save();
     await redis.del(registerUserToken + code);
+    ctx.reply.clearCookie("rid");
     ctx.reply.setCookie(
       "jid",
       sign({ userId: user.id }, process.env.JWT_RT_SECRET_TOKEN!, {

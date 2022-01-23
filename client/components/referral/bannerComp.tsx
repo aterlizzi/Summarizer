@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import styles from "../../styles/Referral.module.scss";
 import logo from "../../public/logo.png";
 import { useQuery } from "urql";
+import { Sling as Hamburger } from "hamburger-react";
 
 const Me = `
     query{
@@ -13,12 +14,10 @@ const Me = `
     }
 `;
 
-function BannerComp() {
+function BannerComp({ isOpen, setOpen }) {
   const router = useRouter();
 
   const [result, reexecuteMe] = useQuery({ query: Me });
-
-  console.log(result);
 
   const handleClick = () => {
     router.push("/");
@@ -63,6 +62,9 @@ function BannerComp() {
         <a href="https://www.youtube.com" target="_blank">
           <button className={styles.try}>Try for free</button>
         </a>
+        <div className={styles.burgerContainer}>
+          <Hamburger size={25} toggled={isOpen} toggle={setOpen} />
+        </div>
       </div>
     </header>
   );

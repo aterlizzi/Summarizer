@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styles from "../../styles/Settings.module.scss";
+import React from "react";
+import styles from "../../styles/Referral.module.scss";
 import { useRouter } from "next/router";
 import { useMutation } from "urql";
 
@@ -48,6 +48,9 @@ function SidebarLink({ section, setSection, text }) {
         break;
       case "Refer a Friend":
         router.push("/referral");
+        break;
+      case "Settings":
+        router.push("/users/settings");
         break;
       default:
         break;

@@ -1,4 +1,9 @@
-import { faLightbulb, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLightbulb,
+  faLink,
+  faLock,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import styles from "../../styles/Settings.module.scss";
@@ -68,6 +73,22 @@ function MobileMenu({ isOpen, section, setSection }) {
           />
           <SidebarLink
             text={"Logout"}
+            section={section}
+            setSection={setSection}
+          />
+        </section>
+        <section className={`${styles.securitySection} ${styles.subSections}`}>
+          <header className={styles.sectionHeader}>
+            <FontAwesomeIcon icon={faLink} className={styles.icon} />
+            <h3 className={styles.sectionTitle}>Links</h3>
+          </header>
+          <SidebarLink
+            text={"Contact"}
+            section={section}
+            setSection={setSection}
+          />
+          <SidebarLink
+            text={"Refer a Friend"}
             section={section}
             setSection={setSection}
           />

@@ -39,6 +39,12 @@ function BannerComp() {
         >
           Contact
         </button>
+        <button
+          className={styles.contact}
+          onClick={() => router.push("/referral")}
+        >
+          Refer a Friend
+        </button>
         {!result ||
         !result.data ||
         result.error ||

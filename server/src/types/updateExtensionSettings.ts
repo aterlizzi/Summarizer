@@ -7,4 +7,10 @@ export class UpdateExtensionSettingsInput {
 
   @Field(() => Boolean)
   onlyFriendsCanView: boolean;
+
+  @Field(() => Boolean)
+  showSettings: boolean;
+
+  @Field(() => Boolean)
+  referFriendLink: boolean;
 }

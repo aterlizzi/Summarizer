@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation } from "urql";
 import Layout from "../components/layout";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
+import Verification from "../components/welcome/VerificationComp";
 import styles from "../styles/Welcome.module.scss";
 
 const RegisterWebUser = `
@@ -57,6 +58,7 @@ function Login() {
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
   const [disabledLoginAttempt, setDisableLoginAttempt] = useState(false);
+  const [section, setSection] = useState(0);
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
@@ -139,7 +141,11 @@ function Login() {
                 setError(true);
                 setErrorMsg(response.data.registerWebUser.error.message);
               } else {
-                router.push("/begin");
+                router.push(
+                  `/users/verification?email=${encodeURIComponent(
+                    email
+                  )}&url=${encodeURIComponent(url)}`
+                );
               }
             }
           }

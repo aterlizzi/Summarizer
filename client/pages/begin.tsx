@@ -5,6 +5,8 @@ import { useMutation, useQuery } from "urql";
 import Layout from "../components/layout";
 import styles from "../styles/Begin.module.scss";
 import { useRouter } from "next/router";
+import BannerComp from "../components/begin/bannerComp";
+import MobileMenu from "../components/begin/mobileMenuComp";
 
 const Me = `
   query {
@@ -30,6 +32,7 @@ function Begin() {
   const [monthly, setMonthly] = useState(true);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
   const handleFreeClick = () => {
     router.push(`/welcome?target_url=${encodeURIComponent("/begin")}`);
@@ -83,6 +86,8 @@ function Begin() {
 
   return (
     <main className={styles.main}>
+      <BannerComp isOpen={isOpen} setOpen={setOpen} />
+      <MobileMenu isOpen={isOpen} />
       <header className={styles.head}>
         <h1 className={styles.title}>Which Untanglify is best for me?</h1>
         <div className={styles.switchPayment}>

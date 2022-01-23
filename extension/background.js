@@ -357,6 +357,12 @@ const confirmUserStatus = async (userInfo) => {
         me {
           wordCount
           paymentTier
+          settings {
+            extensionSettings{
+              showSettingsLink
+              referFriendLink
+            }
+          }
         }
       }`,
   });
@@ -372,7 +378,12 @@ const confirmUserStatus = async (userInfo) => {
   if (!data.data.me) return { key: "loginFalse" };
   const payload = data.data.me.wordCount;
   const tier = data.data.me.paymentTier;
-  return { key: "loginTrue", payload, tier };
+  const options = {};
+  options.showSettings =
+    data.data.me.settings.extensionSettings.showSettingsLink;
+  options.referFriendLink =
+    data.data.me.settings.extensionSettings.referFriendLink;
+  return { key: "loginTrue", payload, tier, options };
 };
 
 // responsible for launching google login.

@@ -20,6 +20,18 @@ function BannerComp({ setOpen, isOpen, burger, tryFree }) {
         <p className={styles.companyName}>Untanglify</p>
       </div>
       <div className={styles.right}>
+        <button
+          className={styles.contact}
+          onClick={() => router.push("/contact")}
+        >
+          Contact
+        </button>
+        <button
+          className={styles.contact}
+          onClick={() => router.push("/referral")}
+        >
+          Refer a Friend
+        </button>
         {burger ? (
           <div className={styles.burgerContainer}>
             <Hamburger size={25} toggled={isOpen} toggle={setOpen} />

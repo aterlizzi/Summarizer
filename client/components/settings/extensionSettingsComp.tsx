@@ -9,6 +9,8 @@ const Me = `
                 extensionSettings {
                     onlyFriendsCanView
                     popoutSummary
+                    showSettingsLink
+                    referFriendLink
                 }
             }
         }
@@ -25,6 +27,8 @@ const UpdateSettings = `
 function ExtensionSettings() {
   const [friendsOnly, setFriendsOnly] = useState(false);
   const [popoutSummary, setPopoutSummary] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [referFriendLink, setReferFriendLink] = useState(false);
 
   const [result, reexecuteMe] = useQuery({ query: Me });
   const [updateSettingsResult, updateSettings] = useMutation(UpdateSettings);
@@ -50,17 +54,71 @@ function ExtensionSettings() {
     ) {
       setPopoutSummary(result.data.me.settings.extensionSettings.popoutSummary);
     }
+    if (
+      result.data &&
+      result.data.me &&
+      result.data.me.settings &&
+      result.data.me.settings.extensionSettings &&
+      result.data.me.settings.extensionSettings.showSettingsLink
+    ) {
+      setShowSettings(
+        result.data.me.settings.extensionSettings.showSettingsLink
+      );
+    }
+    if (
+      result.data &&
+      result.data.me &&
+      result.data.me.settings &&
+      result.data.me.settings.extensionSettings &&
+      result.data.me.settings.extensionSettings.referFriendLink
+    ) {
+      setReferFriendLink(
+        result.data.me.settings.extensionSettings.referFriendLink
+      );
+    }
   }, [result]);
 
   const handleChangePopoutSettings = (value) => {
     updateSettings({
-      options: { popout: value, onlyFriendsCanView: friendsOnly },
+      options: {
+        popout: value,
+        onlyFriendsCanView: friendsOnly,
+        showSettings,
+        referFriendLink,
+      },
     });
   };
 
   const handleChangeFriendsSettings = (value) => {
     updateSettings({
-      options: { popout: popoutSummary, onlyFriendsCanView: value },
+      options: {
+        popout: popoutSummary,
+        onlyFriendsCanView: value,
+        showSettings,
+        referFriendLink,
+      },
+    });
+  };
+
+  const handleChangeShowSettings = (value) => {
+    updateSettings({
+      options: {
+        popout: popoutSummary,
+        onlyFriendsCanView: friendsOnly,
+        showSettings: value,
+        referFriendLink,
+      },
+    });
+  };
+
+  const handleChangeReferSettings = (value) => {
+    updateSettings({
+      options: {
+        popout: popoutSummary,
+        onlyFriendsCanView: friendsOnly,
+        showSettings: showSettings,
+        referFriendLink: value,
+      },
     });
   };
 
@@ -125,6 +183,64 @@ function ExtensionSettings() {
             <p className={styles.extensionDesc}>
               When enabled, only your friends will be able to view your posts.
               If disabled, everyone can view your posts.
+            </p>
+          </div>
+          <div className={styles.extensionContainer}>
+            <div className={styles.top}>
+              <h3 className={styles.label}>Show Settings Icon</h3>
+              <div className={styles.toggleContainer}>
+                <input
+                  type="checkbox"
+                  name="switch"
+                  id="switch"
+                  className={styles.switch}
+                  defaultChecked={
+                    result.data &&
+                    result.data.me &&
+                    result.data.me.settings &&
+                    result.data.me.settings.extensionSettings &&
+                    result.data.me.settings.extensionSettings.showSettingsLink
+                  }
+                  onChange={(e) => {
+                    setShowSettings(e.currentTarget.checked);
+                    handleChangeShowSettings(e.currentTarget.checked);
+                  }}
+                />
+              </div>
+            </div>
+            <p className={styles.extensionDesc}>
+              When enabled, you have quick access to the settings page through
+              the icon in the bottom left corner of the extension. When
+              disabled, this icon disappears.
+            </p>
+          </div>
+          <div className={styles.extensionContainer}>
+            <div className={styles.top}>
+              <h3 className={styles.label}>Show Refer Friend Icon</h3>
+              <div className={styles.toggleContainer}>
+                <input
+                  type="checkbox"
+                  name="switch"
+                  id="switch"
+                  className={styles.switch}
+                  defaultChecked={
+                    result.data &&
+                    result.data.me &&
+                    result.data.me.settings &&
+                    result.data.me.settings.extensionSettings &&
+                    result.data.me.settings.extensionSettings.referFriendLink
+                  }
+                  onChange={(e) => {
+                    setReferFriendLink(e.currentTarget.checked);
+                    handleChangeReferSettings(e.currentTarget.checked);
+                  }}
+                />
+              </div>
+            </div>
+            <p className={styles.extensionDesc}>
+              When enabled, you have quick access to the referral page through
+              the icon in the bottom left corner of the extension. When
+              disabled, this icon disappears.
             </p>
           </div>
         </>

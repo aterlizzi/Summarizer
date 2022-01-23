@@ -46,4 +46,12 @@ export class ExtensionSettings extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   defaultPostMessage: string;
+
+  @Field(() => Boolean)
+  @Column({ default: true })
+  showSettingsLink: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: true })
+  referFriendLink: boolean;
 }

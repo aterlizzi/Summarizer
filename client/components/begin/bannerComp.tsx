@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import styles from "../../styles/Contact.module.scss";
+import styles from "../../styles/Begin.module.scss";
 import logo from "../../public/logo.png";
 import { Sling as Hamburger } from "hamburger-react";
 import { useQuery } from "urql";
@@ -36,6 +36,12 @@ function BannerComp({ isOpen, setOpen }) {
           onClick={() => router.push("/referral")}
         >
           Refer a Friend
+        </button>
+        <button
+          className={styles.contact}
+          onClick={() => router.push("/contact")}
+        >
+          Contact
         </button>
         {!result ||
         !result.data ||

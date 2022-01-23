@@ -24,6 +24,24 @@
   margin: 0;
   font-size: 1.25em;
 }
+.main .referFriendLink {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  position: absolute;
+  bottom: 10px;
+  left: 80px;
+  cursor: pointer;
+}
+.main .referFriendLink i {
+  color: #bb86fc;
+  margin: 0;
+  font-size: 1.25em;
+}
 .main .logoutCircle {
   width: 30px;
   height: 30px;
@@ -303,7 +321,7 @@
 .spinner {
   display: inline-block;
   position: absolute;
-  top: 0.5em;
+  top: 2em;
   left: 1em;
   font-size: 1.5em;
   height: 1em;

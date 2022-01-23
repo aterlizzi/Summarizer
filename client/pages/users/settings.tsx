@@ -10,7 +10,8 @@ import MobileMenu from "../../components/settings/mobileMenuComp";
 
 function Settings() {
   const router = useRouter();
-  const { auth, status, personal, account, reminders } = router.query;
+  const { auth, status, personal, account, reminders, extension } =
+    router.query;
 
   const [section, setSection] = useState(0);
   const [isOpen, setOpen] = useState(false);
@@ -31,7 +32,10 @@ function Settings() {
     if (reminders) {
       setSection(3);
     }
-  }, [auth, status, personal, account, reminders]);
+    if (extension) {
+      setSection(7);
+    }
+  }, [auth, status, personal, account, reminders, extension]);
 
   return (
     <main className={styles.main}>

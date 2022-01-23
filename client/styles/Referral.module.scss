@@ -9,6 +9,95 @@
   color: $clr-highEmpha;
   min-height: 100vh;
   background: $clr-bg;
+  .mobileWrapper {
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 10;
+    top: 3.5em;
+    right: 0;
+    pointer-events: none;
+    display: none;
+    .mobileSidebar {
+      pointer-events: all;
+      background: #181818;
+      // background: $clr-bg1;
+      width: 12.5em;
+      min-height: 50em;
+      border-right: solid 1px $clr-bg;
+      transform: translateX(100%);
+      transition: transform 250ms ease-in;
+      &.active {
+        transform: translateX(0%);
+        transition: transform 250ms ease-in;
+      }
+      .subSections {
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+        .sectionHeader {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          &:first-of-type {
+            padding-top: 1em;
+            margin-top: 0em;
+          }
+          .icon {
+            margin-right: 1em;
+            margin-left: 1em;
+            font-size: 0.85rem;
+          }
+          .sectionTitle {
+            font-family: "Raleway", sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            margin: 0em;
+          }
+        }
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+      }
+    }
+  }
   .banner {
     width: 100%;
     height: 3.5em;
@@ -30,6 +119,9 @@
     }
     .right {
       margin-right: 3em;
+      .burgerContainer {
+        display: none;
+      }
       .contact {
         background: transparent;
         outline: none;
@@ -327,6 +419,27 @@
     }
   }
 }
+@media (max-width: 650px) {
+  .main {
+    .mobileWrapper {
+      display: block;
+    }
+    .banner {
+      .right {
+        .try {
+          display: none;
+        }
+        .contact {
+          display: none;
+        }
+        .burgerContainer {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 823px) {
   .main {
     .header {

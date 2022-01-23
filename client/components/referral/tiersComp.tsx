@@ -31,8 +31,6 @@ function Tiers() {
   const [result, reexecuteMe] = useQuery({ query: Me });
   const [emailResult, sendEmail] = useMutation(SendEmail);
 
-  console.log(result);
-
   const handleCopy = (e) => {
     if (result.error) return;
     if (!result.data || !result.data.me || !result.data.me.referralCode) return;
@@ -56,72 +54,14 @@ function Tiers() {
 
   return (
     <>
-      <section className={`${styles.tier1} ${styles.tier}`}>
-        <Svg2 />
-        <div className={styles.container}>
-          <div className={styles.top}>
-            <p className={styles.byline}>FIRST 10 FRIENDS</p>
-            <h3 className={styles.title}>Invite your friends</h3>
-            <p className={styles.desc}>
-              In this first referral tier, refering a friend grants the
-              following benefits from Untanglify.
-            </p>
-          </div>
-          <div className={styles.divider}></div>
-          <div className={styles.bottom}>
-            <ListItem purpleText={"+10,000"} text={"words / user"} />
-            <ListItem purpleText={"10%"} text={"discount for you"} />
-            <ListItem purpleText={"10%"} text={"discount for friend"} />
-          </div>
-        </div>
-      </section>
-      <section className={`${styles.tier2} ${styles.tier}`}>
-        <div className={styles.container}>
-          <div className={styles.top}>
-            <p className={styles.byline}>BETWEEN 10-15 FRIENDS</p>
-            <h3 className={styles.title}>Work with your colleagues</h3>
-            <p className={styles.desc}>
-              In our second referral tier, refering between 10 to 15 friends
-              grants the following benefits from Untanglify.
-            </p>
-          </div>
-          <div className={styles.divider}></div>
-          <div className={styles.bottom}>
-            <ListItem purpleText={"+15,000"} text={"words / user"} />
-            <ListItem purpleText={"15%"} text={"discount for you"} />
-            <ListItem purpleText={"10%"} text={"discount for friend"} />
-          </div>
-        </div>
-        <Svg3 />
-      </section>
-      <section className={`${styles.tier1} ${styles.tier}`}>
-        <Svg4 />
-        <div className={styles.container}>
-          <div className={styles.top}>
-            <p className={styles.byline}>MORE THAN 15 FRIENDS</p>
-            <h3 className={styles.title}>Get your network involved</h3>
-            <p className={styles.desc}>
-              Wow! If you reach the third tier in our referral program,
-              referring more than 15 friends, you will be bestowed with the
-              following from Untanglify.
-            </p>
-          </div>
-          <div className={styles.divider}></div>
-          <div className={styles.bottom}>
-            <ListItem purpleText={"+20,000"} text={"words / user"} />
-            <ListItem purpleText={"FREE"} text={"student plan"} />
-            <ListItem purpleText={"10%"} text={"discount for friend"} />
-          </div>
-        </div>
-      </section>
-      <section className={`${styles.tier3} ${styles.tier}`}>
+      <section id="referral" className={`${styles.tier3} ${styles.tier}`}>
         <div className={styles.container}>
           <div className={styles.top}>
             <p className={styles.byline}>REFERRAL LINK</p>
             <h3 className={styles.title}>
               Easily share your referral link with others
             </h3>
-            <p className={styles.desc} id="referral">
+            <p className={styles.desc}>
               Simply provide your link to others and once they sign up both you
               and your friend will be acredited with your duly earned rewards!
             </p>
@@ -235,6 +175,64 @@ function Tiers() {
                 ? "Share"
                 : "Login"}
             </button>
+          </div>
+        </div>
+      </section>
+      <section className={`${styles.tier1} ${styles.tier}`}>
+        <Svg2 />
+        <div className={styles.container}>
+          <div className={styles.top}>
+            <p className={styles.byline}>FIRST 10 FRIENDS</p>
+            <h3 className={styles.title}>Invite your friends</h3>
+            <p className={styles.desc}>
+              In this first referral tier, refering a friend grants the
+              following benefits from Untanglify.
+            </p>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.bottom}>
+            <ListItem purpleText={"+10,000"} text={"words / user"} />
+            <ListItem purpleText={"10%"} text={"discount for you"} />
+            <ListItem purpleText={"10%"} text={"discount for friend"} />
+          </div>
+        </div>
+      </section>
+      <section className={`${styles.tier2} ${styles.tier}`}>
+        <div className={styles.container}>
+          <div className={styles.top}>
+            <p className={styles.byline}>BETWEEN 10-15 FRIENDS</p>
+            <h3 className={styles.title}>Work with your colleagues</h3>
+            <p className={styles.desc}>
+              In our second referral tier, refering between 10 to 15 friends
+              grants the following benefits from Untanglify.
+            </p>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.bottom}>
+            <ListItem purpleText={"+15,000"} text={"words / user"} />
+            <ListItem purpleText={"15%"} text={"discount for you"} />
+            <ListItem purpleText={"10%"} text={"discount for friend"} />
+          </div>
+        </div>
+        <Svg3 />
+      </section>
+      <section className={`${styles.tier1} ${styles.tier}`}>
+        <Svg4 />
+        <div className={styles.container}>
+          <div className={styles.top}>
+            <p className={styles.byline}>MORE THAN 15 FRIENDS</p>
+            <h3 className={styles.title}>Get your network involved</h3>
+            <p className={styles.desc}>
+              Wow! If you reach the third tier in our referral program,
+              referring more than 15 friends, you will be bestowed with the
+              following from Untanglify.
+            </p>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.bottom}>
+            <ListItem purpleText={"+20,000"} text={"words / user"} />
+            <ListItem purpleText={"FREE"} text={"student plan"} />
+            <ListItem purpleText={"10%"} text={"discount for friend"} />
           </div>
         </div>
       </section>

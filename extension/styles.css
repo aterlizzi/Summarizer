@@ -213,6 +213,7 @@ i {
   display: block;
   cursor: pointer;
   margin-top: 3em;
+  margin-bottom: 2em;
   /* transition: background 80ms ease-in; */
 }
 .btn:hover {

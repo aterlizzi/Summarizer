@@ -169,7 +169,11 @@ function Welcome() {
                 setError(true);
                 setErrorMsg(response.data.registerWebUser.error.message);
               } else {
-                setSection(2);
+                router.push(
+                  `/users/verification?email=${encodeURIComponent(
+                    email
+                  )}&url=${encodeURIComponent(url)}`
+                );
               }
             }
           }
@@ -242,9 +246,7 @@ function Welcome() {
             disabledLoginAttempt={disabledLoginAttempt}
           />
         </>
-      ) : (
-        <Verification email={email} url={url} />
-      )}
+      ) : null}
     </main>
   );
 }
