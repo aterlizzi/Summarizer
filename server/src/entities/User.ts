@@ -108,6 +108,10 @@ export class User extends BaseEntity {
   @Column({ default: false })
   freeTrialed: boolean;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  trialing: boolean;
+
   @Field(() => String)
   @Column({ default: "" })
   creditCardFingerprint: string;

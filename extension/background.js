@@ -369,7 +369,7 @@ const confirmUserStatus = async (userInfo) => {
     body,
   });
   const data = await response.json();
-
+  if (!data.data.me) return { key: "loginFalse" };
   const payload = data.data.me.wordCount;
   const tier = data.data.me.paymentTier;
   return { key: "loginTrue", payload, tier };

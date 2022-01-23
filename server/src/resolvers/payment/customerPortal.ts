@@ -14,7 +14,7 @@ export class CustomerPortalResolver {
     if (!user) return "";
     const session = await stripe.billingPortal.sessions.create({
       customer: user.custKey,
-      return_url: "http://localhost:3000/users/settings?personal=true",
+      return_url: "http://localhost:3000/users/settings",
     });
     return session.url;
   }
