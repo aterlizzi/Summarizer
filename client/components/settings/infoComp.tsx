@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../../styles/Settings.module.scss";
 import Account from "./accountComp";
 import AuthorizeApps from "./authAppsComp";
+import ExtensionSettings from "./extensionSettingsComp";
 import Personal from "./personalComp";
 import Reminders from "./reminderComp";
 import Status from "./statusComp";
@@ -21,6 +22,8 @@ function Info({ section }) {
             ? "Connect Your Favorite Apps"
             : section === 6
             ? "Account Status"
+            : section === 7
+            ? "Extension Settings"
             : null}
         </h2>
       </header>
@@ -35,6 +38,8 @@ function Info({ section }) {
           <AuthorizeApps />
         ) : section === 6 ? (
           <Status />
+        ) : section === 7 ? (
+          <ExtensionSettings />
         ) : null}
       </section>
     </section>

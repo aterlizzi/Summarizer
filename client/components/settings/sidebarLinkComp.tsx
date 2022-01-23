@@ -40,6 +40,8 @@ function SidebarLink({ section, setSection, text }) {
       case "Logout":
         handleLogout();
         break;
+      case "Extension Settings":
+        setSection(7);
       default:
         break;
     }
@@ -65,7 +67,8 @@ function SidebarLink({ section, setSection, text }) {
         (text === "Reminders" && section === 3) ||
         (text === "Upgrade" && section === 4) ||
         (text === "Authorizations" && section === 5) ||
-        (text === "Status" && section === 6)
+        (text === "Status" && section === 6) ||
+        (text === "Extension Settings" && section === 7)
           ? { background: "#1f1f1f" }
           : null
       }
@@ -79,7 +82,8 @@ function SidebarLink({ section, setSection, text }) {
           (text === "Reminders" && section === 3) ||
           (text === "Upgrade" && section === 4) ||
           (text === "Authorizations" && section === 5) ||
-          (text === "Status" && section === 6)
+          (text === "Status" && section === 6) ||
+          (text === "Extension Settings" && section === 7)
             ? { background: "#bb86fc" }
             : { background: "transparent" }
         }

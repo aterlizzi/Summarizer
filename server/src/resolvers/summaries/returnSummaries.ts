@@ -35,7 +35,7 @@ export class ReturnSummariesResolver {
 
     // if the user doesn't allow users to view their summaries and the user viewing isnt the owner of the summary, return the user.
     if (
-      !recentSummary.user.settings.extensionSettings.othersCanViewSummaries &&
+      recentSummary.user.settings.extensionSettings.onlyFriendsCanView &&
       user.id !== recentSummary.user.id
     )
       return;

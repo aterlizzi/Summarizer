@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from "type-graphql";
+import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class UpdateExtensionSettingsInput {
@@ -6,5 +6,5 @@ export class UpdateExtensionSettingsInput {
   popout: boolean;
 
   @Field(() => Boolean)
-  othersCanViewSummaries: boolean;
+  onlyFriendsCanView: boolean;
 }

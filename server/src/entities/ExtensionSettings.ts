@@ -32,8 +32,8 @@ export class ExtensionSettings extends BaseEntity {
   settings: Settings;
 
   @Field(() => Boolean)
-  @Column({ default: false })
-  othersCanViewSummaries: boolean;
+  @Column({ default: true })
+  onlyFriendsCanView: boolean;
 
   @Field(() => Boolean)
   @Column({ default: false })

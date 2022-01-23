@@ -17,6 +17,7 @@ export class MeResolver {
       ],
     });
     if (!user) return undefined;
+    await handleCooldown(user.id);
     return user;
   }
 }
@@ -27,21 +28,10 @@ const handleCooldown = async (userId: number) => {
   const current_date = new Date();
   current_date.setMonth(current_date.getMonth() - 1);
   if (current_date.getTime() >= user.current_period) {
-    const tier = user.paymentTier;
-    switch (tier) {
-      case "Free":
-        user.wordCount += 15000;
-        break;
-      case "Student":
-        user.wordCount += 150000;
-        break;
-      case "Researcher":
-        user.wordCount += 500000;
-        break;
-      default:
-        break;
-    }
     user.current_period = Date.now();
+    user.wordCount += 25000;
+    user.prem = false;
+    user.paymentTier = "Free";
     await user.save();
   }
 };

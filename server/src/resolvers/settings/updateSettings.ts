@@ -31,16 +31,16 @@ export class UpdateSettingsResolver {
   async updateExtensionSettings(
     @Ctx() { payload }: MyContext,
     @Arg("options")
-    { popout, othersCanViewSummaries }: UpdateExtensionSettingsInput
+    { popout, onlyFriendsCanView }: UpdateExtensionSettingsInput
   ): Promise<boolean> {
     const user = await User.findOne({
       where: { id: payload!.userId },
       relations: ["settings", "settings.extensionSettings"],
     });
     if (!user) return false;
-    user.settings.extensionSettings.othersCanViewSummaries =
-      othersCanViewSummaries;
+    user.settings.extensionSettings.onlyFriendsCanView = onlyFriendsCanView;
     user.settings.extensionSettings.popoutSummary = popout;
+    console.log(popout);
     await user.save();
     return true;
   }

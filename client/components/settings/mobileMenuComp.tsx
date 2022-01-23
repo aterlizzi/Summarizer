@@ -30,6 +30,11 @@ function MobileMenu({ isOpen, section, setSection }) {
             setSection={setSection}
           />
           <SidebarLink
+            text={"Extension Settings"}
+            section={section}
+            setSection={setSection}
+          />
+          <SidebarLink
             text={"Reminders"}
             section={section}
             setSection={setSection}

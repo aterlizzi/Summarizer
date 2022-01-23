@@ -1,3 +1,5 @@
+import { Bundle } from "./entities/Bundle";
+import { Groups } from "./entities/Groups";
 import { ExtensionSettings } from "./entities/ExtensionSettings";
 import { RecentSummaries } from "./entities/RecentSummaries";
 import { CreditCard } from "./entities/CreditCard";
@@ -41,6 +43,8 @@ const main = async () => {
       CreditCard,
       RecentSummaries,
       ExtensionSettings,
+      Groups,
+      Bundle,
     ],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",

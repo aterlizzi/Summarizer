@@ -1,3 +1,5 @@
+import { Bundle } from "./Bundle";
+import { Groups } from "./Groups";
 import { RecentSummaries } from "./RecentSummaries";
 import { Settings } from "./Settings";
 import { Field, ID, ObjectType } from "type-graphql";
@@ -7,6 +9,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -129,4 +133,13 @@ export class User extends BaseEntity {
     cascade: true,
   })
   recentSummaries: RecentSummaries[];
+
+  @Field(() => [Groups])
+  @ManyToMany(() => Groups, (group) => group.users, { cascade: true })
+  @JoinTable()
+  groups: Groups[];
+
+  @Field(() => [Bundle])
+  @OneToMany(() => Bundle, (group) => group.user, { cascade: true })
+  bundles: Bundle[];
 }
