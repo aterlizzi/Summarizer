@@ -155,7 +155,9 @@ function Begin() {
               <div className={styles.circle}>
                 <FontAwesomeIcon icon={faLightbulb} className={styles.icon} />
               </div>
-              <p className={styles.feature}>1,000,000 words</p>
+              <p className={styles.feature}>
+                {monthly ? "750,000 words / month" : "9,000,000 words / year"}
+              </p>
             </div>
             {!meResult.fetching ? (
               meResult.data ? (
@@ -170,9 +172,10 @@ function Begin() {
                       disabled={true}
                     >
                       {!loading1 ? (
-                        meResult.data &&
-                        meResult.data.me &&
-                        meResult.data.me.freeTrialed ? (
+                        (meResult.data &&
+                          meResult.data.me &&
+                          meResult.data.me.freeTrialed) ||
+                        !monthly ? (
                           "Begin now"
                         ) : (
                           "Try for free"
@@ -187,7 +190,7 @@ function Begin() {
                       onClick={handleResearcherClick}
                     >
                       {!loading1 ? (
-                        meResult.data.me.freeTrialed ? (
+                        meResult.data.me.freeTrialed || !monthly ? (
                           "Begin now"
                         ) : (
                           "Try for free"
@@ -203,9 +206,10 @@ function Begin() {
                     onClick={handleResearcherClick}
                   >
                     {!loading1 ? (
-                      meResult.data &&
-                      meResult.data.me &&
-                      meResult.data.me.freeTrialed ? (
+                      (meResult.data &&
+                        meResult.data.me &&
+                        meResult.data.me.freeTrialed) ||
+                      !monthly ? (
                         "Begin now"
                       ) : (
                         "Try for free"
@@ -264,7 +268,9 @@ function Begin() {
               <div className={styles.circle}>
                 <FontAwesomeIcon icon={faLightbulb} className={styles.icon} />
               </div>
-              <p className={styles.feature}>500,000 words</p>
+              <p className={styles.feature}>
+                {monthly ? "250,000 words / month" : "3,000,000 words / year"}
+              </p>
             </div>
             {!meResult.fetching ? (
               meResult.data ? (
@@ -280,9 +286,10 @@ function Begin() {
                       disabled={true}
                     >
                       {!loading2 ? (
-                        meResult.data &&
-                        meResult.data.me &&
-                        meResult.data.me.freeTrialed ? (
+                        (meResult.data &&
+                          meResult.data.me &&
+                          meResult.data.me.freeTrialed) ||
+                        !monthly ? (
                           "Begin now"
                         ) : (
                           "Try for free"
@@ -297,9 +304,10 @@ function Begin() {
                       onClick={handleStudentClick}
                     >
                       {!loading2 ? (
-                        meResult.data &&
-                        meResult.data.me &&
-                        meResult.data.me.freeTrialed ? (
+                        (meResult.data &&
+                          meResult.data.me &&
+                          meResult.data.me.freeTrialed) ||
+                        !monthly ? (
                           "Begin now"
                         ) : (
                           "Try for free"
@@ -315,9 +323,10 @@ function Begin() {
                     onClick={handleStudentClick}
                   >
                     {!loading2 ? (
-                      meResult.data &&
-                      meResult.data.me &&
-                      meResult.data.me.freeTrialed ? (
+                      (meResult.data &&
+                        meResult.data.me &&
+                        meResult.data.me.freeTrialed) ||
+                      !monthly ? (
                         "Begin now"
                       ) : (
                         "Try for free"
@@ -359,7 +368,9 @@ function Begin() {
               <div className={styles.circle}>
                 <FontAwesomeIcon icon={faLightbulb} className={styles.icon} />
               </div>
-              <p className={styles.feature}>25,000 words</p>
+              <p className={styles.feature}>
+                {monthly ? "25,000 words / month" : "300,000 words / year"}
+              </p>
             </div>
             {!meResult.fetching ? (
               meResult.data ? (

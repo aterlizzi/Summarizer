@@ -1,0 +1,15 @@
+@import "utils/variables";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
+
+.main {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: $clr-highEmpha;
+  min-height: 100vh;
+  background: $clr-bg;
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  position: relative;
+}

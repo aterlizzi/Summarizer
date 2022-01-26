@@ -7,6 +7,9 @@ function Referral() {
 
   useEffect(() => {
     if (referral) {
+      if (referral === "settings") {
+        router.push("/users/settings");
+      }
       if (referral.length === 8) {
         router.push(`/welcome?referral=${referral}`);
       } else {

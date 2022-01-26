@@ -158,6 +158,7 @@ function receiver(req, sender, sendResponse) {
       });
       break;
     case "logout":
+      console.log("log me out");
       logout();
       sendResponse("logged out");
       break;
@@ -347,6 +348,8 @@ const storePDFText = (text, filename) => {
 
 // used upon every load up process to verify user status.
 const confirmUserStatus = async (userInfo) => {
+  const cookie = await returnWhetherCookie();
+  if (!cookie) return { key: "loginFalse" };
   let token = userInfo.accessToken;
   const { exp } = parseJwt(token);
   if (Date.now() >= exp * 1000) {
@@ -503,6 +506,7 @@ const logout = () => {
     body: summaryBody,
   }).then((res) => {
     res.json().then((data) => {
+      console.log(data);
       if (data.data && data.data.logout) {
         chrome.storage.local.clear();
       }
@@ -530,6 +534,21 @@ const refreshAccessToken = async (userInfo) => {
   // if token wasn't a success, log out the user.
 
   return token;
+};
+
+const returnWhetherCookie = async () => {
+  return new Promise((resolve) => {
+    chrome.cookies.get(
+      { url: "http://localhost:3000/", name: "jid" },
+      (cookie) => {
+        if (cookie) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }
+    );
+  });
 };
 
 const summarizeFunc = async (action, retries = 0) => {

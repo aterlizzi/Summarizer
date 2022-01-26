@@ -220,54 +220,7 @@ export class StripeResolver {
       case "yearly":
         switch (tier) {
           case "researcher":
-            freeTrial
-              ? coupon && coupon.id
-                ? (session = await stripe.checkout.sessions.create({
-                    payment_method_types: ["card"],
-                    client_reference_id: `${user.id}`,
-                    subscription_data: {
-                      trial_period_days: 7,
-                    },
-                    line_items: [
-                      {
-                        price: process.env.STRIPE_RESEARCH_YEAR_KEY,
-                        quantity: 1,
-                      },
-                    ],
-                    metadata: {
-                      trial: true,
-                    },
-                    mode: "subscription",
-                    discounts: [
-                      {
-                        coupon: coupon.id,
-                      },
-                    ],
-                    success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
-                  }))
-                : (session = await stripe.checkout.sessions.create({
-                    payment_method_types: ["card"],
-                    client_reference_id: `${user.id}`,
-                    subscription_data: {
-                      trial_period_days: 7,
-                    },
-                    line_items: [
-                      {
-                        price: process.env.STRIPE_RESEARCH_YEAR_KEY,
-                        quantity: 1,
-                      },
-                    ],
-                    metadata: {
-                      trial: true,
-                    },
-                    mode: "subscription",
-                    success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
-                  }))
-              : coupon && coupon.id
+            coupon && coupon.id
               ? (session = await stripe.checkout.sessions.create({
                   payment_method_types: ["card"],
                   client_reference_id: `${user.id}`,
@@ -277,9 +230,6 @@ export class StripeResolver {
                       quantity: 1,
                     },
                   ],
-                  metadata: {
-                    trial: true,
-                  },
                   mode: "subscription",
                   discounts: [
                     {
@@ -299,9 +249,6 @@ export class StripeResolver {
                       quantity: 1,
                     },
                   ],
-                  metadata: {
-                    trial: true,
-                  },
                   mode: "subscription",
                   success_url:
                     "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
@@ -309,54 +256,7 @@ export class StripeResolver {
                 }));
             return session.url;
           case "student":
-            freeTrial
-              ? coupon && coupon.id
-                ? (session = await stripe.checkout.sessions.create({
-                    payment_method_types: ["card"],
-                    client_reference_id: `${user.id}`,
-                    subscription_data: {
-                      trial_period_days: 7,
-                    },
-                    line_items: [
-                      {
-                        price: process.env.STRIPE_STUDENT_YEAR_KEY,
-                        quantity: 1,
-                      },
-                    ],
-                    metadata: {
-                      trial: true,
-                    },
-                    mode: "subscription",
-                    discounts: [
-                      {
-                        coupon: coupon.id,
-                      },
-                    ],
-                    success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
-                  }))
-                : (session = await stripe.checkout.sessions.create({
-                    payment_method_types: ["card"],
-                    client_reference_id: `${user.id}`,
-                    subscription_data: {
-                      trial_period_days: 7,
-                    },
-                    line_items: [
-                      {
-                        price: process.env.STRIPE_STUDENT_YEAR_KEY,
-                        quantity: 1,
-                      },
-                    ],
-                    metadata: {
-                      trial: true,
-                    },
-                    mode: "subscription",
-                    success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
-                  }))
-              : coupon && coupon.id
+            coupon && coupon.id
               ? (session = await stripe.checkout.sessions.create({
                   payment_method_types: ["card"],
                   client_reference_id: `${user.id}`,
@@ -366,9 +266,6 @@ export class StripeResolver {
                       quantity: 1,
                     },
                   ],
-                  metadata: {
-                    trial: true,
-                  },
                   mode: "subscription",
                   discounts: [
                     {
@@ -388,9 +285,6 @@ export class StripeResolver {
                       quantity: 1,
                     },
                   ],
-                  metadata: {
-                    trial: true,
-                  },
                   mode: "subscription",
                   success_url:
                     "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
