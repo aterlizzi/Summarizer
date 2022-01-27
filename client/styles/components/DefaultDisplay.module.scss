@@ -31,6 +31,43 @@
         }
       }
     }
+    .sorting {
+      position: absolute;
+      top: 30em;
+      right: -10em;
+      background: #252525;
+      border-radius: 0.5em;
+      -webkit-box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+      box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+      flex-direction: column;
+      display: none;
+      padding: 1em 0em;
+      .sortby {
+        margin: 0;
+        font-weight: 400;
+        text-align: center;
+        font-size: 1.125rem;
+        padding-bottom: 0.5em;
+        border-bottom: 2px solid $clr-bg4;
+        color: $clr-medEmpha;
+      }
+      .utilContainer {
+        display: flex;
+        align-items: center;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        &:hover {
+          background: $clr-bg4;
+        }
+        .util {
+          margin: 0em 1em 0em 0em;
+        }
+        .icon {
+          font-size: 0.6rem;
+          color: $clr-primary;
+        }
+      }
+    }
     .navigation {
       margin-bottom: 2em;
       .userLinks {
@@ -148,43 +185,6 @@
             width: 3.5px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.3);
-          }
-        }
-      }
-      .sorting {
-        position: absolute;
-        top: 0.5em;
-        right: -10.5em;
-        background: #252525;
-        border-radius: 0.5em;
-        -webkit-box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
-        box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
-        flex-direction: column;
-        display: none;
-        padding: 1em 0em;
-        .sortby {
-          margin: 0;
-          font-weight: 400;
-          text-align: center;
-          font-size: 1.125rem;
-          padding-bottom: 0.5em;
-          border-bottom: 2px solid $clr-bg4;
-          color: $clr-medEmpha;
-        }
-        .utilContainer {
-          display: flex;
-          align-items: center;
-          padding: 0.5em 1em;
-          cursor: pointer;
-          &:hover {
-            background: $clr-bg4;
-          }
-          .util {
-            margin: 0em 1em 0em 0em;
-          }
-          .icon {
-            font-size: 0.6rem;
-            color: $clr-primary;
           }
         }
       }
@@ -353,7 +353,98 @@
     }
   }
 }
-
+.barContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0em 2em;
+  margin-top: 2em;
+  .returnContainer {
+    display: flex;
+    align-items: center;
+    .circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      border: 1px solid $clr-bg4;
+      background: $clr-bg1;
+      cursor: pointer;
+      &:last-child {
+        margin-left: 0.5em;
+      }
+      .icon {
+        color: $clr-medEmpha;
+      }
+    }
+  }
+  .searchbarContainer {
+    display: flex;
+    .bar {
+      display: flex;
+      align-items: center;
+      background: $clr-bg1;
+      border: 1px solid $clr-bg4;
+      padding: 0.5em 1em;
+      border-radius: 0.75em;
+      cursor: pointer;
+      .icon {
+        margin-right: 0.5em;
+        font-size: 0.85rem;
+      }
+      .search {
+        font-size: 1rem;
+        font-family: "Roboto", sans-serif;
+        color: $clr-highEmpha;
+        background: transparent;
+        outline: none;
+        border: none;
+        width: 17.5em;
+        &.active {
+          animation: expand 100ms linear forwards;
+        }
+        &::placeholder {
+          color: $clr-medEmpha;
+        }
+      }
+    }
+    .circle {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      border: 1px solid $clr-bg4;
+      background: $clr-bg1;
+      margin-left: 1em;
+      cursor: pointer;
+      .icon {
+        color: $clr-medEmpha;
+      }
+      .notification {
+        display: flex;
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        background: $clr-error;
+        bottom: 2.5px;
+        right: 2.5px;
+        .notifNum {
+          font-size: 0.75rem;
+          color: $clr-highEmpha;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
 .loader {
   width: 20px;
   height: 20px;
@@ -371,5 +462,14 @@
 
   100% {
     transform: rotate(359deg);
+  }
+}
+
+@keyframes expand {
+  0% {
+    width: 17.5em;
+  }
+  100% {
+    width: 55em;
   }
 }

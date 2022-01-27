@@ -102,6 +102,60 @@ function SideBar({
             <p className={styles.util}>Log out</p>
           </div>
         </aside>
+        <aside
+          className={styles.sorting}
+          style={showSort ? { display: "flex" } : null}
+        >
+          <h5 className={styles.sortby}>Sort by</h5>
+          <div
+            className={styles.utilContainer}
+            style={
+              sort === "createdAt_desc" || sort === "createdAt_asc"
+                ? { background: "rgba(255, 255, 255, 0.08)" }
+                : null
+            }
+            onClick={handleCreatedAt}
+          >
+            <p className={styles.util}>Created Date</p>
+            {sort === "createdAt_asc" ? (
+              <FontAwesomeIcon icon={faChevronUp} className={styles.icon} />
+            ) : sort === "createdAt_desc" ? (
+              <FontAwesomeIcon icon={faChevronDown} className={styles.icon} />
+            ) : null}
+          </div>
+          <div
+            className={styles.utilContainer}
+            style={
+              sort === "updatedAt_desc" || sort === "updatedAt_asc"
+                ? { background: "rgba(255, 255, 255, 0.08)" }
+                : null
+            }
+            onClick={handleUpdatedAt}
+          >
+            <p className={styles.util}>Updated Date</p>
+            {sort === "updatedAt_asc" ? (
+              <FontAwesomeIcon icon={faChevronUp} className={styles.icon} />
+            ) : sort === "updatedAt_desc" ? (
+              <FontAwesomeIcon icon={faChevronDown} className={styles.icon} />
+            ) : null}
+          </div>
+          <div
+            className={styles.utilContainer}
+            style={
+              sort === "alphabetical_desc" || sort === "alphabetical_asc"
+                ? { background: "rgba(255, 255, 255, 0.08)" }
+                : null
+            }
+            onClick={handleAlphabetical}
+          >
+            <p className={styles.util}>Alphabetical</p>
+            {sort === "alphabetical_asc" ? (
+              <FontAwesomeIcon icon={faChevronUp} className={styles.icon} />
+            ) : sort === "alphabetical_desc" ? (
+              <FontAwesomeIcon icon={faChevronDown} className={styles.icon} />
+            ) : null}
+          </div>
+        </aside>
         <div className={styles.navigation}>
           <div
             className={styles.userLinks}
@@ -183,60 +237,6 @@ function SideBar({
               <div className={styles.circle}></div>
             </div>
           </header>
-          <aside
-            className={styles.sorting}
-            style={showSort ? { display: "flex" } : null}
-          >
-            <h5 className={styles.sortby}>Sort by</h5>
-            <div
-              className={styles.utilContainer}
-              style={
-                sort === "createdAt_desc" || sort === "createdAt_asc"
-                  ? { background: "rgba(255, 255, 255, 0.08)" }
-                  : null
-              }
-              onClick={handleCreatedAt}
-            >
-              <p className={styles.util}>Created Date</p>
-              {sort === "createdAt_asc" ? (
-                <FontAwesomeIcon icon={faChevronUp} className={styles.icon} />
-              ) : sort === "createdAt_desc" ? (
-                <FontAwesomeIcon icon={faChevronDown} className={styles.icon} />
-              ) : null}
-            </div>
-            <div
-              className={styles.utilContainer}
-              style={
-                sort === "updatedAt_desc" || sort === "updatedAt_asc"
-                  ? { background: "rgba(255, 255, 255, 0.08)" }
-                  : null
-              }
-              onClick={handleUpdatedAt}
-            >
-              <p className={styles.util}>Updated Date</p>
-              {sort === "updatedAt_asc" ? (
-                <FontAwesomeIcon icon={faChevronUp} className={styles.icon} />
-              ) : sort === "updatedAt_desc" ? (
-                <FontAwesomeIcon icon={faChevronDown} className={styles.icon} />
-              ) : null}
-            </div>
-            <div
-              className={styles.utilContainer}
-              style={
-                sort === "alphabetical_desc" || sort === "alphabetical_asc"
-                  ? { background: "rgba(255, 255, 255, 0.08)" }
-                  : null
-              }
-              onClick={handleAlphabetical}
-            >
-              <p className={styles.util}>Alphabetical</p>
-              {sort === "alphabetical_asc" ? (
-                <FontAwesomeIcon icon={faChevronUp} className={styles.icon} />
-              ) : sort === "alphabetical_desc" ? (
-                <FontAwesomeIcon icon={faChevronDown} className={styles.icon} />
-              ) : null}
-            </div>
-          </aside>
           <section
             className={styles.createContainer}
             onClick={() => setPopupSection("Create_Bundle")}

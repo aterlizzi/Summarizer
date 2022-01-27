@@ -3,6 +3,7 @@ import SideBar from "./SideBar";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 import CreateBundle from "./CreateBundle";
 import { useQuery } from "urql";
+import SearchBar from "./SearchBar";
 
 const Me = `
     query{
@@ -57,7 +58,9 @@ function DefaultDisplay({
         sort={sort}
         setExecute={setExecute}
       />
-      <section className={styles.home}></section>
+      <section className={styles.home}>
+        <SearchBar />
+      </section>
       {popupSection === "Create_Bundle" ? (
         <CreateBundle
           setPopupSection={setPopupSection}
