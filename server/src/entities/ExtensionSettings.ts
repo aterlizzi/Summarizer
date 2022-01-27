@@ -54,4 +54,8 @@ export class ExtensionSettings extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: true })
   referFriendLink: boolean;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  lastBundleSortType: string;
 }

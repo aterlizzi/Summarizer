@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -27,4 +28,12 @@ export class Bundle extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.bundles)
   user: User;
+
+  @Field(() => String)
+  @Column()
+  title: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  description: string;
 }

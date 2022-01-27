@@ -54,13 +54,31 @@ export class SummarizeResolver {
     } else {
       const response = await openai.complete({
         engine: "babbage-instruct-beta",
-        prompt: `Summarize the following text.\n\nText: ${text.trim()} \n\nSummary:`,
+        prompt: `What are the key takeaways of the following text?\n\nText: ${text.trim()} \n\nSummary:`,
         temperature: 0,
         max_tokens: 160,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
       });
+      // const response = await openai.complete({
+      //   engine: "babbage-instruct-beta",
+      //   prompt: `Summarize the details of the following text.\n\nText: ${text.trim()} \n\nSummary:`,
+      //   temperature: 0,
+      //   max_tokens: 160,
+      //   top_p: 1,
+      //   frequency_penalty: 0,
+      //   presence_penalty: 0,
+      // });
+      // const response = await openai.complete({
+      //   engine: "babbage-instruct-beta",
+      //   prompt: `Summarize the following text.\n\nText: ${text.trim()} \n\nSummary:`,
+      //   temperature: 0,
+      //   max_tokens: 160,
+      //   top_p: 1,
+      //   frequency_penalty: 0,
+      //   presence_penalty: 0,
+      // });
       const summary = response.data.choices[0].text;
       user.wordCount = user.wordCount - wordCount;
       await user.save();
@@ -292,13 +310,31 @@ const handlePromiseChain = async (textArr: string[]) => {
     promiseArr[i] = new Promise(async (resolve, reject) => {
       const response = await openai.complete({
         engine: "babbage-instruct-beta",
-        prompt: `In a paragraph, summarize the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
+        prompt: `What are the key takeaways of the following text?\n\nText: ${textArr[i]} \n\nSummary:`,
         temperature: 0,
         max_tokens: 160,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
       });
+      // const response = await openai.complete({
+      //   engine: "babbage-instruct-beta",
+      //   prompt: `In a paragraph, summarize the details of the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
+      //   temperature: 0,
+      //   max_tokens: 160,
+      //   top_p: 1,
+      //   frequency_penalty: 0,
+      //   presence_penalty: 0,
+      // });
+      // const response = await openai.complete({
+      //   engine: "babbage-instruct-beta",
+      //   prompt: `In a paragraph, summarize the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
+      //   temperature: 0,
+      //   max_tokens: 160,
+      //   top_p: 1,
+      //   frequency_penalty: 0,
+      //   presence_penalty: 0,
+      // });
       if (response.data.choices[0].text) {
         resolve(response.data.choices[0].text);
       } else {

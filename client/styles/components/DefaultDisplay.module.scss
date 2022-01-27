@@ -1,149 +1,50 @@
 @import "../utils/variables";
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
 
-.sidebar {
-  background: $clr-bg3;
+.sidebarWrapper {
   position: relative;
-  height: 100vh;
-  padding: 1em;
-  .popout {
-    position: absolute;
-    z-index: 2;
-    top: 2.5em;
-    right: -2em;
-    flex-direction: column;
-    background: #252525;
-    border-radius: 0.5em;
-    -webkit-box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
-    box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
-    display: none;
-    padding: 1em 0em;
-    .utilContainer {
-      padding: 0.5em 1.5em;
-      cursor: pointer;
-      &:hover {
-        background: $clr-bg4;
-      }
-      .util {
-        margin: 0;
-      }
-    }
-  }
-  .navigation {
-    margin-bottom: 2em;
-    .userLinks {
-      margin-bottom: 2em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5em;
-      cursor: pointer;
+  .sidebar {
+    background: $clr-bg3;
+    max-height: 100vh;
+    padding: 1em;
+    overflow-y: scroll;
+    .popout {
+      position: absolute;
+      z-index: 2;
+      top: 2.5em;
+      right: -2em;
+      flex-direction: column;
+      background: #252525;
       border-radius: 0.5em;
-      &:hover {
-        background: $clr-bg4;
-      }
-      .userCircle {
-        height: 25px;
-        width: 25px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.15);
-        .icon {
-          font-size: 0.85rem;
+      -webkit-box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+      box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+      display: none;
+      padding: 1em 0em;
+      .utilContainer {
+        padding: 0.5em 1.5em;
+        cursor: pointer;
+        &:hover {
+          background: $clr-bg4;
         }
-      }
-      .linksContainer {
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        width: 15px;
-        .circle {
-          height: 3.5px;
-          width: 3.5px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.3);
+        .util {
+          margin: 0;
         }
       }
     }
-    .broadTopics {
-      .navContainer {
-        cursor: pointer;
+    .navigation {
+      margin-bottom: 2em;
+      .userLinks {
+        margin-bottom: 2em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 0.5em;
+        cursor: pointer;
         border-radius: 0.5em;
         &:hover {
           background: $clr-bg4;
         }
-        .nav {
-          margin: 0.25em 0em;
-          font-weight: 400;
-          letter-spacing: 1px;
-        }
-      }
-    }
-  }
-  .mainUtilContainer {
-    margin-bottom: 2em;
-    .utilHeader {
-      margin-bottom: 1em;
-      .title {
-        font-weight: 500;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        margin: 0;
-        letter-spacing: 1.5px;
-        color: $clr-medEmpha;
-      }
-    }
-    .utilContainer {
-      padding: 0.5em;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 0.5em;
-      &:hover {
-        background: $clr-bg4;
-      }
-      .iconContainer {
-        width: 35px;
-        .icon {
-          font-size: 1.15rem;
-          color: $clr-medEmpha;
-        }
-      }
-      .label {
-        margin: 0;
-        font-size: 0.95rem;
-        font-weight: 400;
-        font-family: "Raleway", sans-serif;
-      }
-    }
-  }
-  .bundlesContainer {
-    .bundleHead {
-      margin-bottom: 1em;
-      .title {
-        font-weight: 500;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        margin: 0;
-        letter-spacing: 1.5px;
-        color: $clr-medEmpha;
-      }
-    }
-    .createContainer {
-      display: flex;
-      align-items: center;
-      padding: 0.5em;
-      cursor: pointer;
-      &:hover {
-        background: $clr-bg4;
-        border-radius: 0.5em;
-      }
-      .circleContainer {
-        width: 35px;
-        .circle {
+        .userCircle {
           height: 25px;
           width: 25px;
           display: flex;
@@ -152,15 +53,188 @@
           border-radius: 50%;
           background: rgba(255, 255, 255, 0.15);
           .icon {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+          }
+        }
+        .linksContainer {
+          display: flex;
+          justify-content: space-evenly;
+          align-items: center;
+          width: 15px;
+          .circle {
+            height: 3.5px;
+            width: 3.5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
           }
         }
       }
-      .create {
-        margin: 0;
-        font-size: 0.95rem;
-        font-weight: 400;
-        font-family: "Raleway", sans-serif;
+      .broadTopics {
+        .navContainer {
+          cursor: pointer;
+          padding: 0.5em;
+          border-radius: 0.5em;
+          &:hover {
+            background: $clr-bg4;
+          }
+          .nav {
+            margin: 0.25em 0em;
+            font-weight: 400;
+            letter-spacing: 1px;
+          }
+        }
+      }
+    }
+    .mainUtilContainer {
+      margin-bottom: 2em;
+      .utilHeader {
+        margin-bottom: 1em;
+        .title {
+          font-weight: 500;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          margin: 0;
+          letter-spacing: 1.5px;
+          color: $clr-medEmpha;
+        }
+      }
+      .utilContainer {
+        padding: 0.5em;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 0.5em;
+        &:hover {
+          background: $clr-bg4;
+        }
+        .iconContainer {
+          width: 35px;
+          .icon {
+            font-size: 1.15rem;
+            color: $clr-medEmpha;
+          }
+        }
+        .label {
+          margin: 0;
+          font-size: 0.95rem;
+          font-weight: 400;
+          font-family: "Raleway", sans-serif;
+        }
+      }
+    }
+    .bundlesContainer {
+      position: relative;
+      .bundleHead {
+        padding-right: 0.5em;
+        margin-bottom: 1em;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        .title {
+          font-weight: 500;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          margin: 0;
+          letter-spacing: 1.5px;
+          color: $clr-medEmpha;
+        }
+        .linksContainer {
+          display: flex;
+          justify-content: space-evenly;
+          align-items: center;
+          width: 15px;
+          .circle {
+            height: 3.5px;
+            width: 3.5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+          }
+        }
+      }
+      .sorting {
+        position: absolute;
+        top: 0.5em;
+        right: -10.5em;
+        background: #252525;
+        border-radius: 0.5em;
+        -webkit-box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+        box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+        flex-direction: column;
+        display: none;
+        padding: 1em 0em;
+        .sortby {
+          margin: 0;
+          font-weight: 400;
+          text-align: center;
+          font-size: 1.125rem;
+          padding-bottom: 0.5em;
+          border-bottom: 2px solid $clr-bg4;
+          color: $clr-medEmpha;
+        }
+        .utilContainer {
+          display: flex;
+          align-items: center;
+          padding: 0.5em 1em;
+          cursor: pointer;
+          &:hover {
+            background: $clr-bg4;
+          }
+          .util {
+            margin: 0em 1em 0em 0em;
+          }
+          .icon {
+            font-size: 0.6rem;
+            color: $clr-primary;
+          }
+        }
+      }
+      .createContainer {
+        display: flex;
+        align-items: center;
+        padding: 0.5em;
+        cursor: pointer;
+        border-radius: 0.5em;
+        margin-bottom: 1em;
+        &:hover {
+          background: $clr-bg4;
+        }
+        .circleContainer {
+          width: 35px;
+          .circle {
+            height: 25px;
+            width: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            .icon {
+              font-size: 0.75rem;
+            }
+          }
+        }
+        .create {
+          margin: 0;
+          font-size: 0.95rem;
+          font-weight: 400;
+          font-family: "Raleway", sans-serif;
+        }
+      }
+      .bundle {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        &:hover {
+          background: $clr-bg4;
+        }
+        .bundleName {
+          margin: 0;
+          font-size: 0.95rem;
+          font-weight: 400;
+          font-family: "Raleway", sans-serif;
+        }
       }
     }
   }
@@ -175,6 +249,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 10;
+  padding: 1em;
   .createBundleCard {
     background: #1b1b1b;
     width: 30em;
@@ -223,6 +298,42 @@
       }
       .input {
         margin-bottom: 1em;
+        padding: 0.5em 0em;
+        font-size: 1rem;
+        color: $clr-highEmpha;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid $clr-bg4;
+        font-family: "Roboto", sans-serif;
+        outline: none;
+        &:focus {
+          border-bottom: 1px solid $clr-primary;
+        }
+        &::placeholder {
+          font-size: 1rem;
+          color: $clr-medEmpha;
+        }
+      }
+      .textarea {
+        margin-bottom: 1em;
+        resize: none;
+        height: 100px;
+        font-size: 1rem;
+        color: $clr-highEmpha;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid $clr-bg4;
+        background: transparent;
+        font-family: "Roboto", sans-serif;
+        &:focus {
+          border-bottom: 1px solid $clr-primary;
+        }
+      }
+      .count {
+        margin: 0em 0em 1em 0em;
+        align-self: flex-end;
+        font-size: 0.85rem;
+        color: $clr-highEmpha;
       }
       .btn {
         width: 40%;
@@ -233,9 +344,32 @@
         border: none;
         outline: none;
         color: $clr-highEmpha;
-        padding: 0.5em 0em;
+        height: 35px;
         border-radius: 0.5em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
+  }
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-top: 2px solid;
+  border-color: white transparent;
+  animation: spin 1s linear infinite;
+  margin-top: 0em;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
   }
 }

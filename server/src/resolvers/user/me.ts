@@ -14,6 +14,7 @@ export class MeResolver {
         "settings",
         "settings.emailSettings",
         "settings.extensionSettings",
+        "bundles",
       ],
     });
     if (!user) return undefined;
