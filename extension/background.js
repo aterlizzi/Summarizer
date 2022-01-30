@@ -32,6 +32,7 @@ function receiver(req, sender, sendResponse) {
     case "status":
       verifyUserStatus().then((res) => {
         userSignedIn = res.userStatus;
+        console.log(userSignedIn);
         switch (userSignedIn) {
           case true:
             const token = res.userInfo.accessToken;
@@ -89,9 +90,10 @@ function receiver(req, sender, sendResponse) {
         .catch((err) => console.log(err));
       break;
     case "loginGoogleUser":
-      verifyUserStatus().then((res) => {
-        if (res.userStatus) returnSession = true;
+      verifyUserStatus().then(async (res) => {
         userSignedIn = res.userStatus;
+        const cookie = await returnWhetherCookie();
+        if (!cookie) userSignedIn = false;
         switch (userSignedIn) {
           case true:
             break;
@@ -156,11 +158,6 @@ function receiver(req, sender, sendResponse) {
             break;
         }
       });
-      break;
-    case "logout":
-      console.log("log me out");
-      logout();
-      sendResponse("logged out");
       break;
     case "sendSelectedText":
       retrieveSelectedText().then((response) => {
@@ -492,29 +489,6 @@ const retrieveManualText = () => {
   });
 };
 
-// logout
-const logout = () => {
-  const query = `mutation Logout {
-    logout
-  }`;
-  const summaryBody = JSON.stringify({
-    query,
-  });
-  fetch("http://localhost:4000/graphql", {
-    headers: { "content-type": "application/json" },
-    method: "POST",
-    body: summaryBody,
-  }).then((res) => {
-    res.json().then((data) => {
-      console.log(data);
-      if (data.data && data.data.logout) {
-        chrome.storage.local.clear();
-      }
-    });
-  });
-  return "done";
-};
-
 // request a new access token
 const refreshAccessToken = async (userInfo) => {
   // token has expired. Request new token.
@@ -566,6 +540,8 @@ const summarizeFunc = async (action, retries = 0) => {
       token = await refreshAccessToken(initObj.user);
     }
   }
+
+  console.log(initObj);
 
   // if the text isn't blank, hit the backend with a summarization request.
   if (text !== "") {

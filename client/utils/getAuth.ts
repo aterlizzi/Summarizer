@@ -1,7 +1,15 @@
 export const getAuth = async ({ authState }) => {
   if (!authState) {
-    const accessToken = localStorage.getItem("accessToken");
+    let accessToken = localStorage.getItem("accessToken");
     if (accessToken) return { accessToken };
+
+    // if you have a cookie but not an accessToken
+    if (!accessToken) {
+      const token = await handleRefreshToken();
+      if (token) {
+        return token;
+      }
+    }
     return null;
   }
 

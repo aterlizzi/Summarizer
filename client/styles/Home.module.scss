@@ -8,6 +8,7 @@
   font-family: "Roboto", sans-serif;
   color: $clr-highEmpha;
   min-height: 100vh;
+  max-height: 100vh;
   background: $clr-bg;
   display: flex;
   flex-direction: column;
@@ -66,8 +67,102 @@
       }
     }
   }
+  .gridWrap {
+    padding: 3.5em;
+    display: flex;
+    height: calc(100vh - 3.5em);
+    align-items: center;
+    .constructionCard {
+      max-width: 27.5em;
+      margin-right: 3em;
+      .header {
+        .title {
+          font-weight: 400;
+          font-size: 4rem;
+          margin: 0;
+          padding-bottom: 0.25em;
+          border-bottom: 4px solid $clr-bg4;
+        }
+        .desc {
+          margin: 1em 0em 0em 0em;
+          line-height: 25px;
+          font-size: 1.25rem;
+          font-family: "Raleway", sans-serif;
+          color: $clr-medEmpha;
+        }
+      }
+      .emailSubmit {
+        margin-top: 3em;
+        .input {
+          background: $clr-bg4;
+          height: 40px;
+          width: 300px;
+          padding: 0em 1em;
+          border-top-left-radius: 0.5em;
+          border-bottom-left-radius: 0.5em;
+          font-size: 1rem;
+          font-family: "Roboto", sans-serif;
+          color: $clr-highEmpha;
+          outline: none;
+          border: none;
+          &::placeholder {
+            color: $clr-medEmpha;
+          }
+        }
+        .btn {
+          border-top-right-radius: 0.5em;
+          border-bottom-right-radius: 0.5em;
+          background: $clr-primaryVariant;
+          color: $clr-highEmpha;
+          outline: none;
+          border: none;
+          height: 40px;
+          cursor: pointer;
+          width: 80px;
+          font-size: 1rem;
+          font-family: "Roboto", sans-serif;
+        }
+      }
+    }
+  }
 }
-
+@media (max-width: 880px) {
+  .main {
+    .gridWrap {
+      .constructionCard {
+        .emailSubmit {
+          .input {
+            width: 200px;
+          }
+          .btn {
+            width: 65px;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 680px) {
+  .main {
+    .gridWrap {
+      .svg {
+        display: none;
+      }
+    }
+  }
+}
+@media (max-width: 428px) {
+  .main {
+    .gridWrap {
+      padding: 1em;
+      .constructionCard {
+        width: 100%;
+        text-align: center;
+        margin-right: 0;
+      }
+    }
+  }
+}
 @media (max-width: 560px) {
   .main {
     .banner {

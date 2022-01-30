@@ -33,17 +33,18 @@ export class SummarizeResolver {
       const textArr = spliceLargeText(text, wordCount);
       // parses the textarr into a promise chain that is resolved.
       const summary = await handlePromiseChain(textArr);
+
+      // refactor when saving to database
+      const saveSummary = summary.split("NEWSECTION").join(" ");
       // subtract the word count.
       user.wordCount = user.wordCount - wordCount;
       await user.save();
-      const sumId = await handleSaveRecentSummary(user.id, url, summary, title);
-      console.log({
-        summary,
-        remainingSummaries: user.wordCount,
+      const sumId = await handleSaveRecentSummary(
+        user.id,
         url,
-        id: sumId,
-        popout: user.settings.extensionSettings.popoutSummary,
-      });
+        saveSummary,
+        title
+      );
       return {
         summary,
         remainingSummaries: user.wordCount,
@@ -52,24 +53,24 @@ export class SummarizeResolver {
         popout: user.settings.extensionSettings.popoutSummary,
       };
     } else {
-      const response = await openai.complete({
-        engine: "babbage-instruct-beta",
-        prompt: `What are the key takeaways of the following text?\n\nText: ${text.trim()} \n\nSummary:`,
-        temperature: 0,
-        max_tokens: 160,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-      });
       // const response = await openai.complete({
       //   engine: "babbage-instruct-beta",
-      //   prompt: `Summarize the details of the following text.\n\nText: ${text.trim()} \n\nSummary:`,
+      //   prompt: `Summarize the important details in following text.\n\nText: ${text.trim()} \n\nSummary:`,
       //   temperature: 0,
       //   max_tokens: 160,
       //   top_p: 1,
       //   frequency_penalty: 0,
       //   presence_penalty: 0,
       // });
+      const response = await openai.complete({
+        engine: "babbage-instruct-beta",
+        prompt: `List the key takeaways of the following article.\n\nText: ${text.trim()} \n\nSummary:`,
+        temperature: 0,
+        max_tokens: 160,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
       // const response = await openai.complete({
       //   engine: "babbage-instruct-beta",
       //   prompt: `Summarize the following text.\n\nText: ${text.trim()} \n\nSummary:`,
@@ -310,7 +311,7 @@ const handlePromiseChain = async (textArr: string[]) => {
     promiseArr[i] = new Promise(async (resolve, reject) => {
       const response = await openai.complete({
         engine: "babbage-instruct-beta",
-        prompt: `What are the key takeaways of the following text?\n\nText: ${textArr[i]} \n\nSummary:`,
+        prompt: `List the key takeaways of the following article.\n\nText: ${textArr[i]} \n\nSummary:`,
         temperature: 0,
         max_tokens: 160,
         top_p: 1,
@@ -319,7 +320,7 @@ const handlePromiseChain = async (textArr: string[]) => {
       });
       // const response = await openai.complete({
       //   engine: "babbage-instruct-beta",
-      //   prompt: `In a paragraph, summarize the details of the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
+      //   prompt: `Summarize the important details of the following text.\n\nText: ${textArr[i]} \n\nSummary:`,
       //   temperature: 0,
       //   max_tokens: 160,
       //   top_p: 1,
@@ -343,7 +344,7 @@ const handlePromiseChain = async (textArr: string[]) => {
     });
   }
   const summaries = await Promise.all([...promiseArr]);
-  return summaries.join(" ");
+  return summaries.join("NEWSECTION");
 };
 
 // used for handling recent summary saving

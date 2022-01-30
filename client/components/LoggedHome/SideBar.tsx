@@ -94,6 +94,24 @@ function SideBar({
         >
           <div
             className={styles.utilContainer}
+            onClick={() => router.push("/begin")}
+          >
+            <p className={styles.util}>Upgrade</p>
+          </div>
+          <div
+            className={styles.utilContainer}
+            onClick={() => router.push("/referral")}
+          >
+            <p className={styles.util}>Refer a Friend</p>
+          </div>
+          <div
+            className={styles.utilContainer}
+            onClick={() => router.push("/contact")}
+          >
+            <p className={styles.util}>Contact</p>
+          </div>
+          <div
+            className={styles.utilContainer}
             onClick={() => router.push("/users/settings")}
           >
             <p className={styles.util}>Settings</p>

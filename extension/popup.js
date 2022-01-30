@@ -1,6 +1,4 @@
 // mass element selection.
-
-const emptyTag = document.querySelector(".summary");
 const button = document.querySelector(".btn");
 const spinner = document.querySelector(".hidden");
 const sumWrapper = document.querySelector(".sumWrapper");
@@ -36,7 +34,6 @@ const hTrashBtn = document.querySelector(".hTrash");
 const summaryContainer = document.querySelector(".container");
 const bookmark = document.querySelector(".save");
 const saveRejectContainer = document.querySelector(".saveRejectContainer");
-const logoutCircle = document.querySelector(".logoutCircle");
 const popoutBtn = document.querySelector(".reject");
 
 // icons
@@ -92,14 +89,6 @@ window.onload = () => {
   });
 };
 
-logoutCircle.addEventListener("click", () => {
-  chrome.runtime.sendMessage({ key: "logout" }, (response) => {
-    if (response === "logged out") {
-      window.close();
-    }
-  });
-});
-
 // clear and save manual text
 mTrashBtn.addEventListener("click", () => {
   manualTextArea.value = "";
@@ -148,7 +137,6 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       button.classList.toggle("hidden");
       spinner.classList.toggle("hidden");
       summary = req.text;
-      emptyTag.textContent = summary;
       break;
     case "ogLlRDalkA":
       button.classList.toggle("hidden");
@@ -186,7 +174,6 @@ const checkTier = (tier) => {
 const checkOptions = (options) => {
   if (options.showSettings === false) {
     settingsCircle.classList.add("none");
-    logoutCircle.style.left = "10px";
   }
   if (options.referFriendLink === false) {
     referFriendCircle.classList.add("none");
@@ -225,7 +212,6 @@ const handleSaveText = () => {
 const handleOnLoadClassChanges = () => {
   sumWrapper.classList.remove("none");
   settingsCircle.classList.remove("none");
-  logoutCircle.classList.remove("none");
   referFriendCircle.classList.remove("none");
   circle.classList.remove("none");
 };
@@ -297,7 +283,12 @@ button.addEventListener("click", () => {
             ) {
               saveRejectContainer.classList.remove("none");
             }
-            emptyTag.textContent = response.data.summarize.summary;
+            response.data.summarize.summary.split("NEWSECTION").map((text) => {
+              const newSummary = document.createElement("p");
+              newSummary.className = "summary";
+              newSummary.textContent = text;
+              summaryContainer.insertBefore(newSummary, saveRejectContainer);
+            });
             sumNum.textContent = checkText(
               response.data.summarize.remainingSummaries
             );
@@ -309,14 +300,17 @@ button.addEventListener("click", () => {
                 url: `http://localhost:3000/summaries/${sumId}`,
               });
             }
-          } else {
-            spinner.classList.toggle("hidden");
-            button.classList.toggle("hidden");
-            emptyTag.textContent =
-              "You don't have any enough words left to summarize this text.";
-            emptyTag.style.color = "#cf6679";
           }
         }
+      } else {
+        spinner.classList.toggle("hidden");
+        button.classList.toggle("hidden");
+        const newSummary = document.createElement("p");
+        newSummary.className = "summary";
+        newSummary.textContent =
+          "You don't have any enough words left to summarize this text. But don't worry, we've got a solution! Either refer a friend, upgrade your subscription, or wait until your next period begins.";
+        newSummary.style.color = "#cf6679";
+        summaryContainer.insertBefore(newSummary, saveRejectContainer);
       }
       return true;
     }
