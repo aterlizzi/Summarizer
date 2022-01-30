@@ -28,7 +28,7 @@ function Mendeley() {
         }
       });
     }
-  }, [code]);
+  }, [code, router, retrieveToken]);
   return (
     <main className={styles.main}>
       <Loader />

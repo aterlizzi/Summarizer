@@ -24,7 +24,7 @@ function Google() {
         }
       });
     }
-  }, [code]);
+  }, [code, retrieveGoogleToken, router]);
   return (
     <main className={styles.main}>
       <Loader />

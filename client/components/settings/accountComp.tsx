@@ -13,6 +13,7 @@ query {
     reason
     wordCount
     current_period
+    totalWordsSummarized
   }
 }
 `;
@@ -37,6 +38,10 @@ function Account() {
           <AccountInfo
             title={"Remaining Words"}
             text={meResult.data.me.wordCount}
+          />
+          <AccountInfo
+            title={"Words Summarized"}
+            text={meResult.data.me.totalWordsSummarized}
           />
           <AccountInfo title={"Email"} text={meResult.data.me.email} />
           <AccountInfo

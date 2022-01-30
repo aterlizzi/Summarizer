@@ -36,8 +36,8 @@ function ForgotPassword({ setForgotPass }) {
         <header className={styles.head}>
           <h3 className={styles.title}>Reset password</h3>
           <p className={styles.desc}>
-            Enter the email associated with your account and we'll send an email
-            with instructions to reset your password.
+            Enter the email associated with your account and we&apos;ll send an
+            email with instructions to reset your password.
           </p>
         </header>
         <div className={styles.inputSection}>

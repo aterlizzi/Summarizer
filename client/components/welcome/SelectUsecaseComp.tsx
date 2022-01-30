@@ -8,7 +8,9 @@ function SelectUsecaseComp({ setUseCase, setSection, section }) {
   return (
     <section className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.headline}>Welcome to the team, let's begin.</h1>
+        <h1 className={styles.headline}>
+          Welcome to the team, let&apos;s begin.
+        </h1>
         <h5 className={styles.subtitle}>
           Will you please choose the category that best suits you?
         </h5>

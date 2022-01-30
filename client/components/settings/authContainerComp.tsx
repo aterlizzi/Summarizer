@@ -20,6 +20,7 @@ function AuthContainerComp({
           <div className={styles.image}>
             <div className={styles.logo}>
               <Image
+                alt={"Logo for " + name}
                 src={
                   name === "Zotero"
                     ? zotero
@@ -68,6 +69,7 @@ function AuthContainerComp({
         </p>
         <a
           target="_blank"
+          rel="noreferrer"
           href={
             name === "Zotero"
               ? "https://www.zotero.org/"

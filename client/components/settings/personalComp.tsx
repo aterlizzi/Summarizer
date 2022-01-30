@@ -61,7 +61,7 @@ function Personal() {
     ) {
       setChanged(true);
     }
-  }, [name, email]);
+  }, [name, email, meResult]);
 
   const handleSave = () => {
     if (

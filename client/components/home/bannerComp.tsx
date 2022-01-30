@@ -28,7 +28,11 @@ function BannerComp() {
     <header className={styles.banner}>
       <div className={styles.left}>
         <div className={styles.logo}>
-          <Image src={logo} onClick={handleClick}></Image>
+          <Image
+            alt="Logo for Untanglify"
+            src={logo}
+            onClick={handleClick}
+          ></Image>
         </div>
         <p className={styles.companyName}>Untanglify</p>
       </div>
@@ -66,7 +70,7 @@ function BannerComp() {
             Settings
           </button>
         )}
-        <a href="https://www.youtube.com" target="_blank">
+        <a href="https://www.youtube.com" target="_blank" rel="noreferrer">
           <button className={styles.try}>Try for free</button>
         </a>
       </div>

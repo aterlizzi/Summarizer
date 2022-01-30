@@ -36,7 +36,7 @@ function Popup({ setPopup }) {
     if (!session_id) {
       setPopup(false);
     }
-  }, [session_id, result]);
+  }, [session_id, result, setPopup]);
 
   useEffect(() => {
     if (result.data && result.data.me && result.data.me.onboardCompleted) {
@@ -111,13 +111,13 @@ function Popup({ setPopup }) {
           </div>
           <div className={styles.bot}>
             <header className={styles.header}>
-              <h3 className={styles.title}>What's this?</h3>
+              <h3 className={styles.title}>What&apos;s this?</h3>
               <p className={styles.desc}>
-                In an effort to catapult you into summarizing, we'll walk you
-                through the most important aspects of the extension. Upon
-                completion of the tutorial, you'll be rewarded with some more
-                words, and the chance to win stuff even greater than knowledge
-                itself, wild.
+                In an effort to catapult you into summarizing, we&apos;ll walk
+                you through the most important aspects of the extension. Upon
+                completion of the tutorial, you&apos;ll be rewarded with some
+                more words, and the chance to win stuff even greater than
+                knowledge itself, wild.
               </p>
             </header>
             <div className={styles.content}>

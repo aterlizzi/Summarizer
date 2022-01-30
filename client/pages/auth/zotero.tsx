@@ -26,7 +26,7 @@ function Zotero() {
         }
       });
     }
-  }, [oauth_verifier]);
+  }, [oauth_verifier, router, zotero]);
   return (
     <main className={styles.main}>
       <Loader />

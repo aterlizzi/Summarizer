@@ -9,11 +9,11 @@ function AccountInfo({ title, text }) {
       <div className={styles.textContainer}>
         <p className={styles.info}>{text}</p>
         {title === "Payment Tier" && text !== "Untanglify Researcher" ? (
-          <Link href="/begin">
+          <Link href="/begin" passHref>
             <span className={styles.special}>Upgrade</span>
           </Link>
         ) : title === "Email" ? (
-          <Link href="/users/settings?personal=true">
+          <Link href="/users/settings?personal=true" passHref>
             <span className={styles.special}>Change</span>
           </Link>
         ) : null}

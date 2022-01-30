@@ -39,7 +39,7 @@ function MainSigninLoginComp({
           <>
             <section className={styles.top}>
               <div className={styles.logoContainer}>
-                <Image src={logo} />
+                <Image src={logo} alt="Logo for Untanglify" />
               </div>
               <button
                 className={styles.signinBtn}

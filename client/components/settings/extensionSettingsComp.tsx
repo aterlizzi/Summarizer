@@ -152,9 +152,10 @@ function ExtensionSettings() {
               </div>
             </div>
             <p className={styles.extensionDesc}>
-              When enabled, clicking "Summarize" in the extension will open a
-              new tab with the summary and related information. This is useful
-              for individuals who want to see a larger font-size summary.
+              When enabled, clicking &quote;Summarize&quote; in the extension
+              will open a new tab with the summary and related information. This
+              is useful for individuals who want to see a larger font-size
+              summary.
             </p>
           </div>
           <div className={styles.extensionContainer}>

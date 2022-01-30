@@ -142,4 +142,8 @@ export class User extends BaseEntity {
   @Field(() => [Bundle])
   @OneToMany(() => Bundle, (group) => group.user, { cascade: true })
   bundles: Bundle[];
+
+  @Field(() => Number)
+  @Column({ default: 0 })
+  totalWordsSummarized: number;
 }

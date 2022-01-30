@@ -41,7 +41,7 @@ function SummaryPage() {
         }
       });
     }
-  }, [summaryId]);
+  }, [summaryId, findRecentSummary]);
 
   return (
     <main className={styles.main}>
@@ -51,7 +51,7 @@ function SummaryPage() {
           <h1>{title !== "" ? title : null}</h1>
           <h3>{summary !== "" ? summary : null}</h3>
           <p>{url !== "" ? url : null}</p>
-          <a href={url !== "" ? url : null} target="_blank">
+          <a href={url !== "" ? url : null} target="_blank" rel="noreferrer">
             <button>Visit</button>
           </a>
         </section>

@@ -27,7 +27,7 @@ function Notion() {
         }
       });
     }
-  }, [code, error]);
+  }, [code, error, router, retrieveNotionToken]);
   return (
     <main className={styles.main}>
       <Loader />

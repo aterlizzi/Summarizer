@@ -52,7 +52,7 @@ function ForgotPassToken() {
         }
       });
     }
-  }, [forgotPassToken]);
+  }, [forgotPassToken, confirm]);
 
   const handleChangePass = () => {
     if (!displayPass) return;
@@ -142,7 +142,7 @@ function ForgotPassToken() {
       ) : (
         <section className={styles.errorContainer}>
           <h1 className={styles.emoji}>( ͡❛ ︵ ͡❛)</h1>
-          <Link href="/">
+          <Link href="/" passHref>
             <p className={styles.msg}>{error}</p>
           </Link>
         </section>

@@ -1,3 +1,4 @@
+@use "sass:math";
 @import "utils/variables";
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
 
@@ -144,7 +145,7 @@ $switch-animation-bounce-distance: 0.4em;
                     width: $switch-width;
                     height: $switch-size;
                     line-height: $switch-size;
-                    border-radius: $switch-size/2;
+                    border-radius: math.div($switch-size, 2);
                     margin: 0;
                     padding: 0;
                     box-shadow: inset 0 0 0 $switch-space $switch-off-border;
@@ -162,7 +163,8 @@ $switch-animation-bounce-distance: 0.4em;
 
                     &:checked {
                       transition-delay: 0s, 0s;
-                      box-shadow: inset 0 0 0 $switch-size/1.75 $switch-on-color !important;
+                      box-shadow: inset 0 0 0 math.div($switch-size, 1.75)
+                        $switch-on-color !important;
                       padding-left: $switch-on-padding;
                     }
                     /* Animations if supported */
@@ -180,7 +182,7 @@ $switch-animation-bounce-distance: 0.4em;
 
                     &::after {
                       /* Increases hit area */
-                      $size-adjust: -($switch-button-size/3);
+                      $size-adjust: -1 * math.div($switch-button-size, 3);
                       position: absolute;
                       top: $size-adjust;
                       left: $size-adjust;
@@ -194,11 +196,11 @@ $switch-animation-bounce-distance: 0.4em;
                       width: $switch-button-size;
                       margin: $switch-space 0 0 $switch-space;
                       background-color: $switch-toggle-color;
-                      border-radius: $switch-button-size/2;
+                      border-radius: math.div($switch-button-size, 2);
                       box-shadow: 0 $switch-space ($switch-space * 2) 0
                           rgba(0, 0, 0, 0.2),
-                        0 0 ($switch-space/2) ($switch-space/2)
-                          rgba(0, 0, 0, 0.1);
+                        0 0 math.div($switch-space, 2)
+                          math.div($switch-space, 2) rgba(0, 0, 0, 0.1);
                       transition: all 0.1s ease 0.1s;
                     }
 
@@ -419,7 +421,7 @@ $switch-animation-bounce-distance: 0.4em;
                   width: $switch-width;
                   height: $switch-size;
                   line-height: $switch-size;
-                  border-radius: $switch-size/2;
+                  border-radius: math.div($switch-size, 2);
                   margin: 0;
                   padding: 0;
                   box-shadow: inset 0 0 0 $switch-space $switch-off-border;
@@ -437,7 +439,8 @@ $switch-animation-bounce-distance: 0.4em;
 
                   &:checked {
                     transition-delay: 0s, 0s;
-                    box-shadow: inset 0 0 0 $switch-size/1.75 $switch-on-color !important;
+                    box-shadow: inset 0 0 0 math.div($switch-size, 1.75)
+                      $switch-on-color !important;
                     padding-left: $switch-on-padding;
                   }
                   /* Animations if supported */
@@ -455,7 +458,7 @@ $switch-animation-bounce-distance: 0.4em;
 
                   &::after {
                     /* Increases hit area */
-                    $size-adjust: -($switch-button-size/3);
+                    $size-adjust: -1 * math.div($switch-button-size, 3);
                     position: absolute;
                     top: $size-adjust;
                     left: $size-adjust;
@@ -469,10 +472,11 @@ $switch-animation-bounce-distance: 0.4em;
                     width: $switch-button-size;
                     margin: $switch-space 0 0 $switch-space;
                     background-color: $switch-toggle-color;
-                    border-radius: $switch-button-size/2;
+                    border-radius: math.div($switch-button-size, 2);
                     box-shadow: 0 $switch-space ($switch-space * 2) 0
                         rgba(0, 0, 0, 0.2),
-                      0 0 ($switch-space/2) ($switch-space/2) rgba(0, 0, 0, 0.1);
+                      0 0 math.div($switch-space, 2) math.div($switch-space, 2)
+                        rgba(0, 0, 0, 0.1);
                     transition: all 0.1s ease 0.1s;
                   }
 

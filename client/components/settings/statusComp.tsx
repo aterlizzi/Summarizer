@@ -67,7 +67,7 @@ function Status() {
             <h5 className={styles.extra}>Before deleting, know this:</h5>
             <ul className={styles.list}>
               <li className={styles.item}>
-                Deletion is a permanent action, you can't undo this!
+                Deletion is a permanent action, you can&apos;t undo this!
               </li>
               <li className={styles.item}>
                 You can cancel your subscription{" "}
@@ -83,7 +83,7 @@ function Status() {
                 </span>
               </li>
               <li className={styles.item}>
-                You can contact us if you're having any difficulties{" "}
+                You can contact us if you&apos;re having any difficulties{" "}
                 <span
                   className={styles.redirect}
                   onClick={() => {

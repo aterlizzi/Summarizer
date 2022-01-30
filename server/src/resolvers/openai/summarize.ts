@@ -38,6 +38,7 @@ export class SummarizeResolver {
       const saveSummary = summary.split("NEWSECTION").join(" ");
       // subtract the word count.
       user.wordCount = user.wordCount - wordCount;
+      user.totalWordsSummarized += wordCount;
       await user.save();
       const sumId = await handleSaveRecentSummary(
         user.id,
@@ -53,6 +54,7 @@ export class SummarizeResolver {
         popout: user.settings.extensionSettings.popoutSummary,
       };
     } else {
+      let summary;
       // const response = await openai.complete({
       //   engine: "babbage-instruct-beta",
       //   prompt: `Summarize the important details in following text.\n\nText: ${text.trim()} \n\nSummary:`,
@@ -80,8 +82,26 @@ export class SummarizeResolver {
       //   frequency_penalty: 0,
       //   presence_penalty: 0,
       // });
-      const summary = response.data.choices[0].text;
+      const uneditedSummary = response.data.choices[0].text;
+      const sentences = uneditedSummary
+        .replace(/\n/gm, " ")
+        .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/gm)
+        .filter((sentence: string) => {
+          if (!sentence.match(/\.$/gm)) return false;
+          return true;
+        });
+      summary = sentences
+        .join(" ")
+        .trim()
+        .replace(/[0-9]\.$/gm, "");
+      const regex = /^[1]/g;
+      if (uneditedSummary.trim().match(regex)) {
+        summary = "The key takeaways of the text are as follows: " + summary;
+      } else {
+        summary = summary;
+      }
       user.wordCount = user.wordCount - wordCount;
+      user.totalWordsSummarized += wordCount;
       await user.save();
       const sumId = await handleSaveRecentSummary(user.id, url, summary, title);
       try {
@@ -158,68 +178,6 @@ const sectionalizeText = (
   finalPassageArr[smallerFac - 1] = editableText;
   return finalPassageArr;
 };
-// const parseResponseData = async (rawResult: any, text: string) => {
-//   // cut out unfinished sentences.
-//   let summary = rawResult.data.choices[0].text
-//     .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/)
-//     .filter((sentence: string) => {
-//       if (!sentence.match(/\.$/gm)) return false;
-//       return true;
-//     })
-//     .join(" ")
-//     .replace(/^\s/g, "")
-//     .replace(/\n.*/gm, "");
-//   const originalTextSentenceArr = text.split(
-//     /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
-//   );
-//   const summaryTextSentenceArr = summary.split(
-//     /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
-//   );
-//   const newSummaryTextSentenceArr = summaryTextSentenceArr.filter(
-//     (sentence: string) => {
-//       if (originalTextSentenceArr.indexOf(sentence) == -1) return true;
-//       return false;
-//     }
-//   );
-//   const originalLength = summaryTextSentenceArr.length;
-//   const newLength = newSummaryTextSentenceArr.length;
-//   if (newLength / originalLength < 0.333) {
-//     console.log("flagged");
-//     const gtpResponse = await openai.complete({
-//       engine: "curie-instruct-beta",
-//       prompt: `Write a brief statement of the main points of the following text.\nText: ${text}\nStatement:`,
-//       maxTokens: 150,
-//       temperature: 0,
-//       topP: 1,
-//       presencePenalty: 0,
-//       frequencyPenalty: 0,
-//     });
-//     summary = gtpResponse.data.choices[0].text
-//       .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/)
-//       .filter((sentence: string) => {
-//         if (!sentence.match(/\.$/gm)) return false;
-//         return true;
-//       })
-//       .join(" ")
-//       .replace(/^\s/g, "")
-//       .replace(/\n.*/gm, "");
-
-//     const secondSummarySentenceArr = summary.split(
-//       /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/
-//     );
-//     const secondNewSummaryTextSentenceArr = secondSummarySentenceArr.filter(
-//       (sentence: string) => {
-//         if (originalTextSentenceArr.indexOf(sentence) !== -1) return true;
-//         return false;
-//       }
-//     );
-//     const secondNewLength = secondNewSummaryTextSentenceArr.length;
-//     if (secondNewLength / originalLength < 0.8) {
-//       summary = "I'm sorry, we were unable to summarize this text.";
-//     }
-//   }
-//   return summary;
-// };
 const determineFactors = (n: number) => {
   if (n < 0) return;
   let sqrtn = Math.sqrt(n);
@@ -343,8 +301,31 @@ const handlePromiseChain = async (textArr: string[]) => {
       }
     });
   }
-  const summaries = await Promise.all([...promiseArr]);
-  return summaries.join("NEWSECTION");
+  const uneditedSummaries = await Promise.all([...promiseArr]);
+  const editedSummaries = uneditedSummaries
+    .map((summary) => {
+      const sentences = summary.split(
+        /(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s/gm
+      );
+      const newSentences = sentences.filter((sentence: string) => {
+        if (!sentence.match(/\.$/gm)) return false;
+        return true;
+      });
+      const newSummary = newSentences.join(" ");
+      return newSummary.trim().replace(/[0-9]\.$/gm, "");
+    })
+    .map((summary, idx) => {
+      const regex = /^[1]/g;
+      if (summary.trim().match(regex)) {
+        if (idx === 0) {
+          return "The key takeaways of this text are as follows: " + summary;
+        } else {
+          return "Addition takeaways include: " + summary;
+        }
+      }
+      return summary;
+    });
+  return editedSummaries.join("NEWSECTION");
 };
 
 // used for handling recent summary saving

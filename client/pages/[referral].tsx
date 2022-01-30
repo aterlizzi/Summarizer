@@ -16,7 +16,7 @@ function Referral() {
         router.push("/");
       }
     }
-  }, [referral]);
+  }, [referral, router]);
   return <div></div>;
 }
 

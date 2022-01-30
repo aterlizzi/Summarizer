@@ -240,7 +240,9 @@ function Update() {
       <section className={styles.card}>
         <header className={styles.header}>
           <h2 className={styles.emoji}> (•◡•) /</h2>
-          <h1 className={styles.title}>You're using an updated Untanglify!</h1>
+          <h1 className={styles.title}>
+            You&apos;re using an updated Untanglify!
+          </h1>
           <h5 className={styles.subtitle}>
             <span className={styles.special}>Click here</span> to see the
             changes.

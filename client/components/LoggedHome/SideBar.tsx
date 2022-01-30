@@ -50,7 +50,7 @@ function SideBar({
       setSort(meResult.data.me.settings.extensionSettings.lastBundleSortType);
       setExecute(true);
     }
-  }, [meResult]);
+  }, [meResult, setSort, setExecute]);
 
   const handleLogout = () => {
     logout();

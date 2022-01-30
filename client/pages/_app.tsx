@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps, isLoggedIn }) {
         credentials: "include",
       },
     });
-  }, [isLoggedIn]);
+  }, []);
 
   return getLayout(
     <Provider value={client}>
