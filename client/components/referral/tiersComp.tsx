@@ -1,9 +1,10 @@
+import dynamic from "next/dynamic";
 import React, { useRef, useState } from "react";
 import styles from "../../styles/Referral.module.scss";
-import Svg3 from "./svg3";
 import ListItem from "./listItemComp";
-import Svg2 from "./svg2";
-import Svg4 from "./svg4";
+const Svg2 = dynamic(() => import("./svg2"));
+const Svg3 = dynamic(() => import("./svg3"));
+const Svg4 = dynamic(() => import("./svg4"));
 import { useMutation, useQuery } from "urql";
 import router from "next/router";
 
@@ -58,9 +59,9 @@ function Tiers() {
         <div className={styles.container}>
           <div className={styles.top}>
             <p className={styles.byline}>REFERRAL LINK</p>
-            <h3 className={styles.title}>
+            <h2 className={styles.title}>
               Easily share your referral link with others
-            </h3>
+            </h2>
             <p className={styles.desc}>
               Simply provide your link to others and once they sign up both you
               and your friend will be acredited with your duly earned rewards!
@@ -183,7 +184,7 @@ function Tiers() {
         <div className={styles.container}>
           <div className={styles.top}>
             <p className={styles.byline}>FIRST 10 FRIENDS</p>
-            <h3 className={styles.title}>Invite your friends</h3>
+            <h2 className={styles.title}>Invite your friends</h2>
             <p className={styles.desc}>
               In this first referral tier, refering a friend grants the
               following benefits from Untanglify.
@@ -201,7 +202,7 @@ function Tiers() {
         <div className={styles.container}>
           <div className={styles.top}>
             <p className={styles.byline}>BETWEEN 10-15 FRIENDS</p>
-            <h3 className={styles.title}>Work with your colleagues</h3>
+            <h2 className={styles.title}>Work with your colleagues</h2>
             <p className={styles.desc}>
               In our second referral tier, refering between 10 to 15 friends
               grants the following benefits from Untanglify.
@@ -221,7 +222,7 @@ function Tiers() {
         <div className={styles.container}>
           <div className={styles.top}>
             <p className={styles.byline}>MORE THAN 15 FRIENDS</p>
-            <h3 className={styles.title}>Get your network involved</h3>
+            <h2 className={styles.title}>Get your network involved</h2>
             <p className={styles.desc}>
               Wow! If you reach the third tier in our referral program,
               referring more than 15 friends, you will be bestowed with the

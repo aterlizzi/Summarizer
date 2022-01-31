@@ -1,11 +1,13 @@
+import dynamic from "next/dynamic";
+
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "urql";
 import styles from "../../styles/Onboarding.module.scss";
-import Svg from "../onboarding/svg";
 import Link from "next/link";
-import Svg2 from "./svg2";
-import Svg3 from "./svg3";
+const Svg = dynamic(() => import("./svg"));
+const Svg2 = dynamic(() => import("./svg2"));
+const Svg3 = dynamic(() => import("./svg3"));
 
 const Me = `
     query{

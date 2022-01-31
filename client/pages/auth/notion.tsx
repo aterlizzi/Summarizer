@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useMutation } from "urql";
-import Layout from "../../../components/layout";
-import Loader from "../../../components/zoteroAuth/loaderComp";
-import styles from "../../../styles/NotionAuth.module.scss";
+import Layout from "../../components/layout";
+import Loader from "../../components/zoteroAuth/loaderComp";
+import styles from "../../styles/NotionAuth.module.scss";
 
 const RetrieveNotionToken = `
   mutation($code: String!){
@@ -35,6 +35,10 @@ function Notion() {
   );
 }
 Notion.getLayout = (page) => {
-  return <Layout title="Notion Authentication - Untanglify">{page}</Layout>;
+  return (
+    <Layout metaContent="" title="Notion Authentication - Untanglify">
+      {page}
+    </Layout>
+  );
 };
 export default Notion;

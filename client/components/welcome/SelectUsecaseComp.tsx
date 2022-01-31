@@ -1,8 +1,11 @@
+import dynamic from "next/dynamic";
+
 import React from "react";
 import styles from "../../styles/Welcome.module.scss";
-import Svg1 from "./svg1";
-import Svg2 from "./svg2";
-import Svg3 from "./svg3";
+
+const Svg1 = dynamic(() => import("./svg1"));
+const Svg2 = dynamic(() => import("./svg2"));
+const Svg3 = dynamic(() => import("./svg3"));
 
 function SelectUsecaseComp({ setUseCase, setSection, section }) {
   return (

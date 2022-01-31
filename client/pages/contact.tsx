@@ -1,8 +1,10 @@
+import dynamic from "next/dynamic";
+
 import React, { useState } from "react";
 import Layout from "../components/layout";
 import BannerComp from "../components/contact/bannerComp";
 import styles from "../styles/Contact.module.scss";
-import Svg from "../components/contact/svg";
+const Svg = dynamic(() => import("../components/contact/svg"));
 import Form from "../components/contact/form";
 import MobileMenu from "../components/contact/mobileMenuComp";
 

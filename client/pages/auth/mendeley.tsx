@@ -37,6 +37,10 @@ function Mendeley() {
 }
 
 Mendeley.getLayout = (page) => {
-  return <Layout title="Mendeley Authentication - Untanglify">{page}</Layout>;
+  return (
+    <Layout metaContent="" title="Mendeley Authentication - Untanglify">
+      {page}
+    </Layout>
+  );
 };
 export default Mendeley;

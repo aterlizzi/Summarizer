@@ -35,6 +35,10 @@ function Zotero() {
 }
 
 Zotero.getLayout = (page) => {
-  return <Layout title="Zotero Authentication - Untanglify">{page}</Layout>;
+  return (
+    <Layout metaContent="" title="Zotero Authentication - Untanglify">
+      {page}
+    </Layout>
+  );
 };
 export default Zotero;

@@ -1,6 +1,8 @@
+import dynamic from "next/dynamic";
+
 import React from "react";
 import styles from "../../styles/Referral.module.scss";
-import Svg from "./svg";
+const Svg = dynamic(() => import("./svg"));
 import Link from "next/link";
 
 function TitleSection() {

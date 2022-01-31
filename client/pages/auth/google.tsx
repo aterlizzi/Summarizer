@@ -32,6 +32,10 @@ function Google() {
   );
 }
 Google.getLayout = (page) => {
-  return <Layout title="Google Authentication - Untanglify">{page}</Layout>;
+  return (
+    <Layout metaContent="" title="Google Authentication - Untanglify">
+      {page}
+    </Layout>
+  );
 };
 export default Google;

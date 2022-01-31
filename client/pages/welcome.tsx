@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import SelectUsecaseComp from "../components/welcome/SelectUsecaseComp";
 import ReturnButtonComp from "../components/welcome/ReturnButtonComp";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
-import Verification from "../components/welcome/VerificationComp";
 
 const RegisterWebUser = `
     mutation($options: registerUserInput!) {

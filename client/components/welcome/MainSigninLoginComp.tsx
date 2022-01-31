@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+
 import {
   faChevronLeft,
   faChevronRight,
@@ -8,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import GoogleLogin from "react-google-login";
 import styles from "../../styles/Welcome.module.scss";
-import Svg4 from "./svg4";
+const Svg4 = dynamic(() => import("./svg4"));
 import Image from "next/image";
 import logo from "../../public/favicon.png";
 import googleLogo from "../../public/googleLogo.png";
