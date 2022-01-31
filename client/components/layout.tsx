@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 
-function Layout({ children, title }) {
+function Layout({ children, title, metaContent }) {
   return (
     <>
       <Head>
@@ -11,6 +11,7 @@ function Layout({ children, title }) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1 "
         />
+        <meta name="description" content={metaContent} />
         <title>{title}</title>
         <link rel="icon" href="/favicon.png" />
       </Head>

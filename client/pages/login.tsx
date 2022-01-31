@@ -205,7 +205,14 @@ function Login() {
 }
 
 Login.getLayout = (page) => {
-  return <Layout title="Login - Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Log in now to start saving hours of your time."
+      title="Login - Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (req.cookies.hasOwnProperty("jid")) {

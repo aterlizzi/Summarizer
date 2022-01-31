@@ -55,7 +55,12 @@ function Settings() {
 }
 
 Settings.getLayout = (page) => (
-  <Layout title="Settings - Untanglify">{page}</Layout>
+  <Layout
+    metaContent="Being able to change how you interact with our services is a priority for us. Adjust your settings, update your subscriptions, change your extension, all from the Settings page."
+    title="Settings - Untanglify"
+  >
+    {page}
+  </Layout>
 );
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!req.cookies.hasOwnProperty("jid")) {

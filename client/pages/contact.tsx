@@ -22,6 +22,13 @@ function Contact() {
 }
 
 Contact.getLayout = (page) => {
-  return <Layout title="Contact - Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Got a question? Reach Untanglify here! A direct line of contact is best for us both, plus we're probably getting tired of coding - reach out to us!"
+      title="Contact - Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 export default Contact;

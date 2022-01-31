@@ -21,7 +21,14 @@ function Home() {
 }
 
 Home.getLayout = (page) => {
-  return <Layout title="Home - Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Summarize any text with Untanglify, saving you hours of your time. Start saving time for free with our Google Chrome Extension."
+      title="Home - Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 
 export default Home;

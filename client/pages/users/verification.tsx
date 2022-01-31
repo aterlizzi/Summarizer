@@ -116,7 +116,11 @@ function Verification() {
 }
 
 Verification.getLayout = (page) => {
-  return <Layout title="Verify Account - Untanglify">{page}</Layout>;
+  return (
+    <Layout metaContent="" title="Verify Account - Untanglify">
+      {page}
+    </Layout>
+  );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!req.cookies.hasOwnProperty("rid")) {

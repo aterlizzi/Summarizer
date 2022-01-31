@@ -67,7 +67,12 @@ function BannerComp({ isOpen, setOpen }) {
           <button className={styles.try}>Try for free</button>
         </a>
         <div className={styles.burgerContainer}>
-          <Hamburger size={25} toggled={isOpen} toggle={setOpen} />
+          <Hamburger
+            size={25}
+            toggled={isOpen}
+            toggle={setOpen}
+            aria-label="Mobile Menu Button"
+          />
         </div>
       </div>
     </header>

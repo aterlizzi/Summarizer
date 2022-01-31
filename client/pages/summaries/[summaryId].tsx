@@ -68,7 +68,14 @@ function SummaryPage() {
 }
 
 SummaryPage.getLayout = (page) => {
-  return <Layout title={"Summary - Untanglify"}>{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Check out this cool summary!"
+      title={"Summary - Untanglify"}
+    >
+      {page}
+    </Layout>
+  );
 };
 
 export default SummaryPage;

@@ -10,6 +10,13 @@ function Offboard() {
   );
 }
 Offboard.getLayout = (page) => {
-  return <Layout title="Offboarding - Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="We figured this time would come, all good things must come to an end. Give us some feedback on what we can do better so we can help others like you."
+      title="Offboarding - Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 export default Offboard;

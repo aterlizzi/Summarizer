@@ -252,7 +252,14 @@ function Welcome() {
 }
 
 Welcome.getLayout = (page) => {
-  return <Layout title="Welcome! - Summarizer">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Summarize any text with Untanglify, saving you hours of your time. Start saving time for free with our Google Chrome Extension."
+      title="Welcome! - Summarizer"
+    >
+      {page}
+    </Layout>
+  );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (req.cookies.hasOwnProperty("jid")) {

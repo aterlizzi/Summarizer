@@ -152,6 +152,10 @@ function ForgotPassToken() {
 }
 
 ForgotPassToken.getLayout = (page) => {
-  return <Layout title="Forgot Password - Untanglify">{page}</Layout>;
+  return (
+    <Layout metaContent="" title="Forgot Password - Untanglify">
+      {page}
+    </Layout>
+  );
 };
 export default ForgotPassToken;

@@ -38,7 +38,12 @@ function BannerComp({ setOpen, isOpen, burger, tryFree }) {
         </button>
         {burger ? (
           <div className={styles.burgerContainer}>
-            <Hamburger size={25} toggled={isOpen} toggle={setOpen} />
+            <Hamburger
+              size={25}
+              toggled={isOpen}
+              toggle={setOpen}
+              aria-label="Mobile Menu Button"
+            />
           </div>
         ) : null}
       </div>

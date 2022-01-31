@@ -403,6 +403,11 @@ function Begin() {
 }
 
 Begin.getLayout = (page) => (
-  <Layout title="Begin now - Untanglify">{page}</Layout>
+  <Layout
+    metaContent="Checkout Untanglify's plans to start saving hours of your time. Let's make reading online quick and effective."
+    title="Begin now - Untanglify"
+  >
+    {page}
+  </Layout>
 );
 export default Begin;

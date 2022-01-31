@@ -22,6 +22,13 @@ function Referral() {
 }
 
 Referral.getLayout = (page) => {
-  return <Layout title="Referrals - Edutech">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Invite your friends to Untanglify and reap the benefits! Our tiered referral program rewards you for the work you put in."
+      title="Referrals - Edutech"
+    >
+      {page}
+    </Layout>
+  );
 };
 export default Referral;

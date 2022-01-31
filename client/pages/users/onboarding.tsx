@@ -21,7 +21,14 @@ function Onboarding() {
 }
 
 Onboarding.getLayout = (page) => {
-  return <Layout title="Learn the ropes - Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Untanglify wants to make sure you're getting the best for your buck (or time!). Complete our onboarding to learn the tech and get rewards!"
+      title="Learn the ropes - Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!req.cookies.hasOwnProperty("jid")) {

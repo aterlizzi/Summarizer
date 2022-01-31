@@ -253,6 +253,11 @@ function Update() {
   );
 }
 Update.getLayout = (page) => (
-  <Layout title="Update - Untanglify">{page}</Layout>
+  <Layout
+    metaContent="This page contains Untanglify's newest updates. We are always working to make your lives easier."
+    title="Update - Untanglify"
+  >
+    {page}
+  </Layout>
 );
 export default Update;

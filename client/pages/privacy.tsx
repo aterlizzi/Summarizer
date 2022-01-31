@@ -6,6 +6,13 @@ function Privacy() {
 }
 
 Privacy.getLayout = (page) => {
-  return <Layout title="Privacy Policy - Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Find out how Untanglify is using your data here."
+      title="Privacy Policy - Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 export default Privacy;

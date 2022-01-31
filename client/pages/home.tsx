@@ -23,7 +23,14 @@ function Home() {
 }
 
 Home.getLayout = (page) => {
-  return <Layout title="Untanglify">{page}</Layout>;
+  return (
+    <Layout
+      metaContent="Share, save, and read articles from your friends!"
+      title="Untanglify"
+    >
+      {page}
+    </Layout>
+  );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!req.cookies.hasOwnProperty("jid")) {
