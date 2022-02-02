@@ -18,7 +18,23 @@ export class ReturnSummariesResolver {
     const summaries = await RecentSummaries.find();
     return summaries;
   }
-
+  @Query(() => [RecentSummaries])
+  @UseMiddleware(isAuth)
+  async returnUserSummaries(
+    @Ctx() { payload }: MyContext
+  ): Promise<RecentSummaries[]> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+    });
+    if (!user) return [];
+    const recentSummaries = RecentSummaries.find({
+      relations: ["user"],
+      where: { user },
+      take: 5,
+      order: { id: "DESC" },
+    });
+    return recentSummaries;
+  }
   @Mutation(() => RecentSummaries, { nullable: true })
   @UseMiddleware(isAuth)
   async returnSummary(

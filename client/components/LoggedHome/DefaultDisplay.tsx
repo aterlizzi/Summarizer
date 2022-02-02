@@ -4,6 +4,7 @@ import styles from "../../styles/components/DefaultDisplay.module.scss";
 import CreateBundle from "./CreateBundle";
 import { useQuery } from "urql";
 import SearchBar from "./SearchBar";
+import Slider from "./Slider";
 
 const Me = `
     query{
@@ -60,6 +61,7 @@ function DefaultDisplay({
       />
       <section className={styles.home}>
         <SearchBar />
+        <Slider type={"recentReads"} title={"Recently Read"} />
       </section>
       {popupSection === "Create_Bundle" ? (
         <CreateBundle
