@@ -1,3 +1,4 @@
+import { UserRelationship } from "./entities/UserRelationship";
 import { Bundle } from "./entities/Bundle";
 import { Groups } from "./entities/Groups";
 import { ExtensionSettings } from "./entities/ExtensionSettings";
@@ -45,6 +46,7 @@ const main = async () => {
       ExtensionSettings,
       Groups,
       Bundle,
+      UserRelationship,
     ],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",

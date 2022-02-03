@@ -1,3 +1,4 @@
+import { UserRelationship } from "./UserRelationship";
 import { Bundle } from "./Bundle";
 import { Groups } from "./Groups";
 import { RecentSummaries } from "./RecentSummaries";
@@ -146,4 +147,12 @@ export class User extends BaseEntity {
   @Field(() => Number)
   @Column({ default: 0 })
   totalWordsSummarized: number;
+
+  @Field(() => [UserRelationship])
+  @OneToMany(() => UserRelationship, (relationship) => relationship.userOne)
+  relationshipOne: UserRelationship[];
+
+  @Field(() => [UserRelationship])
+  @OneToMany(() => UserRelationship, (relationship) => relationship.userOne)
+  relationshipTwo: UserRelationship[];
 }
