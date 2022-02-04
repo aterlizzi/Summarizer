@@ -2,11 +2,14 @@ import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import Layout from "../components/layout";
 import DefaultDisplay from "../components/LoggedHome/DefaultDisplay";
+import UserProfile from "../components/LoggedHome/UserProfile";
 import styles from "../styles/LoggedHome.module.scss";
 
 function Home() {
   const [section, setSection] = useState("Home");
   const [popupSection, setPopupSection] = useState("");
+  const [userProfileId, setUserProfileId] = useState("");
+  const [history, setHistory] = useState({});
 
   return (
     <main className={styles.main}>
@@ -16,6 +19,20 @@ function Home() {
           popupSection={popupSection}
           section={section}
           setSection={setSection}
+          setUserProfileId={setUserProfileId}
+          history={history}
+          setHistory={setHistory}
+        />
+      ) : section === "UserProfile" ? (
+        <UserProfile
+          setPopupSection={setPopupSection}
+          popupSection={popupSection}
+          section={section}
+          setSection={setSection}
+          userProfileId={userProfileId}
+          setUserProfileId={setUserProfileId}
+          history={history}
+          setHistory={setHistory}
         />
       ) : null}
     </main>

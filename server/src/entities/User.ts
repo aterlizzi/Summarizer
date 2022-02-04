@@ -149,10 +149,14 @@ export class User extends BaseEntity {
   totalWordsSummarized: number;
 
   @Field(() => [UserRelationship])
-  @OneToMany(() => UserRelationship, (relationship) => relationship.userOne)
+  @OneToMany(() => UserRelationship, (relationship) => relationship.userOne, {
+    cascade: true,
+  })
   relationshipOne: UserRelationship[];
 
   @Field(() => [UserRelationship])
-  @OneToMany(() => UserRelationship, (relationship) => relationship.userOne)
+  @OneToMany(() => UserRelationship, (relationship) => relationship.userOne, {
+    cascade: true,
+  })
   relationshipTwo: UserRelationship[];
 }

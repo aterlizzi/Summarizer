@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import SideBar from "./SideBar";
-import styles from "../../styles/components/DefaultDisplay.module.scss";
-import CreateBundle from "./CreateBundle";
-import { useQuery } from "urql";
+import { useMutation, useQuery } from "urql";
+import styles from "../../styles/components/UserProfile.module.scss";
 import SearchBar from "./SearchBar";
-import Slider from "./Slider";
+import SideBar from "./SideBar";
 
 const Me = `
     query{
@@ -30,11 +28,18 @@ const ReturnBundles = `
     }
 `;
 
-function DefaultDisplay({
+const SendFriendRequest = `
+    mutation($friendId: Float!){
+        sendFriendRequest(friendId: $friendId)
+    }
+`;
+
+function UserProfile({
   setSection,
   section,
   popupSection,
   setPopupSection,
+  userProfileId,
   setUserProfileId,
   history,
   setHistory,
@@ -42,11 +47,19 @@ function DefaultDisplay({
   const [sort, setSort] = useState("");
   const [execute, setExecute] = useState(false);
   const [result, rexecuteMe] = useQuery({ query: Me });
+  const [friendRequestResult, sendFriendRequest] =
+    useMutation(SendFriendRequest);
   const [bundleResult, reexecuteBundle] = useQuery({
     query: ReturnBundles,
     variables: { sort },
     pause: !execute,
   });
+
+  const handleFriendRequest = () => {
+    sendFriendRequest({ friendId: parseInt(userProfileId) }).then((res) => {
+      console.log(res);
+    });
+  };
 
   return (
     <>
@@ -64,21 +77,15 @@ function DefaultDisplay({
       />
       <section className={styles.home}>
         <SearchBar
-          setSection={setSection}
           setUserProfileId={setUserProfileId}
+          setSection={setSection}
           history={history}
           setHistory={setHistory}
         />
-        <Slider type={"recentReads"} title={"Recently Read"} />
+        <button onClick={handleFriendRequest}>Send Friend Request</button>
       </section>
-      {popupSection === "Create_Bundle" ? (
-        <CreateBundle
-          setPopupSection={setPopupSection}
-          reexecuteBundle={reexecuteBundle}
-        />
-      ) : null}
     </>
   );
 }
 
-export default DefaultDisplay;
+export default UserProfile;

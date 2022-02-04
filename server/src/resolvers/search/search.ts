@@ -29,8 +29,14 @@ export class SearchResolver {
     const articles = await RecentSummaries.find({
       where: { title: Like(`%${query}%`) },
     });
-    const users = await User.find({ where: { username: Like(`%${query}%`) } });
+    const tempUsers = await User.find({
+      where: { username: Like(`%${query}%`) },
+    });
     const groups = await Groups.find({ where: { name: Like(`%${query}%`) } });
+    const users = tempUsers.filter((tempUser) => {
+      if (user.id === tempUser.id) return false;
+      return true;
+    });
     return {
       bundles,
       articles,

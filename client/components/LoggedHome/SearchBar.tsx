@@ -3,11 +3,13 @@ import {
   faChevronLeft,
   faChevronRight,
   faSearch,
+  faTimes,
+  faUserCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation } from "urql";
+import { useMutation, useQuery } from "urql";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 let typingTimer;
 
@@ -34,14 +36,44 @@ const Search = `
   }
 `;
 
-function SearchBar() {
+const ReturnNotifications = `
+  query{
+    returnNotifications{
+      friendRequests
+    }
+  }
+`;
+
+const AcceptFriendRequest = `
+  mutation($username: String!){
+    acceptFriendRequest(username: $username)
+  }
+`;
+
+function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
   const [notification, setNotification] = useState(0);
   const [search, setSearch] = useState("");
   const [searching, setSearching] = useState(false);
+  const [displayNotif, setDisplayNotif] = useState(false);
 
   const [searchResult, sendSearch] = useMutation(Search);
+  const [acceptFriendResult, acceptFriend] = useMutation(AcceptFriendRequest);
+  const [notificationsResult, reexecuteNotifications] = useQuery({
+    query: ReturnNotifications,
+  });
 
-  console.log(search);
+  console.log(acceptFriendResult);
+
+  useEffect(() => {
+    if (
+      notificationsResult.data &&
+      notificationsResult.data.returnNotifications
+    ) {
+      setNotification(
+        notificationsResult.data.returnNotifications.friendRequests.length
+      );
+    }
+  }, [notification, setNotification, notificationsResult]);
 
   const searchBar = useRef(null);
   const node = useRef(null);
@@ -58,6 +90,12 @@ function SearchBar() {
     });
   };
 
+  const handleAcceptFriend = (username: string) => {
+    acceptFriend({ username }).then((res) => {
+      console.log(res);
+    });
+  };
+
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (searching && node.current && !node.current.contains(e.target)) {
@@ -70,30 +108,52 @@ function SearchBar() {
     };
   }, [searching]);
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (displayNotif && node.current && !node.current.contains(e.target)) {
+        setDisplayNotif(false);
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }, [displayNotif]);
+
   return (
     <>
       <section
         className={styles.wrapperSearch}
-        style={searching ? { display: "flex" } : { display: "none" }}
+        style={
+          searching || displayNotif ? { display: "flex" } : { display: "none" }
+        }
       ></section>
       <section className={styles.barContainer}>
         <div className={styles.returnContainer}>
-          <div className={styles.circle}>
+          <div
+            className={styles.circle}
+            onClick={() => {
+              if (history.section === "UserProfile") {
+                setUserProfileId(history.params);
+              }
+              setSection(history.section);
+            }}
+          >
             <FontAwesomeIcon icon={faChevronLeft} className={styles.icon} />
           </div>
           <div className={styles.circle}>
             <FontAwesomeIcon icon={faChevronRight} className={styles.icon} />
           </div>
         </div>
-        <div
-          className={styles.searchbarContainer}
-          ref={node}
-          onClick={() => {
-            searchBar.current.focus();
-            setSearching(true);
-          }}
-        >
-          <div className={styles.bar}>
+        <div className={styles.searchbarContainer}>
+          <div
+            className={styles.bar}
+            ref={node}
+            onClick={() => {
+              searchBar.current.focus();
+              setSearching(true);
+            }}
+          >
             <div
               className={styles.searchResults}
               style={searching ? { display: "block" } : null}
@@ -128,11 +188,12 @@ function SearchBar() {
                 searchResult.data.search &&
                 searchResult.data.search.articles.map((article) => {
                   return (
-                    <Link href={`/summaries/${article.id}`}>
-                      <div
-                        className={styles.searchResultContainer}
-                        key={article.id}
-                      >
+                    <Link
+                      passHref
+                      key={article.id}
+                      href={`/summaries/${article.id}`}
+                    >
+                      <div className={styles.searchResultContainer}>
                         <p className={styles.title}>{article.title}</p>
                       </div>
                     </Link>
@@ -175,12 +236,71 @@ function SearchBar() {
                       <div
                         className={styles.searchResultContainer}
                         key={users.id}
+                        onClick={() => {
+                          setHistory({
+                            section: "UserProfile",
+                            params: users.id.toString(),
+                          });
+                          setSection("UserProfile");
+                          setUserProfileId(users.id.toString());
+                        }}
                       >
                         <p className={styles.title}>{users.username}</p>
                       </div>
                     </>
                   );
                 })}
+            </div>
+            <div
+              className={styles.notificationContainer}
+              style={displayNotif ? { display: "block" } : null}
+            >
+              <h5 className={styles.title}>Notifications</h5>
+              {notification === 0 ? (
+                <p className={styles.error}>
+                  You have no notifications at this time.
+                </p>
+              ) : notificationsResult.data &&
+                notificationsResult.data.returnNotifications &&
+                notificationsResult.data.returnNotifications.friendRequests
+                  .length > 0 ? (
+                notificationsResult.data.returnNotifications.friendRequests.map(
+                  (request, idx) => {
+                    return (
+                      <div
+                        className={styles.notificationResultContainer}
+                        key={idx}
+                      >
+                        <div className={styles.left}>
+                          <div className={styles.userCircle}>
+                            <FontAwesomeIcon
+                              icon={faUserCheck}
+                              className={styles.icon}
+                            />
+                          </div>
+                          <p className={styles.username}>{request}</p>
+                        </div>
+                        <div className={styles.right}>
+                          <button
+                            className={styles.btn}
+                            onClick={() => {
+                              handleAcceptFriend(request);
+                              setNotification(notification - 1);
+                              reexecuteNotifications();
+                            }}
+                          >
+                            Confirm
+                          </button>
+                          <FontAwesomeIcon
+                            icon={faTimes}
+                            className={styles.icon}
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                )
+              ) : null}
             </div>
             {!searchResult.fetching ? (
               <FontAwesomeIcon icon={faSearch} className={styles.icon} />
@@ -202,7 +322,10 @@ function SearchBar() {
               ref={searchBar}
             />
           </div>
-          <div className={styles.circle}>
+          <div
+            className={styles.circle}
+            onClick={() => setDisplayNotif(!displayNotif)}
+          >
             <FontAwesomeIcon icon={faBell} className={styles.icon} />
             {notification !== 0 ? (
               <div className={styles.notification}>
