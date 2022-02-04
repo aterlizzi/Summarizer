@@ -2,7 +2,14 @@ import { MyContext } from "./../../types/MyContext";
 import { UserRelationship } from "./../../entities/UserRelationship";
 import { isAuth } from "./../../middlewares/isAuth";
 import { User } from "../../entities/User";
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 
 @Resolver()
 export class FriendResolver {
@@ -14,24 +21,17 @@ export class FriendResolver {
   ): Promise<boolean> {
     const user = await User.findOne({
       where: { id: payload!.userId },
-      relations: ["relationshipOne"],
     });
     const friend = await User.findOne({
       where: { id: friendId },
-      relations: ["relationshipTwo"],
     });
     if (!user || !friend) return false;
-    const userRelations = user.relationshipOne;
-    const friendRelations = friend.relationshipTwo;
     const newRelationship = UserRelationship.create({
       userOne: user,
       userTwo: friend,
       type: "pending_friend_request",
     });
-    user.relationshipOne = [...userRelations, newRelationship];
-    friend.relationshipTwo = [...friendRelations, newRelationship];
-    await user.save();
-    await friend.save();
+    await newRelationship.save();
     return true;
   }
   @Mutation(() => Boolean)
@@ -49,11 +49,45 @@ export class FriendResolver {
     });
     if (!user || !friend) return false;
     const relationship = await UserRelationship.findOne({
-      where: { userOne: friend, userTwo: user },
+      where: { userOne: friend, userTwo: user, type: "pending_friend_request" },
     });
     if (!relationship) return false;
     relationship.type = "friends";
     await relationship.save();
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async declineFriendRequest(
+    @Arg("username") username: string,
+    @Ctx() { payload }: MyContext
+  ): Promise<boolean> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: ["relationshipTwo"],
+    });
+    const friend = await User.findOne({
+      where: { username },
+    });
+    if (!user || !friend) return false;
+    const relationship = await UserRelationship.findOne({
+      where: { userOne: friend, userTwo: user, type: "pending_friend_request" },
+    });
+    if (!relationship) return false;
+    await UserRelationship.delete(relationship.id);
+    return true;
+  }
+  @Query(() => [UserRelationship])
+  async returnRelationships(): Promise<UserRelationship[]> {
+    const relationships = await UserRelationship.find({
+      relations: ["userOne", "userTwo"],
+    });
+    return relationships;
+  }
+  @Mutation(() => Boolean)
+  async deleteRelationship(@Arg("id") id: number): Promise<boolean> {
+    await UserRelationship.delete(id);
     return true;
   }
 }

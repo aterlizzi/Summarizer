@@ -50,6 +50,12 @@ const AcceptFriendRequest = `
   }
 `;
 
+const DeclineFriendRequest = `
+  mutation($username: String!){
+    declineFriendRequest(username: $username)
+  }
+`;
+
 function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
   const [notification, setNotification] = useState(0);
   const [search, setSearch] = useState("");
@@ -58,11 +64,13 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
 
   const [searchResult, sendSearch] = useMutation(Search);
   const [acceptFriendResult, acceptFriend] = useMutation(AcceptFriendRequest);
+  const [declineFriendResult, declineFriend] =
+    useMutation(DeclineFriendRequest);
   const [notificationsResult, reexecuteNotifications] = useQuery({
     query: ReturnNotifications,
   });
 
-  console.log(acceptFriendResult);
+  console.log(notificationsResult);
 
   useEffect(() => {
     if (
@@ -85,17 +93,26 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
   };
 
   const handleSearch = () => {
-    sendSearch({ query: search }).then((res) => {
-      console.log(res);
-    });
+    sendSearch({ query: search }).then((res) => {});
   };
 
   const handleAcceptFriend = (username: string) => {
     acceptFriend({ username }).then((res) => {
-      console.log(res);
+      if (res && res.data && res.data.acceptFriendRequest) {
+        setNotification(notification - 1);
+        reexecuteNotifications();
+      }
     });
   };
 
+  const handleDeclineFriend = (username: string) => {
+    declineFriend({ username }).then((res) => {
+      if (res && res.data && res.data.declineFriendRequest) {
+        setNotification(notification - 1);
+        reexecuteNotifications();
+      }
+    });
+  };
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (searching && node.current && !node.current.contains(e.target)) {
@@ -285,8 +302,6 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
                             className={styles.btn}
                             onClick={() => {
                               handleAcceptFriend(request);
-                              setNotification(notification - 1);
-                              reexecuteNotifications();
                             }}
                           >
                             Confirm
@@ -294,6 +309,7 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
                           <FontAwesomeIcon
                             icon={faTimes}
                             className={styles.icon}
+                            onClick={() => handleDeclineFriend(request)}
                           />
                         </div>
                       </div>

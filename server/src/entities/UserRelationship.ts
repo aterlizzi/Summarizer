@@ -30,10 +30,10 @@ export class UserRelationship extends BaseEntity {
   type: string;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.relationshipOne)
+  @ManyToOne(() => User, (user) => user.relationshipOne, { cascade: true })
   userOne: User;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.relationshipTwo)
+  @ManyToOne(() => User, (user) => user.relationshipTwo, { cascade: true })
   userTwo: User;
 }

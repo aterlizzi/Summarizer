@@ -11,6 +11,8 @@ export class FindUsersResolver {
         "settings.emailSettings",
         "recentSummaries",
         "settings.extensionSettings",
+        "relationshipTwo",
+        "relationshipOne",
       ],
     });
     return users;
