@@ -55,9 +55,9 @@ function SidebarLink({ section, setSection, text }) {
   };
 
   const handleLogout = () => {
+    localStorage.clear();
     logout().then((res) => {
       if (res.data && res.data.logout) {
-        localStorage.clear();
         router.push("/");
       }
     });

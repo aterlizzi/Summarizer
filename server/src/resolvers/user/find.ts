@@ -13,6 +13,8 @@ export class FindUsersResolver {
         "settings.extensionSettings",
         "relationshipTwo",
         "relationshipOne",
+        "relationshipTwo.userOne",
+        "relationshipOne.userTwo",
       ],
     });
     return users;

@@ -112,10 +112,10 @@ function Personal() {
   return (
     <section className={styles.personal}>
       <div className={styles.personalContainer}>
-        <p className={styles.contact}>Contact Name</p>
+        <p className={styles.contact}>Username</p>
         <form action="" className={styles.contactForm}>
           <label htmlFor="" className={styles.label}>
-            Full Name
+            Username
           </label>
           <input
             type="text"
@@ -128,8 +128,9 @@ function Personal() {
             onChange={(e) => setName(e.currentTarget.value)}
           />
           <p className={styles.desc}>
-            ** Contact names act like usernames, they are completely optional
-            and are only used in emails.
+            ** Usernames are how you are identified on Untanglify. They are
+            unique to you and are used on the application extensively as well as
+            in emails.
           </p>
           {success.type === "name" ? (
             <p className={styles.success}>{success.msg}</p>

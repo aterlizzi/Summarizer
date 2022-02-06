@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useMutation } from "urql";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 
@@ -15,6 +15,8 @@ function CreateBundle({ setPopupSection, reexecuteBundle }) {
 
   const [createResult, createBundle] = useMutation(CreateNewBundle);
 
+  const node = useRef(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     createBundle({ options: { title, description } }).then((res) => {
@@ -24,9 +26,22 @@ function CreateBundle({ setPopupSection, reexecuteBundle }) {
       }
     });
   };
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (node.current && !node.current.contains(e.target)) {
+        setPopupSection("");
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }, []);
+
   return (
     <div className={styles.wrapper}>
-      <section className={styles.createBundleCard}>
+      <section className={styles.createBundleCard} ref={node}>
         <header className={styles.header}>
           <h3 className={styles.title}>Create a new Bundle</h3>
           <div className={styles.exit} onClick={() => setPopupSection("")}>

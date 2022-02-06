@@ -1,3 +1,4 @@
+import { UserRelationship } from "./../../entities/UserRelationship";
 import { isAuth } from "./../../middlewares/isAuth";
 import { MyContext } from "./../../types/MyContext";
 import { RecentSummaries } from "./../../entities/RecentSummaries";
@@ -10,6 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { User } from "../../entities/User";
+const _ = require("lodash");
 
 @Resolver()
 export class ReturnSummariesResolver {
@@ -56,5 +58,42 @@ export class ReturnSummariesResolver {
     )
       return;
     return recentSummary;
+  }
+  @Query(() => [RecentSummaries])
+  @UseMiddleware(isAuth)
+  async returnFriendsRecentSummaries(
+    @Ctx() { payload }: MyContext
+  ): Promise<RecentSummaries[]> {
+    const user = await User.findOne({ where: { id: payload!.userId } });
+    if (!user) return [];
+    const relationshipsOne = await UserRelationship.find({
+      where: { userOne: user, type: "friends" },
+      relations: [
+        "userTwo",
+        "userTwo.recentSummaries",
+        "userTwo.recentSummaries.user",
+      ],
+    });
+    const relationshipsTwo = await UserRelationship.find({
+      where: { userTwo: user, type: "friends" },
+      relations: [
+        "userOne",
+        "userOne.recentSummaries",
+        "userOne.recentSummaries.user",
+      ],
+    });
+    if (relationshipsOne.length === 0 && relationshipsTwo.length === 0)
+      return [];
+
+    const relationshipOneArr = relationshipsOne.map((relationship) => {
+      return relationship.userTwo.recentSummaries;
+    });
+    const relationshipTwoArr = relationshipsTwo.map((relationship) => {
+      return relationship.userOne.recentSummaries;
+    });
+    const relationships = [...relationshipOneArr, ...relationshipTwoArr].flat();
+    const sortedRelationships = _.orderBy(relationships, "createdAt", "desc");
+    sortedRelationships.length = 5;
+    return sortedRelationships;
   }
 }

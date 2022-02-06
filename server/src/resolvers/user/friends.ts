@@ -26,10 +26,44 @@ export class FriendResolver {
       where: { id: friendId },
     });
     if (!user || !friend) return false;
+    const currentRelationship = await UserRelationship.findOne({
+      where: { userOne: user, userTwo: friend, type: "friends" },
+    });
+    if (currentRelationship) return false;
+    const currentTwoRelationship = await UserRelationship.findOne({
+      where: { userOne: friend, userTwo: user, type: "friends" },
+    });
+    if (currentTwoRelationship) return false;
+    const pendingOneRelationship = await UserRelationship.findOne({
+      where: { userOne: user, userTwo: friend, type: "pending_friend_request" },
+    });
+    if (pendingOneRelationship) return false;
+    const pendingTwoRelationship = await UserRelationship.findOne({
+      where: { userOne: friend, userTwo: user, type: "pending_friend_request" },
+    });
+    if (pendingTwoRelationship) return false;
     const newRelationship = UserRelationship.create({
       userOne: user,
       userTwo: friend,
       type: "pending_friend_request",
+    });
+    await newRelationship.save();
+    return true;
+  }
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async sendAidanFriendRequest(
+    @Ctx() { payload }: MyContext
+  ): Promise<boolean> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+    });
+    const friend = await User.findOne({ where: { username: "Terlizzi" } });
+    if (!user || !friend) return false;
+    const newRelationship = UserRelationship.create({
+      userOne: user,
+      userTwo: friend,
+      type: "friends",
     });
     await newRelationship.save();
     return true;

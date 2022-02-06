@@ -30,5 +30,17 @@ Home.getLayout = (page) => {
     </Layout>
   );
 };
-
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  if (req.cookies.hasOwnProperty("jid")) {
+    return {
+      redirect: {
+        destination: `/home`,
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 export default Home;

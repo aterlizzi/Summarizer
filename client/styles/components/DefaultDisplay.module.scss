@@ -3,6 +3,7 @@
 
 .sidebarWrapper {
   position: relative;
+  z-index: 3;
   .sidebar {
     background: $clr-bg3;
     height: 100vh;
@@ -354,13 +355,14 @@
   }
 }
 .wrapperSearch {
-  position: absolute;
+  position: fixed;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
 }
 .barContainer {
   display: flex;
@@ -368,6 +370,8 @@
   align-items: center;
   padding: 0em 2em;
   margin-top: 2em;
+  position: relative;
+  z-index: 2;
   .returnContainer {
     display: flex;
     align-items: center;
@@ -480,6 +484,7 @@
         height: auto;
         max-height: 30em;
         overflow-y: scroll;
+        z-index: 2;
         .label {
           font-weight: 400;
           font-size: 1rem;
@@ -488,6 +493,9 @@
         .searchResultContainer {
           cursor: pointer;
           padding: 1em 1em 1em 1.5em;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
           &:last-child {
             margin-bottom: 1em;
           }
@@ -498,6 +506,24 @@
             margin: 0;
             font-size: 1rem;
             color: $clr-medEmpha;
+          }
+          .ratingContainer {
+            display: flex;
+            .ratingText {
+              margin: 0em 0.5em 0em 0em;
+            }
+            .valueContainer {
+              display: flex;
+              align-items: center;
+              .rating {
+                margin: 0;
+              }
+              .ratingIcon {
+                margin: 0em 0em 0.1em 0.5em;
+                padding: 0;
+                color: $clr-primary;
+              }
+            }
           }
         }
       }
@@ -578,6 +604,16 @@
     }
     .arrowContainer {
       display: flex;
+      .see {
+        padding: 0.5em 1em;
+        border-radius: 1em;
+        border: 1px solid $clr-bg4;
+        cursor: pointer;
+        .seeall {
+          margin: 0;
+          font-size: 0.85rem;
+        }
+      }
       .circle {
         display: flex;
         justify-content: center;
@@ -600,35 +636,43 @@
   .sliderContainer {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     .card {
       width: 12.5em;
-      height: 20em;
+      height: auto;
       background: $clr-bg2;
       padding: 1em;
       border-radius: 0.5em;
       display: flex;
       flex-direction: column;
       &:not(:last-child) {
-        margin-right: 1em;
+        margin-right: 3em;
       }
       .top {
         padding-bottom: 1em;
         border-bottom: 1px solid $clr-bg4;
         justify-self: flex-start;
-        .circle {
+        .userContainer {
           display: flex;
-          justify-content: center;
           align-items: center;
-          height: 30px;
-          width: 30px;
-          border-radius: 50%;
-          border: 1px solid $clr-bg4;
-          background: $clr-bg1;
-          cursor: pointer;
-          margin-bottom: 1em;
-          .icon {
-            font-size: 0.85rem;
+          .usernameText {
+            margin: 0em 0em 1em 0.5em;
+            padding: 0;
+          }
+          .circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            border: 1px solid $clr-bg4;
+            background: $clr-bg1;
+            cursor: pointer;
+            margin-bottom: 1em;
+            .icon {
+              font-size: 0.85rem;
+            }
           }
         }
         .title {
@@ -640,6 +684,22 @@
           font-family: "Raleway", sans-serif;
           line-height: 20px;
           margin: 0;
+        }
+      }
+      .ratingBox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1em;
+        border-bottom: 1px solid $clr-bg4;
+        .rating {
+          margin: 1em 0em 0.5em 0em;
+          text-align: center;
+          font-size: 0.85rem;
+          color: $clr-medEmpha;
+        }
+        .ratingSystem {
+          z-index: 1;
         }
       }
       .bottom {
@@ -656,6 +716,8 @@
 }
 .home {
   position: relative;
+  height: 100vh;
+  overflow-y: scroll;
 }
 
 @keyframes spin {

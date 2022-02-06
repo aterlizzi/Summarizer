@@ -3,9 +3,11 @@ import {
   faChevronLeft,
   faChevronRight,
   faSearch,
+  faStar,
   faTimes,
   faUserCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
@@ -23,6 +25,7 @@ const Search = `
       articles{
         id
         title
+        rating
       }
       groups{
         id
@@ -212,6 +215,20 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
                     >
                       <div className={styles.searchResultContainer}>
                         <p className={styles.title}>{article.title}</p>
+                        {article.rating ? (
+                          <div className={styles.ratingContainer}>
+                            <p className={styles.ratingText}>Rating:</p>
+                            <div className={styles.valueContainer}>
+                              <p className={styles.rating}>
+                                {Math.round(article.rating * 100) / 100}
+                              </p>
+                              <FontAwesomeIcon
+                                icon={faEmptyStar}
+                                className={styles.ratingIcon}
+                              />
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     </Link>
                   );

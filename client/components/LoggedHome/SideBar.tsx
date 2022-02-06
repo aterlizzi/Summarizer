@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useMutation } from "urql";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 
@@ -37,6 +37,9 @@ function SideBar({
 
   const [showAside, setShowAside] = useState(false);
   const [showSort, setShowSort] = useState(false);
+
+  const node = useRef(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -85,11 +88,24 @@ function SideBar({
     }
   };
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (showAside && node.current && !node.current.contains(e.target)) {
+        setShowAside(false);
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }, [showAside]);
+
   return (
     <div className={styles.sidebarWrapper}>
       <nav className={styles.sidebar}>
         <aside
           className={styles.popout}
+          ref={node}
           style={showAside ? { display: "flex" } : null}
         >
           <div

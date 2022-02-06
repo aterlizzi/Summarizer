@@ -42,4 +42,12 @@ export class RecentSummaries extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   title: string;
+
+  @Field(() => Number, { nullable: true })
+  @Column("decimal", { default: null })
+  rating: number;
+
+  @Field(() => Number)
+  @Column({ default: 0 })
+  numberOfRatings: number;
 }

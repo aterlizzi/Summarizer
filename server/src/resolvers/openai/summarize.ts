@@ -28,6 +28,16 @@ export class SummarizeResolver {
     if (!user) return undefined;
     if (!user.prem) await handleCooldown(user);
     if (user.wordCount < wordCount) return undefined;
+    const testSum = await RecentSummaries.findOne({ where: { title, url } });
+    if (testSum) {
+      return {
+        summary: testSum.summary,
+        remainingSummaries: user.wordCount,
+        url,
+        id: testSum.id,
+        popout: user.settings.extensionSettings.popoutSummary,
+      };
+    }
     if (wordCount > 1200) {
       // construct an appropriately sized textarr to make digesting the text easier.
       const textArr = spliceLargeText(text, wordCount);
@@ -66,7 +76,7 @@ export class SummarizeResolver {
       // });
       const response = await openai.complete({
         engine: "babbage-instruct-beta",
-        prompt: `List the key takeaways of the following article.\n\nText: ${text.trim()} \n\nSummary:`,
+        prompt: `List the key takeaways of the following article.\n\nText: ${text.trim()} \n\nKey Takeaways:`,
         temperature: 0,
         max_tokens: 160,
         top_p: 1,
@@ -94,7 +104,7 @@ export class SummarizeResolver {
         .join(" ")
         .trim()
         .replace(/[0-9]\.$/gm, "");
-      const regex = /^[1]/g;
+      const regex = /^[1]|^-/g;
       if (uneditedSummary.trim().match(regex)) {
         summary = "The key takeaways of the text are as follows: " + summary;
       } else {
@@ -315,7 +325,7 @@ const handlePromiseChain = async (textArr: string[]) => {
       return newSummary.trim().replace(/[0-9]\.$/gm, "");
     })
     .map((summary, idx) => {
-      const regex = /^[1]/g;
+      const regex = /^[1]|^-/g;
       if (summary.trim().match(regex)) {
         if (idx === 0) {
           return "The key takeaways of this text are as follows: " + summary;

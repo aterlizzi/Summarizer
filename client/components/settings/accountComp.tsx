@@ -19,7 +19,12 @@ query {
 `;
 
 function Account() {
-  const [meResult, reexecuteMe] = useQuery({ query: Me });
+  const [meResult, reexecuteMe] = useQuery({
+    query: Me,
+    requestPolicy: "network-only",
+  });
+
+  console.log(meResult);
 
   return (
     <section className={styles.account}>

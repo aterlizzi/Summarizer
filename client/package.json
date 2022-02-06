@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@urql/exchange-auth": "^0.1.7",
@@ -22,6 +23,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-google-login": "^5.2.2",
+    "react-simple-star-rating": "^4.0.5",
     "react-verification-input": "^2.0.3",
     "sass": "^1.42.1",
     "sharp": "^0.29.3",

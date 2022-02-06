@@ -9,6 +9,7 @@ import Slider from "./Slider";
 const Me = `
     query{
         me{
+            paymentTier
             bundles{
                 title
             }
@@ -69,7 +70,8 @@ function DefaultDisplay({
           history={history}
           setHistory={setHistory}
         />
-        <Slider type={"recentReads"} title={"Recently Read"} />
+        <Slider type={"recentReads"} title={"Recently Read"} data={result} />
+        <Slider type={"friendsReads"} title={"Friends Feed"} />
       </section>
       {popupSection === "Create_Bundle" ? (
         <CreateBundle
