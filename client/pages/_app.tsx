@@ -14,29 +14,29 @@ import { willAuthError } from "../utils/willAuthError";
 function MyApp({ Component, pageProps, isLoggedIn }) {
   const getLayout = Component.getLayout || ((page) => page);
 
-  const client = useMemo(() => {
-    return createClient({
-      url: "http://localhost:4000/graphql",
-      exchanges: [
-        dedupExchange,
-        authExchange({
-          getAuth,
-          addAuthToOperation,
-          didAuthError,
-          willAuthError,
-        }),
-        multipartFetchExchange,
-      ],
-      fetchOptions: {
-        credentials: "include",
-      },
-    });
-  }, []);
+  // const client = useMemo(() => {
+  //   return createClient({
+  //     url: "http://localhost:4000/graphql",
+  //     exchanges: [
+  //       dedupExchange,
+  //       authExchange({
+  //         getAuth,
+  //         addAuthToOperation,
+  //         didAuthError,
+  //         willAuthError,
+  //       }),
+  //       multipartFetchExchange,
+  //     ],
+  //     fetchOptions: {
+  //       credentials: "include",
+  //     },
+  //   });
+  // }, []);
 
   return getLayout(
-    <Provider value={client}>
-      <Component {...pageProps} />
-    </Provider>
+    // <Provider value={client}>
+    <Component {...pageProps} />
+    // </Provider>
   );
 }
 export default MyApp;
