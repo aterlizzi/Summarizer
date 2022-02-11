@@ -39,6 +39,7 @@ function SideBar({
   const [showSort, setShowSort] = useState(false);
 
   const node = useRef(null);
+  const sortNode = useRef(null);
 
   const router = useRouter();
 
@@ -48,7 +49,8 @@ function SideBar({
       meResult.data.me &&
       meResult.data.me.settings &&
       meResult.data.me.settings.extensionSettings &&
-      meResult.data.me.settings.extensionSettings.lastBundleSortType
+      (meResult.data.me.settings.extensionSettings.lastBundleSortType ||
+        meResult.data.me.settings.extensionSettings.lastBundleSortType === "")
     ) {
       setSort(meResult.data.me.settings.extensionSettings.lastBundleSortType);
       setExecute(true);
@@ -100,6 +102,22 @@ function SideBar({
     };
   }, [showAside]);
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (
+        showSort &&
+        sortNode.current &&
+        !sortNode.current.contains(e.target)
+      ) {
+        setShowSort(false);
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }, [showSort]);
+
   return (
     <div className={styles.sidebarWrapper}>
       <nav className={styles.sidebar}>
@@ -139,6 +157,7 @@ function SideBar({
         <aside
           className={styles.sorting}
           style={showSort ? { display: "flex" } : null}
+          ref={sortNode}
         >
           <h5 className={styles.sortby}>Sort by</h5>
           <div
@@ -234,17 +253,33 @@ function SideBar({
             </div>
             <p className={styles.label}>History</p>
           </div>
-          <div className={styles.utilContainer}>
+          <div
+            className={styles.utilContainer}
+            onClick={() => setSection("Friends")}
+          >
             <div className={styles.iconContainer}>
               <FontAwesomeIcon icon={faUserFriends} className={styles.icon} />
             </div>
-            <p className={styles.label}>Friends</p>
+            <p
+              className={styles.label}
+              style={section === "Friends" ? { color: "#bb86fc" } : null}
+            >
+              Friends
+            </p>
           </div>
-          <div className={styles.utilContainer}>
+          <div
+            className={styles.utilContainer}
+            onClick={() => setSection("Groups")}
+          >
             <div className={styles.iconContainer}>
               <FontAwesomeIcon icon={faUsers} className={styles.icon} />
             </div>
-            <p className={styles.label}>Groups</p>
+            <p
+              className={styles.label}
+              style={section === "Groups" ? { color: "#bb86fc" } : null}
+            >
+              Groups
+            </p>
           </div>
           <div className={styles.utilContainer}>
             <div className={styles.iconContainer}>

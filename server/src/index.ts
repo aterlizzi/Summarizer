@@ -8,7 +8,6 @@ import { EmailSettings } from "./entities/EmailSettings";
 import { Settings } from "./entities/Settings";
 import { SavedSummary } from "./entities/SavedSummary";
 import { MyContext } from "./types/MyContext";
-import { Summary } from "./entities/Summary";
 import { User } from "./entities/User";
 import { buildSchema } from "type-graphql";
 import dotenv from "dotenv";
@@ -30,14 +29,13 @@ const main = async () => {
 
   await createConnection({
     type: "postgres",
-    host: "localhost",
-    port: 5432,
+    host: process.env.PGHOST,
+    port: parseInt(process.env.PGPORT!),
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASS,
-    database: "summarizer",
+    database: process.env.PGDBNAME,
     entities: [
       User,
-      Summary,
       SavedSummary,
       Settings,
       EmailSettings,

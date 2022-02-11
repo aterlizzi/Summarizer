@@ -1,19 +1,16 @@
-import React, { useState } from "react";
-import { useMutation, useQuery } from "urql";
-import styles from "../../styles/components/UserProfile.module.scss";
+import React from "react";
 import SearchBar from "./SearchBar";
 import SideBar from "./SideBar";
+import styles from "../../styles/components/Friends.module.scss";
 
-function UserProfile({
+function Groups({
   setSection,
   section,
   popupSection,
   setPopupSection,
-  userProfileId,
   setUserProfileId,
   history,
   setHistory,
-  sendFriendRequest,
   bundleResult,
   result,
   reexecuteBundle,
@@ -21,12 +18,6 @@ function UserProfile({
   sort,
   setExecute,
 }) {
-  const handleFriendRequest = () => {
-    sendFriendRequest({ friendId: parseInt(userProfileId) }).then((res) => {
-      console.log(res);
-    });
-  };
-
   return (
     <>
       <SideBar
@@ -48,10 +39,9 @@ function UserProfile({
           history={history}
           setHistory={setHistory}
         />
-        <button onClick={handleFriendRequest}>Send Friend Request</button>
       </section>
     </>
   );
 }
 
-export default UserProfile;
+export default Groups;

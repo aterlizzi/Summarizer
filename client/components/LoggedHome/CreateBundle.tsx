@@ -21,8 +21,8 @@ function CreateBundle({ setPopupSection, reexecuteBundle }) {
     e.preventDefault();
     createBundle({ options: { title, description } }).then((res) => {
       if (res.data && res.data.createBundle) {
-        setPopupSection("");
         reexecuteBundle();
+        setPopupSection("");
       }
     });
   };
@@ -37,7 +37,7 @@ function CreateBundle({ setPopupSection, reexecuteBundle }) {
     return () => {
       document.removeEventListener("click", checkIfClickedOutside);
     };
-  }, []);
+  }, [setPopupSection]);
 
   return (
     <div className={styles.wrapper}>

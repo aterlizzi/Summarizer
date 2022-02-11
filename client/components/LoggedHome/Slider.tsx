@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import {
   faChevronLeft,
   faChevronRight,
@@ -8,6 +9,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useMutation, useQuery } from "urql";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
+const PostSettings = dynamic(() => import("./PostSettings"));
 import StarRating from "./StarRating";
 
 const ReturnRecentSummaries = `
@@ -44,9 +46,10 @@ interface SliderProps {
   title: string;
   type: string;
   data?: any;
+  bundleResult?: any;
 }
 
-function Slider({ type, title, data }: SliderProps) {
+function Slider({ type, title, data, bundleResult }: SliderProps) {
   const router = useRouter();
   const [returnSummariesResult, rexecuteReturnSummaries] = useQuery({
     query: ReturnRecentSummaries,
@@ -60,8 +63,6 @@ function Slider({ type, title, data }: SliderProps) {
   const [sendAidanFriendRequestResult, sendAidanFriendRequest] = useMutation(
     SendAidanFriendRequest
   );
-
-  console.log(returnFriendsSummariesResult);
 
   return (
     <section className={styles.slider}>
@@ -102,9 +103,15 @@ function Slider({ type, title, data }: SliderProps) {
               <section className={styles.card} key={summary.id}>
                 <div className={styles.top}>
                   <div className={styles.userContainer}>
-                    <div className={styles.circle}>
-                      <FontAwesomeIcon icon={faUser} className={styles.icon} />
+                    <div className={styles.left}>
+                      <div className={styles.circle}>
+                        <FontAwesomeIcon
+                          icon={faUser}
+                          className={styles.icon}
+                        />
+                      </div>
                     </div>
+                    <PostSettings bundleResult={bundleResult} />
                   </div>
                   <h4 className={styles.title}>
                     {summary.title ? summary.title : "Untitled"}
@@ -154,15 +161,18 @@ function Slider({ type, title, data }: SliderProps) {
                 <section className={styles.card} key={summary.id}>
                   <div className={styles.top}>
                     <div className={styles.userContainer}>
-                      <div className={styles.circle}>
-                        <FontAwesomeIcon
-                          icon={faUser}
-                          className={styles.icon}
-                        />
+                      <div className={styles.left}>
+                        <div className={styles.circle}>
+                          <FontAwesomeIcon
+                            icon={faUser}
+                            className={styles.icon}
+                          />
+                        </div>
+                        <p className={styles.usernameText}>
+                          {summary.user.username}
+                        </p>
                       </div>
-                      <p className={styles.usernameText}>
-                        {summary.user.username}
-                      </p>
+                      <PostSettings bundleResult={bundleResult} />
                     </div>
                     <h4 className={styles.title}>
                       {summary

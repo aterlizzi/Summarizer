@@ -1,35 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import SideBar from "./SideBar";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 import CreateBundle from "./CreateBundle";
-import { useQuery } from "urql";
 import SearchBar from "./SearchBar";
 import Slider from "./Slider";
-
-const Me = `
-    query{
-        me{
-            paymentTier
-            bundles{
-                title
-            }
-            settings{
-              extensionSettings{
-                lastBundleSortType
-              }
-            }
-        }
-    }
-`;
-
-const ReturnBundles = `
-    query($sort: String){
-      returnBundles(sort: $sort){
-        title
-        id
-      }
-    }
-`;
 
 function DefaultDisplay({
   setSection,
@@ -39,16 +13,13 @@ function DefaultDisplay({
   setUserProfileId,
   history,
   setHistory,
+  bundleResult,
+  result,
+  reexecuteBundle,
+  setSort,
+  sort,
+  setExecute,
 }) {
-  const [sort, setSort] = useState("");
-  const [execute, setExecute] = useState(false);
-  const [result, rexecuteMe] = useQuery({ query: Me });
-  const [bundleResult, reexecuteBundle] = useQuery({
-    query: ReturnBundles,
-    variables: { sort },
-    pause: !execute,
-  });
-
   return (
     <>
       <SideBar
@@ -70,8 +41,18 @@ function DefaultDisplay({
           history={history}
           setHistory={setHistory}
         />
-        <Slider type={"recentReads"} title={"Recently Read"} data={result} />
-        <Slider type={"friendsReads"} title={"Friends Feed"} />
+        <Slider
+          type={"recentReads"}
+          title={"Recently Read"}
+          data={result}
+          bundleResult={bundleResult}
+        />
+        <Slider
+          type={"friendsReads"}
+          title={"Friends Feed"}
+          bundleResult={bundleResult}
+        />
+        <Slider type={"groupsReads"} title={"Groups Feed"} />
       </section>
       {popupSection === "Create_Bundle" ? (
         <CreateBundle
