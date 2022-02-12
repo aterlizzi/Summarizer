@@ -5,7 +5,7 @@ import { User } from "../entities/User";
 
 const refreshTokenRoute = (fastify: any, _: void, next: any) => {
   fastify.post(
-    "/refresh_token",
+    "/api/refresh_token",
     async (req: FastifyRequest, reply: FastifyReply) => {
       console.log("attempted refresh");
       const token = req.cookies.jid;

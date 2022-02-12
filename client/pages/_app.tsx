@@ -16,7 +16,10 @@ function MyApp({ Component, pageProps, isLoggedIn }) {
 
   const client = useMemo(() => {
     return createClient({
-      url: "http://localhost:3000/graphql",
+      url:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/graphql"
+          : "/graphql",
       exchanges: [
         dedupExchange,
         authExchange({

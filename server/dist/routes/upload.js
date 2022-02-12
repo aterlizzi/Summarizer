@@ -29,7 +29,7 @@ const storage = fastify_multer_1.default.diskStorage({
 const upload = (0, fastify_multer_1.default)({ storage });
 const uploadEndpoint = (fastify, _, next) => {
     fastify.register(require("fastify-multipart"));
-    fastify.post("/upload", { preHandler: upload.single("file") }, (req, reply) => __awaiter(void 0, void 0, void 0, function* () {
+    fastify.post("/api/upload", { preHandler: upload.single("file") }, (req, reply) => __awaiter(void 0, void 0, void 0, function* () {
         const filename = req.file.filename;
         const pathName = path_1.default.join(__dirname, `../uploads/${filename}`);
         const childPython = (0, child_process_1.spawn)("python3.9", [

@@ -19,7 +19,7 @@ const uploadEndpoint = (fastify: any, _: void, next: any) => {
   fastify.register(require("fastify-multipart"));
 
   fastify.post(
-    "/upload",
+    "/api/upload",
     { preHandler: upload.single("file") },
     async (req: any, reply: any) => {
       const filename = req.file.filename;

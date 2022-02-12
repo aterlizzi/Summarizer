@@ -62,7 +62,10 @@ const main = async () => {
     app.use(
       cors({
         credentials: true,
-        origin: "http://localhost:4000",
+        origin:
+          process.env.NODE_ENV !== "production"
+            ? "http://localhost:4000"
+            : ["untanglify.com", "www.untanglify.com"],
       })
     );
   });

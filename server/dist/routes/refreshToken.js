@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = require("jsonwebtoken");
 const User_1 = require("../entities/User");
 const refreshTokenRoute = (fastify, _, next) => {
-    fastify.post("/refresh_token", (req, reply) => __awaiter(void 0, void 0, void 0, function* () {
+    fastify.post("/api/refresh_token", (req, reply) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("attempted refresh");
         const token = req.cookies.jid;
         if (!token)

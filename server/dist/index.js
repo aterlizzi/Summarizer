@@ -69,7 +69,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.register(require("fastify-express")).then(() => {
         app.use((0, cors_1.default)({
             credentials: true,
-            origin: "http://localhost:4000",
+            origin: process.env.NODE_ENV !== "production"
+                ? "http://localhost:4000"
+                : ["untanglify.com", "www.untanglify.com"],
         }));
     });
     app.register(mercurius_1.default, {

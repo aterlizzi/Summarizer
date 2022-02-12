@@ -28,7 +28,10 @@ export const getAuth = async ({ authState }) => {
 };
 
 const handleRefreshToken = async () => {
-  const url = "http://localhost:3000/refresh_token";
+  const url =
+    process.env.NODE_ENV === "production"
+      ? "http://localhost:3000/api/refresh_token"
+      : "/api/refresh_token";
   const response = await fetch(url, {
     method: "POST",
     credentials: "include",
@@ -44,13 +47,17 @@ const handleRefreshToken = async () => {
 };
 
 const handleLogout = async () => {
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000/graphql"
+      : "/graphql";
   const query = `mutation Logout() {
         logout()
       }`;
   const logoutBody = JSON.stringify({
     query,
   });
-  await fetch("http://localhost:3000/graphql", {
+  await fetch(url, {
     headers: { "content-type": "application/json" },
     method: "POST",
     body: logoutBody,

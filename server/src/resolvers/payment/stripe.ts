@@ -60,8 +60,13 @@ export class StripeResolver {
                       trial: true,
                     },
                     success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                        : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                    cancel_url:
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/begin"
+                        : "www.untanglify.com/begin",
                   }))
                 : (session = await stripe.checkout.sessions.create({
                     payment_method_types: ["card"],
@@ -80,8 +85,13 @@ export class StripeResolver {
                       trial: true,
                     },
                     success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                        : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                    cancel_url:
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/begin"
+                        : "www.untanglify.com/begin",
                   }))
               : coupon && coupon.id
               ? (session = await stripe.checkout.sessions.create({
@@ -103,8 +113,13 @@ export class StripeResolver {
                     trial: true,
                   },
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }))
               : (session = await stripe.checkout.sessions.create({
                   payment_method_types: ["card"],
@@ -120,8 +135,13 @@ export class StripeResolver {
                     trial: true,
                   },
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }));
             return session.url;
           case "student":
@@ -149,8 +169,13 @@ export class StripeResolver {
                       },
                     ],
                     success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                        : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                    cancel_url:
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/begin"
+                        : "www.untanglify.com/begin",
                   }))
                 : (session = await stripe.checkout.sessions.create({
                     payment_method_types: ["card"],
@@ -169,8 +194,13 @@ export class StripeResolver {
                     },
                     mode: "subscription",
                     success_url:
-                      "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url: "http://localhost:3000/begin",
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                        : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                    cancel_url:
+                      process.env.NODE_ENV === "development"
+                        ? "http://localhost:3000/begin"
+                        : "www.untanglify.com/begin",
                   }))
               : coupon && coupon.id
               ? (session = await stripe.checkout.sessions.create({
@@ -192,8 +222,13 @@ export class StripeResolver {
                     },
                   ],
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }))
               : (session = await stripe.checkout.sessions.create({
                   payment_method_types: ["card"],
@@ -209,8 +244,13 @@ export class StripeResolver {
                   },
                   mode: "subscription",
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }));
             return session.url;
           default:
@@ -237,8 +277,13 @@ export class StripeResolver {
                     },
                   ],
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }))
               : (session = await stripe.checkout.sessions.create({
                   payment_method_types: ["card"],
@@ -251,8 +296,13 @@ export class StripeResolver {
                   ],
                   mode: "subscription",
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }));
             return session.url;
           case "student":
@@ -273,8 +323,13 @@ export class StripeResolver {
                     },
                   ],
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }))
               : (session = await stripe.checkout.sessions.create({
                   payment_method_types: ["card"],
@@ -287,8 +342,13 @@ export class StripeResolver {
                   ],
                   mode: "subscription",
                   success_url:
-                    "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
-                  cancel_url: "http://localhost:3000/begin",
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/users/onboarding?session_id={CHECKOUT_SESSION_ID}"
+                      : "www.untanglify.com/users/onboarding?session_id={CHECKOUT_SESSION_ID}",
+                  cancel_url:
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/begin"
+                      : "www.untanglify.com/begin",
                 }));
             return session.url;
           default:

@@ -21,7 +21,7 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
   });
 
   fastify.route({
-    url: "/webhook",
+    url: "/api/webhook",
     method: "POST",
     handler: async (req: any, reply: any) => {
       let event;
