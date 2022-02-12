@@ -61,7 +61,7 @@ function receiver(req, sender, sendResponse) {
           }
         }`,
       });
-      fetch("http://localhost:4000/graphql", {
+      fetch("http://localhost:3000/graphql", {
         headers: { "content-type": "application/json" },
         method: "POST",
         body,
@@ -124,7 +124,7 @@ function receiver(req, sender, sendResponse) {
                       }
                     }`,
                   });
-                  fetch("http://localhost:4000/graphql", {
+                  fetch("http://localhost:3000/graphql", {
                     headers: { "content-type": "application/json" },
                     method: "POST",
                     body,
@@ -178,7 +178,7 @@ function receiver(req, sender, sendResponse) {
         }
       }`,
       });
-      fetch("http://localhost:4000/graphql", {
+      fetch("http://localhost:3000/graphql", {
         headers: { "content-type": "application/json" },
         method: "POST",
         body: bodyTwo,
@@ -287,7 +287,7 @@ function receiver(req, sender, sendResponse) {
                 },
               },
             });
-            fetch("http://localhost:4000/graphql", {
+            fetch("http://localhost:3000/graphql", {
               headers: { "content-type": "application/json" },
               method: "POST",
               body: summaryBody,
@@ -366,7 +366,7 @@ const confirmUserStatus = async (userInfo) => {
         }
       }`,
   });
-  const response = await fetch("http://localhost:4000/graphql", {
+  const response = await fetch("http://localhost:3000/graphql", {
     headers: {
       Authorization: `Bearer ${token}`,
       "content-type": "application/json",
@@ -493,7 +493,7 @@ const retrieveManualText = () => {
 const refreshAccessToken = async (userInfo) => {
   // token has expired. Request new token.
   let token;
-  const response = await fetch("http://localhost:4000/refresh_token", {
+  const response = await fetch("http://localhost:3000/refresh_token", {
     method: "POST",
     credentials: "include",
   });
@@ -563,7 +563,7 @@ const summarizeFunc = async (action, retries = 0) => {
         },
       },
     });
-    const response = await fetch("http://localhost:4000/graphql", {
+    const response = await fetch("http://localhost:3000/graphql", {
       headers: {
         Authorization: `Bearer ${token}`,
         "content-type": "application/json",

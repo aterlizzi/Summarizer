@@ -28,7 +28,7 @@ export const getAuth = async ({ authState }) => {
 };
 
 const handleRefreshToken = async () => {
-  const url = "http://localhost:4000/refresh_token";
+  const url = "http://localhost:3000/refresh_token";
   const response = await fetch(url, {
     method: "POST",
     credentials: "include",
@@ -50,9 +50,10 @@ const handleLogout = async () => {
   const logoutBody = JSON.stringify({
     query,
   });
-  await fetch("http://localhost:4000/graphql", {
+  await fetch("http://localhost:3000/graphql", {
     headers: { "content-type": "application/json" },
     method: "POST",
     body: logoutBody,
   });
+  setAccessToken("");
 };
