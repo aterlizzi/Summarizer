@@ -1,21 +1,25 @@
+import dynamic from "next/dynamic";
+
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.scss";
 import BannerComp from "../components/home/bannerComp";
-import Svg from "../components/home/svg";
+const Svg = dynamic(() => import("../components/home/svg"));
 import UnderConstruction from "../components/home/underConstruction";
+import MobileMenu from "../components/home/mobileMenuComp";
 
 function Home() {
   const [isOpen, setOpen] = useState(false);
 
   return (
     <main className={styles.main}>
-      <BannerComp />
+      <BannerComp isOpen={isOpen} setOpen={setOpen} />
       <div className={styles.gridWrap}>
         <UnderConstruction />
         <Svg />
       </div>
+      <MobileMenu isOpen={isOpen} />
     </main>
   );
 }
