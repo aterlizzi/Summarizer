@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "urql";
+import { setAccessToken } from "../accesstoken";
 import Layout from "../components/layout";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
 import Verification from "../components/welcome/VerificationComp";
@@ -86,10 +87,7 @@ function Login() {
               setErrorMsg("User with that email already exists.");
               setError(true);
             } else {
-              localStorage.setItem(
-                "accessToken",
-                response.data.registerGoogleUser.accessToken
-              );
+              setAccessToken(response.data.registerGoogleUser.accessToken);
               router.push("/begin");
             }
           }
@@ -102,10 +100,7 @@ function Login() {
           if (response.data) {
             if (response.data.verifyGoogleUser) {
               if (response.data.verifyGoogleUser.logged) {
-                localStorage.setItem(
-                  "accessToken",
-                  response.data.verifyGoogleUser.accessToken
-                );
+                setAccessToken(response.data.verifyGoogleUser.accessToken);
                 router.push(url);
               } else {
                 setDisableLoginAttempt(true);
@@ -169,10 +164,7 @@ function Login() {
                   setDisableLoginAttempt(false);
                 }, 5000);
               } else {
-                localStorage.setItem(
-                  "accessToken",
-                  response.data.verifyUser.accessToken
-                );
+                setAccessToken(response.data.verifyUser.accessToken);
                 router.push(url);
               }
             }

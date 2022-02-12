@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "urql";
+import { setAccessToken } from "../../../accesstoken";
 import Layout from "../../../components/layout";
 import Loader from "../../../components/zoteroAuth/loaderComp";
 import styles from "../../../styles/ForgotPassToken.module.scss";
@@ -63,10 +64,7 @@ function ForgotPassToken() {
         res.data.changePassword &&
         res.data.changePassword.accessToken !== ""
       ) {
-        localStorage.setItem(
-          "accessToken",
-          res.data.changePassword.accessToken
-        );
+        setAccessToken(res.data.changePassword.accessToken);
         router.push("/");
       }
     });

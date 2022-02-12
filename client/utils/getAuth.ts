@@ -1,6 +1,8 @@
+import { getAccessToken, setAccessToken } from "../accesstoken";
+
 export const getAuth = async ({ authState }) => {
   if (!authState) {
-    let accessToken = localStorage.getItem("accessToken");
+    let accessToken = getAccessToken();
     if (accessToken) return { accessToken };
 
     // if you have a cookie but not an accessToken
@@ -18,7 +20,7 @@ export const getAuth = async ({ authState }) => {
   if (tokens) return tokens;
 
   //   handle logout if refresh token logic fails.
-  localStorage.clear();
+  setAccessToken("");
   //   log user out.
   await handleLogout();
 
@@ -34,7 +36,7 @@ const handleRefreshToken = async () => {
   if (response) {
     const data = await response.json();
     if (data.ok) {
-      localStorage.setItem("accessToken", data.accessToken);
+      setAccessToken(data.accessToken);
       return { accessToken: data.accessToken };
     }
   }

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import SelectUsecaseComp from "../components/welcome/SelectUsecaseComp";
 import ReturnButtonComp from "../components/welcome/ReturnButtonComp";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
+import { setAccessToken } from "../accesstoken";
 
 const RegisterWebUser = `
     mutation($options: registerUserInput!) {
@@ -104,10 +105,7 @@ function Welcome() {
               setErrorMsg("User with that email already exists.");
               setError(true);
             } else {
-              localStorage.setItem(
-                "accessToken",
-                response.data.registerGoogleUser.accessToken
-              );
+              setAccessToken(response.data.registerGoogleUser.accessToken);
               if (url) {
                 router.push(url);
               } else {
@@ -124,10 +122,7 @@ function Welcome() {
           if (response.data) {
             if (response.data.verifyGoogleUser) {
               if (response.data.verifyGoogleUser.logged) {
-                localStorage.setItem(
-                  "accessToken",
-                  response.data.verifyGoogleUser.accessToken
-                );
+                setAccessToken(response.data.verifyGoogleUser.accessToken);
                 if (url) {
                   router.push(url);
                 } else {
@@ -196,10 +191,7 @@ function Welcome() {
                   setDisableLoginAttempt(false);
                 }, 5000);
               } else {
-                localStorage.setItem(
-                  "accessToken",
-                  response.data.verifyUser.accessToken
-                );
+                setAccessToken(response.data.verifyUser.accessToken);
                 if (url) {
                   router.push(url);
                 } else {

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import VerificationInput from "react-verification-input";
 import { useMutation } from "urql";
+import { setAccessToken } from "../../accesstoken";
 import Layout from "../../components/layout";
 import styles from "../../styles/Verification.module.scss";
 
@@ -51,7 +52,7 @@ function Verification() {
     if (code.toString().length === 4) {
       confirmUser({ code: code.toString() }).then((res) => {
         if (res.data && res.data.confirmUser.accessToken !== "") {
-          localStorage.setItem("accessToken", res.data.confirmUser.accessToken);
+          setAccessToken(res.data.confirmUser.accessToken);
           if (url) {
             router.push(url as any);
           } else {
