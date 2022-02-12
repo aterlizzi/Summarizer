@@ -26,7 +26,8 @@
       background: #181818;
       // background: $clr-bg1;
       width: 12.5em;
-      min-height: 50em;
+      height: 100vh;
+      max-height: 100vh;
       border-right: solid 1px $clr-bg;
       transform: translateX(100%);
       transition: transform 250ms ease-in;
