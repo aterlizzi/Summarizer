@@ -29,7 +29,7 @@ export const getAuth = async ({ authState }) => {
 
 const handleRefreshToken = async () => {
   const url =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV !== "production"
       ? "http://localhost:3000/api/refresh_token"
       : "/api/refresh_token";
   const response = await fetch(url, {
