@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "../../styles/Settings.module.scss";
 import { useRouter } from "next/router";
 import { useMutation } from "urql";
+import { setAccessToken } from "../../accesstoken";
 
 const Logout = `
   mutation{
@@ -55,7 +56,7 @@ function SidebarLink({ section, setSection, text }) {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    setAccessToken("");
     logout().then((res) => {
       if (res.data && res.data.logout) {
         router.push("/");

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "../../styles/Settings.module.scss";
 import { useRouter } from "next/router";
 import { useMutation } from "urql";
+import { setAccessToken } from "../../accesstoken";
 
 const DeleteUser = `
     mutation {
@@ -25,7 +26,7 @@ function Status() {
     }
     deleteUser().then((res) => {
       if (res.data && res.data.deleteUser) {
-        localStorage.clear();
+        setAccessToken("");
         router.push("/users/offboard");
       } else {
         router.push("/users/settings?account=true");
