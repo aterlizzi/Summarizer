@@ -118,11 +118,9 @@
     position: relative;
     grid-template-columns: 1fr 1fr;
     background: $clr-bg1;
-    height: 80vh;
     border-radius: 1em;
     .right {
       background: $clr-bg1;
-      max-height: 80vh;
       padding-top: 3em;
       display: flex;
       flex-direction: column;
@@ -131,6 +129,7 @@
       border-bottom-right-radius: 1em;
       .rightContent {
         max-width: 25em;
+        width: 100%;
         .tagLine {
           margin: 2em 0em 0em 0em;
           text-transform: uppercase;
@@ -421,7 +420,29 @@
     }
   }
 }
-
+@media (max-width: 1000px) {
+  .main {
+    padding-bottom: 10em;
+    .gridWrap {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: center;
+      align-items: center;
+      max-width: 100%;
+      .right {
+        width: 100%;
+        padding: 2em 2em 2em 2em;
+        .svg {
+          max-width: 100%;
+        }
+      }
+      .left {
+        width: 100%;
+        padding: 2em 2em 2em 2em;
+      }
+    }
+  }
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);

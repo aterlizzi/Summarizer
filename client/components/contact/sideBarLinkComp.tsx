@@ -53,6 +53,9 @@ function SidebarLink({ section, setSection, text }) {
       case "Settings":
         router.push("/users/settings");
         break;
+      case "Pricing":
+        router.push("/begin");
+        break;
       default:
         break;
     }

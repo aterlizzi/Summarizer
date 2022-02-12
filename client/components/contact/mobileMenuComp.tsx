@@ -31,6 +31,11 @@ function MobileMenu({ isOpen }) {
             section={section}
             setSection={setSection}
           />
+          <SidebarLink
+            text={"Pricing"}
+            section={section}
+            setSection={setSection}
+          />
         </section>
       </section>
     </div>

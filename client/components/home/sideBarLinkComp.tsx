@@ -55,6 +55,7 @@ function SidebarLink({ section, setSection, text }) {
         break;
       case "Pricing":
         router.push("/begin");
+        break;
       default:
         break;
     }
