@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, isLoggedIn }) {
       url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/graphql"
-          : "/graphql",
+          : "www.untanglify.com/graphql",
       exchanges: [
         dedupExchange,
         authExchange({
