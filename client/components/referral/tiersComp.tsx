@@ -84,7 +84,7 @@ function Tiers() {
                 result.data &&
                 result.data.me &&
                 result.data.me.referralCode
-                  ? `https://www.untanglify.com/${result.data.me.referralCode}`
+                  ? `https://untanglify.com/${result.data.me.referralCode}`
                   : "You must login to see your referral link."
               }
               className={styles.copyLink}
