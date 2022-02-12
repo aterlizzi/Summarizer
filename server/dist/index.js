@@ -83,7 +83,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.register(uploadEndpoint);
     app.register(stripeWebhook);
     app.register(refreshTokenRoute);
-    app.listen(parseInt(process.env.PORT), () => {
+    app.listen(parseInt(process.env.BACKEND_PORT), () => {
         console.log(`Server running on port ${process.env.PORT}`);
     });
 });
