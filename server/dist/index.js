@@ -71,7 +71,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             credentials: true,
             origin: process.env.NODE_ENV !== "production"
                 ? "http://localhost:4000"
-                : ["untanglify.com", "www.untanglify.com"],
+                : "www.untanglify.com",
         }));
     });
     app.register(mercurius_1.default, {

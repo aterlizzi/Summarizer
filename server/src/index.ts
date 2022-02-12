@@ -65,7 +65,7 @@ const main = async () => {
         origin:
           process.env.NODE_ENV !== "production"
             ? "http://localhost:4000"
-            : ["untanglify.com", "www.untanglify.com"],
+            : "www.untanglify.com",
       })
     );
   });
