@@ -62,7 +62,7 @@ const main = async () => {
     app.use(
       cors({
         credentials: true,
-        origin: "www.untanglify.com",
+        origin: "https://untanglify.com",
       })
     );
   });
