@@ -105,9 +105,24 @@ function Slider({
         returnSummariesResult.data &&
         returnSummariesResult.data.returnUserSummaries &&
         returnSummariesResult.data.returnUserSummaries.length > 0 ? (
-          returnSummariesResult.data.returnUserSummaries.map((summary) => {
+          returnSummariesResult.data.returnUserSummaries.map((summary, idx) => {
             return (
-              <section className={styles.card} key={summary.id}>
+              <section
+                className={`${styles.card} ${
+                  idx === 0
+                    ? styles.cardOne
+                    : idx === 1
+                    ? styles.cardTwo
+                    : idx === 2
+                    ? styles.cardThree
+                    : idx === 3
+                    ? styles.cardFour
+                    : idx === 4
+                    ? styles.cardFive
+                    : null
+                }`}
+                key={summary.id}
+              >
                 <div className={styles.top}>
                   <div className={styles.userContainer}>
                     <div className={styles.left}>
@@ -167,9 +182,24 @@ function Slider({
           returnFriendsSummariesResult.data.returnFriendsRecentSummaries
             .length > 0 ? (
           returnFriendsSummariesResult.data.returnFriendsRecentSummaries.map(
-            (summary) => {
+            (summary, idx) => {
               return (
-                <section className={styles.card} key={summary.id}>
+                <section
+                  className={`${styles.card} ${
+                    idx === 0
+                      ? styles.cardOne
+                      : idx === 1
+                      ? styles.cardTwo
+                      : idx === 2
+                      ? styles.cardThree
+                      : idx === 3
+                      ? styles.cardFour
+                      : idx === 4
+                      ? styles.cardFive
+                      : null
+                  }`}
+                  key={summary.id}
+                >
                   <div className={styles.top}>
                     <div className={styles.userContainer}>
                       <div className={styles.left}>
