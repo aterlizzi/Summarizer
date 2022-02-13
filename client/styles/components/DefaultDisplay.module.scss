@@ -780,7 +780,7 @@
     &:hover {
       max-width: 10em;
       .sidebar {
-        overflow: hidden;
+        overflow-y: scroll;
         .navigation {
           .userLinks {
             padding: 0.5em;
