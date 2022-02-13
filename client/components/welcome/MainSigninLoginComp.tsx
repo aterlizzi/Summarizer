@@ -32,6 +32,7 @@ function MainSigninLoginComp({
   handleResponseGoogleFailure,
   setSlide,
   disabledLoginAttempt,
+  setUsername,
 }) {
   const [forgotPass, setForgotPass] = useState(false);
   return (
@@ -57,6 +58,23 @@ function MainSigninLoginComp({
               </h3>
             </header>
             <form action="" className={styles.form} onSubmit={handleSubmit}>
+              {signin ? (
+                <>
+                  <label htmlFor="" className={styles.formLabel}>
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="Enter your username:"
+                    required
+                    onChange={(e) => {
+                      setUsername(e.currentTarget.value);
+                      setError(false);
+                    }}
+                  />
+                </>
+              ) : null}
               <label htmlFor="" className={styles.formLabel}>
                 Email
               </label>
@@ -64,6 +82,7 @@ function MainSigninLoginComp({
                 type="email"
                 className={styles.input}
                 placeholder="Enter your email:"
+                required
                 onChange={(e) => {
                   setEmail(e.currentTarget.value);
                   setError(false);
@@ -77,6 +96,7 @@ function MainSigninLoginComp({
                   type={revealPass ? "text" : "password"}
                   className={styles.input}
                   placeholder="Enter your password:"
+                  required
                   onChange={(e) => {
                     setPassword(e.currentTarget.value);
                     setError(false);
@@ -140,8 +160,13 @@ function MainSigninLoginComp({
         <section className={styles.rightContent}>
           <h5 className={styles.tagLine}>Untanglify</h5>
           <h3 className={styles.mainTag}>
-            Start for free and save hours of your time with the click of a
-            button.
+            {slide === 1
+              ? "Start for free and save hours of your time with the click of a button."
+              : slide === 2
+              ? "See what your friends are reading by adding them as friends and creating groups."
+              : slide === 3
+              ? "Create bundles of articles, rate your favorite reads, and discover new passions."
+              : null}
           </h3>
           <div className={styles.bottomContainer}>
             <div className={styles.circles}>

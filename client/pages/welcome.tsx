@@ -76,6 +76,7 @@ function Welcome() {
   const [errorMsg, setErrorMsg] = useState("");
   const [url, setUrl] = useState("");
   const [disabledLoginAttempt, setDisableLoginAttempt] = useState(false);
+  const [username, setUsername] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
@@ -153,6 +154,7 @@ function Welcome() {
           password,
           reason: usecase,
           referral,
+          username,
         },
       };
       registerWebUser(variables).then((response) => {
@@ -235,6 +237,7 @@ function Welcome() {
             handleResponseGoogleFailure={handleResponseGoogleFailure}
             setSlide={setSlide}
             disabledLoginAttempt={disabledLoginAttempt}
+            setUsername={setUsername}
           />
         </>
       ) : null}

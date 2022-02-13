@@ -298,7 +298,7 @@ const handlePromiseChain = (textArr) => __awaiter(void 0, void 0, void 0, functi
                 return "The key takeaways of this text are as follows: " + summary;
             }
             else {
-                return "Addition takeaways include: " + summary;
+                return "Additional takeaways include: " + summary;
             }
         }
         return summary;

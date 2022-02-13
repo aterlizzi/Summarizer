@@ -5,7 +5,6 @@ import { useMutation } from "urql";
 import { setAccessToken } from "../accesstoken";
 import Layout from "../components/layout";
 import MainSigninLoginComp from "../components/welcome/MainSigninLoginComp";
-import Verification from "../components/welcome/VerificationComp";
 import styles from "../styles/Welcome.module.scss";
 
 const RegisterWebUser = `
@@ -60,6 +59,7 @@ function Login() {
   const [url, setUrl] = useState("");
   const [disabledLoginAttempt, setDisableLoginAttempt] = useState(false);
   const [section, setSection] = useState(0);
+  const [username, setUsername] = useState("");
 
   const [webResult, registerWebUser] = useMutation(RegisterWebUser);
   const [googleResult, registerGoogleUser] = useMutation(RegisterGoogleUser);
@@ -126,6 +126,7 @@ function Login() {
           email,
           password,
           reason: usecase,
+          username,
         },
       };
       registerWebUser(variables).then((response) => {
@@ -191,6 +192,7 @@ function Login() {
         handleResponseGoogleFailure={handleResponseGoogleFailure}
         setSlide={setSlide}
         disabledLoginAttempt={disabledLoginAttempt}
+        setUsername={setUsername}
       />
     </main>
   );

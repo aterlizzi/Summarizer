@@ -30,6 +30,9 @@
     }
     .right {
       margin-right: 3em;
+      .burgerContainer {
+        display: none;
+      }
       .contact {
         background: transparent;
         outline: none;
@@ -62,5 +65,201 @@
         margin: 0em 1em;
       }
     }
+  }
+  .loader {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-top: 2px solid;
+    border-color: white transparent;
+    animation: spin 1s linear infinite;
+    margin-top: 0em;
+  }
+  .mobileWrapper {
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 10;
+    top: 3.5em;
+    right: 0;
+    pointer-events: none;
+    display: none;
+    .mobileSidebar {
+      pointer-events: all;
+      background: #181818;
+      // background: $clr-bg1;
+      width: 12.5em;
+      height: calc(100vh - 3.5em);
+      max-height: calc(100vh - 3.5em);
+      border-right: solid 1px $clr-bg;
+      transform: translateX(100%);
+      transition: transform 250ms ease-in;
+      &.active {
+        transform: translateX(0%);
+        transition: transform 250ms ease-in;
+      }
+      .subSections {
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+        .sectionHeader {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+          &:first-of-type {
+            padding-top: 1em;
+            margin-top: 0em;
+          }
+          .icon {
+            margin-right: 1em;
+            margin-left: 1em;
+            font-size: 0.85rem;
+          }
+          .sectionTitle {
+            font-family: "Raleway", sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            margin: 0em;
+          }
+        }
+        .linkBox {
+          display: flex;
+          cursor: pointer;
+          transition: background 100ms ease-in;
+          &:hover {
+            background: #1f1f1f;
+          }
+          .sideDeco {
+            width: 4px;
+          }
+          .textContainer {
+            .text {
+              padding: 1em 1em 1em 1em;
+              margin: 0;
+              font-size: 0.85rem;
+              color: $clr-medEmpha;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .unauthContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0em 2em;
+    .error {
+      text-align: center;
+      color: $clr-error;
+      max-width: 20em;
+      align-self: flex-start;
+      margin-top: 5em;
+    }
+  }
+  .authContainer {
+    display: flex;
+    flex-direction: column;
+    max-width: 50em;
+    padding: 2em;
+    .byline {
+      display: flex;
+      align-items: center;
+      .circle {
+        height: 30px;
+        width: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background: $clr-bg4;
+        margin-right: 0.5em;
+      }
+      .text {
+        margin: 0;
+        font-size: 1rem;
+        font-style: italic;
+        .special {
+          color: $clr-primary;
+          font-size: 1.125rem;
+          font-style: normal;
+        }
+      }
+    }
+    .content {
+      .title {
+        margin: 0.25em 0em;
+        font-size: 4rem;
+        letter-spacing: -1.5px;
+      }
+      .desc {
+        margin: 0em 0em 1em 0em;
+        font-size: 1.125rem;
+        line-height: 25px;
+        color: $clr-medEmpha;
+      }
+      .btn {
+        color: $clr-highEmpha;
+        background: $clr-primaryVariant;
+        padding: 0.5em 1em;
+        font-size: 1rem;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        border-radius: 1em;
+        margin-right: 1em;
+      }
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .main {
+    .mobileWrapper {
+      display: block;
+    }
+    .banner {
+      .right {
+        .try {
+          display: none;
+        }
+        .contact {
+          display: none;
+        }
+        .burgerContainer {
+          display: block;
+        }
+      }
+    }
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
   }
 }

@@ -47,16 +47,37 @@ export class ReturnSummariesResolver {
     if (!user) return;
     const recentSummary = await RecentSummaries.findOne({
       where: { id },
-      relations: ["user", "user.settings", "user.settings.extensionSettings"],
+      relations: [
+        "user",
+        "user.settings",
+        "user.settings.extensionSettings",
+        "user.relationshipOne",
+        "user.relationshipTwo",
+        "user.relationshipOne.userTwo",
+        "user.relationshipTwo.userOne",
+      ],
     });
     if (!recentSummary) return;
 
     // if the user doesn't allow users to view their summaries and the user viewing isnt the owner of the summary, return the user.
     if (
       recentSummary.user.settings.extensionSettings.onlyFriendsCanView &&
-      user.id !== recentSummary.user.id
-    )
-      return;
+      recentSummary.user.id !== user.id
+    ) {
+      const friends = [
+        ...recentSummary.user.relationshipOne,
+        ...recentSummary.user.relationshipTwo,
+      ];
+      const filteredFriends = friends.filter((relationship) => {
+        if (relationship.type !== "friends") return false;
+        if (relationship.userOne && relationship.userOne.id !== user.id)
+          return false;
+        if (relationship.userTwo && relationship.userTwo.id !== user.id)
+          return false;
+        return true;
+      });
+      if (filteredFriends.length === 0) return;
+    }
     return recentSummary;
   }
   @Query(() => [RecentSummaries])

@@ -1,0 +1,1 @@
+{"version":3,"file":"accesstoken.js","sourceRoot":"","sources":["../../../client/accesstoken.ts"],"names":[],"mappings":";;;AAAA,IAAI,WAAW,GAAG,EAAE,CAAC;AAEd,MAAM,cAAc,GAAG,CAAC,CAAS,EAAE,EAAE;IAC1C,WAAW,GAAG,CAAC,CAAC;AAClB,CAAC,CAAC;AAFW,QAAA,cAAc,kBAEzB;AAEK,MAAM,cAAc,GAAG,GAAG,EAAE;IACjC,OAAO,WAAW,CAAC;AACrB,CAAC,CAAC;AAFW,QAAA,cAAc,kBAEzB"}

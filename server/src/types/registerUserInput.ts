@@ -10,6 +10,9 @@ export class registerUserInput implements Partial<User> {
   password: string;
 
   @Field()
+  username: string;
+
+  @Field()
   reason: string;
 
   @Field({ nullable: true })

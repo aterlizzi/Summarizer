@@ -2,6 +2,7 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import SideBar from "./SideBar";
 import styles from "../../styles/components/Friends.module.scss";
+import { getAccessToken } from "../../accesstoken";
 
 function Friends({
   setSection,
@@ -18,6 +19,7 @@ function Friends({
   sort,
   setExecute,
 }) {
+  console.log(getAccessToken());
   return (
     <>
       <SideBar

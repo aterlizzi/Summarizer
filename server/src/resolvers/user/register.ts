@@ -85,10 +85,21 @@ export class RegisterResolver {
   }
   @Mutation(() => RegisterUserOutput)
   async registerWebUser(
-    @Arg("options") { email, password, reason, referral }: registerUserInput,
+    @Arg("options")
+    { email, password, reason, referral, username }: registerUserInput,
     @Ctx() ctx: MyContext
   ): Promise<RegisterUserOutput> {
     let user = await User.findOne({ where: { email } });
+    const usernameUser = await User.findOne({ where: { username } });
+    if (usernameUser) {
+      return {
+        registered: false,
+        error: {
+          type: "Username",
+          message: "User with that username already exists.",
+        },
+      };
+    }
     if (user)
       return {
         registered: false,
@@ -109,6 +120,7 @@ export class RegisterResolver {
     const hash = await argon2.hash(password);
     user = User.create({
       email,
+      username,
       password: hash,
       accountType: "web",
       reason: reason ? reason : "Personal",

@@ -97,9 +97,19 @@ let RegisterResolver = class RegisterResolver {
             };
         });
     }
-    registerWebUser({ email, password, reason, referral }, ctx) {
+    registerWebUser({ email, password, reason, referral, username }, ctx) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield User_1.User.findOne({ where: { email } });
+            const usernameUser = yield User_1.User.findOne({ where: { username } });
+            if (usernameUser) {
+                return {
+                    registered: false,
+                    error: {
+                        type: "Username",
+                        message: "User with that username already exists.",
+                    },
+                };
+            }
             if (user)
                 return {
                     registered: false,
@@ -119,6 +129,7 @@ let RegisterResolver = class RegisterResolver {
             const hash = yield argon2_1.default.hash(password);
             user = User_1.User.create({
                 email,
+                username,
                 password: hash,
                 accountType: "web",
                 reason: reason ? reason : "Personal",

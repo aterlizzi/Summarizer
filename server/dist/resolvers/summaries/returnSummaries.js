@@ -58,13 +58,36 @@ let ReturnSummariesResolver = class ReturnSummariesResolver {
                 return;
             const recentSummary = yield RecentSummaries_1.RecentSummaries.findOne({
                 where: { id },
-                relations: ["user", "user.settings", "user.settings.extensionSettings"],
+                relations: [
+                    "user",
+                    "user.settings",
+                    "user.settings.extensionSettings",
+                    "user.relationshipOne",
+                    "user.relationshipTwo",
+                    "user.relationshipOne.userTwo",
+                    "user.relationshipTwo.userOne",
+                ],
             });
             if (!recentSummary)
                 return;
             if (recentSummary.user.settings.extensionSettings.onlyFriendsCanView &&
-                user.id !== recentSummary.user.id)
-                return;
+                recentSummary.user.id !== user.id) {
+                const friends = [
+                    ...recentSummary.user.relationshipOne,
+                    ...recentSummary.user.relationshipTwo,
+                ];
+                const filteredFriends = friends.filter((relationship) => {
+                    if (relationship.type !== "friends")
+                        return false;
+                    if (relationship.userOne && relationship.userOne.id !== user.id)
+                        return false;
+                    if (relationship.userTwo && relationship.userTwo.id !== user.id)
+                        return false;
+                    return true;
+                });
+                if (filteredFriends.length === 0)
+                    return;
+            }
             return recentSummary;
         });
     }

@@ -330,7 +330,7 @@ const handlePromiseChain = async (textArr: string[]) => {
         if (idx === 0) {
           return "The key takeaways of this text are as follows: " + summary;
         } else {
-          return "Addition takeaways include: " + summary;
+          return "Additional takeaways include: " + summary;
         }
       }
       return summary;
