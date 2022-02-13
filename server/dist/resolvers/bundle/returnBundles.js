@@ -33,7 +33,12 @@ let ReturnBundleResolver = class ReturnBundleResolver {
             let sortedBundles;
             const user = yield User_1.User.findOne({
                 where: { id: payload.userId },
-                relations: ["bundles", "settings", "settings.extensionSettings"],
+                relations: [
+                    "bundles",
+                    "bundles.summaries",
+                    "settings",
+                    "settings.extensionSettings",
+                ],
             });
             if (!user)
                 return [];

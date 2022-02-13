@@ -16,7 +16,12 @@ export class ReturnBundleResolver {
     let sortedBundles;
     const user = await User.findOne({
       where: { id: payload!.userId },
-      relations: ["bundles", "settings", "settings.extensionSettings"],
+      relations: [
+        "bundles",
+        "bundles.summaries",
+        "settings",
+        "settings.extensionSettings",
+      ],
     });
     if (!user) return [];
     if (!sort) {

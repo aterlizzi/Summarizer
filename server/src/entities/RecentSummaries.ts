@@ -1,3 +1,4 @@
+import { Bundle } from "./Bundle";
 import { User } from "./User";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
@@ -5,6 +6,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -50,4 +52,8 @@ export class RecentSummaries extends BaseEntity {
   @Field(() => Number)
   @Column({ default: 0 })
   numberOfRatings: number;
+
+  @Field(() => [Bundle])
+  @ManyToMany(() => Bundle, (bundle) => bundle.summaries)
+  bundles: Bundle[];
 }

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bundle = void 0;
+const RecentSummaries_1 = require("./RecentSummaries");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
@@ -45,6 +46,14 @@ __decorate([
     (0, typeorm_1.Column)({ default: "" }),
     __metadata("design:type", String)
 ], Bundle.prototype, "description", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [RecentSummaries_1.RecentSummaries]),
+    (0, typeorm_1.ManyToMany)(() => RecentSummaries_1.RecentSummaries, (recentSummary) => recentSummary.bundles, {
+        cascade: true,
+    }),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], Bundle.prototype, "summaries", void 0);
 Bundle = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

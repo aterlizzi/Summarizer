@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecentSummaries = void 0;
+const Bundle_1 = require("./Bundle");
 const User_1 = require("./User");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
@@ -62,6 +63,11 @@ __decorate([
     (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)
 ], RecentSummaries.prototype, "numberOfRatings", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Bundle_1.Bundle]),
+    (0, typeorm_1.ManyToMany)(() => Bundle_1.Bundle, (bundle) => bundle.summaries),
+    __metadata("design:type", Array)
+], RecentSummaries.prototype, "bundles", void 0);
 RecentSummaries = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

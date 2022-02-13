@@ -1,9 +1,12 @@
+import { RecentSummaries } from "./RecentSummaries";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -36,4 +39,11 @@ export class Bundle extends BaseEntity {
   @Field(() => String)
   @Column({ default: "" })
   description: string;
+
+  @Field(() => [RecentSummaries])
+  @ManyToMany(() => RecentSummaries, (recentSummary) => recentSummary.bundles, {
+    cascade: true,
+  })
+  @JoinTable()
+  summaries: RecentSummaries[];
 }
