@@ -13,3 +13,9 @@
   grid-template-columns: 1fr 6fr;
   position: relative;
 }
+
+@media (max-width: 950px) {
+  .main {
+    display: flex;
+  }
+}

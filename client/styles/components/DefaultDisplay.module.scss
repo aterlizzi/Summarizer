@@ -774,6 +774,49 @@
   }
 }
 
+@media (max-width: 950px) {
+  .sidebarWrapper {
+    max-width: 4em;
+    &:hover {
+      max-width: 10em;
+      .sidebar {
+        overflow: hidden;
+        .navigation {
+          .userLinks {
+            padding: 0.5em;
+            .linksContainer {
+              display: block;
+            }
+          }
+        }
+        .label {
+          display: block !important;
+        }
+        .create {
+          display: block !important;
+        }
+      }
+    }
+    .sidebar {
+      overflow: hidden;
+      .navigation {
+        .userLinks {
+          padding: 0em 0em 0em 0.5em;
+          .linksContainer {
+            display: none;
+          }
+        }
+      }
+      .label {
+        display: none;
+      }
+      .create {
+        display: none;
+      }
+    }
+  }
+}
+
 @media (max-width: 900px) {
   .slider {
     .sliderContainer {
