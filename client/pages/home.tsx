@@ -34,6 +34,9 @@ query($sort: String){
   returnBundles(sort: $sort){
     title
     id
+    summaries {
+      id
+    }
   }
 }
 `;

@@ -12,9 +12,12 @@ export class EditBundleResolver {
     @Arg("summaryId") summaryId: number
   ): Promise<boolean> {
     const summary = await RecentSummaries.findOne({ where: { id: summaryId } });
-    const bundle = await Bundle.findOne({ where: { id: bundleId } });
+    const bundle = await Bundle.findOne({
+      where: { id: bundleId },
+      relations: ["summaries"],
+    });
     if (!bundle || !summary) return false;
-    bundle.summaries = [...bundle.summaries, summary];
+    bundle.summaries.push(summary);
     await bundle.save();
     return true;
   }

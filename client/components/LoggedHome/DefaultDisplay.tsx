@@ -46,13 +46,19 @@ function DefaultDisplay({
           title={"Recently Read"}
           data={result}
           bundleResult={bundleResult}
+          reexecuteBundle={reexecuteBundle}
         />
         <Slider
           type={"friendsReads"}
           title={"Friends Feed"}
           bundleResult={bundleResult}
+          reexecuteBundle={reexecuteBundle}
         />
-        <Slider type={"groupsReads"} title={"Groups Feed"} />
+        <Slider
+          type={"groupsReads"}
+          title={"Groups Feed"}
+          reexecuteBundle={reexecuteBundle}
+        />
       </section>
       {popupSection === "Create_Bundle" ? (
         <CreateBundle

@@ -30,10 +30,13 @@ let EditBundleResolver = class EditBundleResolver {
     addToBundle(bundleId, summaryId) {
         return __awaiter(this, void 0, void 0, function* () {
             const summary = yield RecentSummaries_1.RecentSummaries.findOne({ where: { id: summaryId } });
-            const bundle = yield Bundle_1.Bundle.findOne({ where: { id: bundleId } });
+            const bundle = yield Bundle_1.Bundle.findOne({
+                where: { id: bundleId },
+                relations: ["summaries"],
+            });
             if (!bundle || !summary)
                 return false;
-            bundle.summaries = [...bundle.summaries, summary];
+            bundle.summaries.push(summary);
             yield bundle.save();
             return true;
         });

@@ -73,8 +73,6 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
     query: ReturnNotifications,
   });
 
-  console.log(notificationsResult);
-
   useEffect(() => {
     if (
       notificationsResult.data &&

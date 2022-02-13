@@ -47,9 +47,16 @@ interface SliderProps {
   type: string;
   data?: any;
   bundleResult?: any;
+  reexecuteBundle: any;
 }
 
-function Slider({ type, title, data, bundleResult }: SliderProps) {
+function Slider({
+  type,
+  title,
+  data,
+  bundleResult,
+  reexecuteBundle,
+}: SliderProps) {
   const router = useRouter();
   const [returnSummariesResult, rexecuteReturnSummaries] = useQuery({
     query: ReturnRecentSummaries,
@@ -111,7 +118,11 @@ function Slider({ type, title, data, bundleResult }: SliderProps) {
                         />
                       </div>
                     </div>
-                    <PostSettings bundleResult={bundleResult} />
+                    <PostSettings
+                      summaryId={summary.id}
+                      bundleResult={bundleResult}
+                      reexecuteBundle={reexecuteBundle}
+                    />
                   </div>
                   <h4 className={styles.title}>
                     {summary.title ? summary.title : "Untitled"}
@@ -172,7 +183,11 @@ function Slider({ type, title, data, bundleResult }: SliderProps) {
                           {summary.user.username}
                         </p>
                       </div>
-                      <PostSettings bundleResult={bundleResult} />
+                      <PostSettings
+                        summaryId={summary.id}
+                        bundleResult={bundleResult}
+                        reexecuteBundle={reexecuteBundle}
+                      />
                     </div>
                     <h4 className={styles.title}>
                       {summary

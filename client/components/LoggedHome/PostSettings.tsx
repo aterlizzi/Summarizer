@@ -1,12 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useMutation } from "urql";
+import { getAccessToken } from "../../accesstoken";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 
-function PostSettings({ bundleResult }) {
+const EditBundle = `
+    mutation($bundleId: Float!, $summaryId: Float!){
+      addToBundle(bundleId: $bundleId, summaryId: $summaryId)
+    }
+`;
+
+function PostSettings({ bundleResult, summaryId, reexecuteBundle }) {
   const [showOptions, setShowOptions] = useState(false);
   const [addToBundle, setAddToBundle] = useState(false);
 
   const node = useRef(null);
   const bundleNode = useRef(null);
+
+  const [editBundleResult, editBundle] = useMutation(EditBundle);
 
   console.log(bundleResult);
 
@@ -38,6 +48,15 @@ function PostSettings({ bundleResult }) {
     };
   }, [addToBundle, setAddToBundle]);
 
+  const handleEditBundle = (summaryId, bundleId) => {
+    editBundle({
+      summaryId: parseInt(summaryId),
+      bundleId: parseInt(bundleId),
+    }).then(() => {
+      reexecuteBundle();
+    });
+  };
+
   return (
     <section
       className={styles.postSettings}
@@ -58,8 +77,16 @@ function PostSettings({ bundleResult }) {
             bundleResult.data.returnBundles &&
             bundleResult.data.returnBundles.length > 0 ? (
               bundleResult.data.returnBundles.map((bundle) => {
+                const indexes = bundle.summaries.map((summary) => summary.id);
+                if (indexes.indexOf(summaryId) !== -1) {
+                  return null;
+                }
                 return (
-                  <div className={styles.optionContainer} key={bundle.id}>
+                  <div
+                    className={styles.optionContainer}
+                    onClick={() => handleEditBundle(summaryId, bundle.id)}
+                    key={bundle.id}
+                  >
                     <p className={styles.option}>{bundle.title}</p>
                   </div>
                 );
