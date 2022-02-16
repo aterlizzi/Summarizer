@@ -2,7 +2,9 @@ import {
   faChevronDown,
   faChevronUp,
   faHistory,
+  faHome,
   faLayerGroup,
+  faMap,
   faNewspaper,
   faPlus,
   faUser,
@@ -21,6 +23,8 @@ const Logout = `
     }
 `;
 
+let isAbbreviate;
+
 function SideBar({
   setSection,
   section,
@@ -37,9 +41,11 @@ function SideBar({
 
   const [showAside, setShowAside] = useState(false);
   const [showSort, setShowSort] = useState(false);
+  const [sidebarActive, setSidebarActive] = useState(false);
 
   const node = useRef(null);
   const sortNode = useRef(null);
+  const sidebar = useRef(null);
 
   const router = useRouter();
 
@@ -56,6 +62,29 @@ function SideBar({
       setExecute(true);
     }
   }, [meResult, setSort, setExecute]);
+
+  const [windowSize, setWindowSize] = useState({ width: 1920, height: 1080 });
+
+  function handleResize() {
+    // Set window width/height to state
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }
+
+  useEffect(() => {
+    // only execute all the code below in client side
+    if (typeof window !== "undefined") {
+      // Handler to call on window resize
+      // Add event listener
+      window.addEventListener("resize", handleResize);
+      // Call handler right away so state gets updated with initial window size
+      handleResize();
+      // Remove event listener on cleanup
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []); // Empty array ensures that effect is only run on mount
 
   const handleLogout = () => {
     logout();
@@ -118,8 +147,32 @@ function SideBar({
     };
   }, [showSort]);
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (
+        sidebarActive &&
+        sidebar.current &&
+        !sidebar.current.contains(e.target)
+      ) {
+        setSidebarActive(false);
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }, [sidebarActive]);
+
   return (
-    <div className={styles.sidebarWrapper}>
+    <div
+      className={
+        sidebarActive
+          ? `${styles.sidebarWrapper} ${styles.sidebarWrapperActive}`
+          : styles.sidebarWrapper
+      }
+      ref={sidebar}
+      onClick={() => setSidebarActive(true)}
+    >
       <nav className={styles.sidebar}>
         <aside
           className={styles.popout}
@@ -232,20 +285,34 @@ function SideBar({
                 className={styles.nav}
                 style={section === "Home" ? { color: "#bb86fc" } : null}
               >
-                Home
+                {windowSize.width < 950 && !sidebarActive ? (
+                  <FontAwesomeIcon icon={faHome} className={styles.icon} />
+                ) : (
+                  "Home"
+                )}
               </p>
             </div>
             <div
               className={styles.navContainer}
               onClick={() => setSection("Explore")}
             >
-              <p className={styles.nav}>Explore</p>
+              <p className={styles.nav}>
+                {windowSize.width < 950 && !sidebarActive ? (
+                  <FontAwesomeIcon icon={faMap} />
+                ) : (
+                  "Explore"
+                )}
+              </p>
             </div>
           </div>
         </div>
         <div className={styles.mainUtilContainer}>
           <header className={styles.utilHeader}>
-            <h4 className={styles.title}>My Utilities</h4>
+            <h4 className={styles.title}>
+              {windowSize.width < 950 && !sidebarActive
+                ? "My..."
+                : "My Utilities"}
+            </h4>
           </header>
           <div className={styles.utilContainer}>
             <div className={styles.iconContainer}>
@@ -299,7 +366,12 @@ function SideBar({
             className={styles.bundleHead}
             onClick={() => setShowSort(!showSort)}
           >
-            <h4 className={styles.title}>My Bundles</h4>
+            <h4 className={styles.title}>
+              {" "}
+              {windowSize.width < 950 && !sidebarActive
+                ? "My..."
+                : "My Bundles"}
+            </h4>
             <div className={styles.linksContainer}>
               <div className={styles.circle}></div>
               <div className={styles.circle}></div>
@@ -321,7 +393,17 @@ function SideBar({
             bundleResult.data.returnBundles.map((bundle) => {
               return (
                 <div className={styles.bundle} key={bundle.id}>
-                  <p className={styles.bundleName}>{bundle.title}</p>
+                  <p className={styles.bundleName}>
+                    {windowSize.width < 950 && !sidebarActive
+                      ? bundle.title
+                          .split("")
+                          .filter((_, idx) => {
+                            if (idx < 3) return true;
+                            return false;
+                          })
+                          .join("") + "..."
+                      : bundle.title}
+                  </p>
                 </div>
               );
             })

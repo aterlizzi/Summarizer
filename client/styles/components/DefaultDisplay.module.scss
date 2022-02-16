@@ -777,26 +777,6 @@
 @media (max-width: 950px) {
   .sidebarWrapper {
     max-width: 4em;
-    &:hover {
-      max-width: 10em;
-      .sidebar {
-        overflow-y: scroll;
-        .navigation {
-          .userLinks {
-            padding: 0.5em;
-            .linksContainer {
-              display: block;
-            }
-          }
-        }
-        .label {
-          display: block !important;
-        }
-        .create {
-          display: block !important;
-        }
-      }
-    }
     .sidebar {
       overflow: hidden;
       .navigation {
@@ -812,6 +792,26 @@
       }
       .create {
         display: none;
+      }
+    }
+  }
+  .sidebarWrapperActive {
+    max-width: 10em;
+    .sidebar {
+      overflow-y: scroll;
+      .navigation {
+        .userLinks {
+          padding: 0.5em;
+          .linksContainer {
+            display: block;
+          }
+        }
+      }
+      .label {
+        display: block !important;
+      }
+      .create {
+        display: block !important;
       }
     }
   }
