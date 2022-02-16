@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchBar from "./SearchBar";
 import SideBar from "./SideBar";
 import styles from "../../styles/components/Friends.module.scss";
@@ -40,10 +40,11 @@ function Friends({
   setExecute,
 }) {
   const router = useRouter();
+  const [take, setTake] = useState(20);
   const [returnFriendsSummariesResult, rexecuteReturnFriendsSummaries] =
     useQuery({
       query: ReturnFriendsRecentSummaries,
-      variables: { take: 20 },
+      variables: { take },
     });
 
   return (
@@ -74,22 +75,7 @@ function Friends({
             ? returnFriendsSummariesResult.data.returnFriendsRecentSummaries.map(
                 (summary, idx) => {
                   return (
-                    <section
-                      className={`${styles.card} ${
-                        idx === 0
-                          ? styles.cardOne
-                          : idx === 1
-                          ? styles.cardTwo
-                          : idx === 2
-                          ? styles.cardThree
-                          : idx === 3
-                          ? styles.cardFour
-                          : idx === 4
-                          ? styles.cardFive
-                          : null
-                      }`}
-                      key={summary.id}
-                    >
+                    <section className={styles.card} key={summary.id}>
                       <div className={styles.top}>
                         <div className={styles.userContainer}>
                           <div className={styles.left}>
@@ -100,7 +86,9 @@ function Friends({
                               />
                             </div>
                             <p className={styles.usernameText}>
-                              {summary.user.username}
+                              {summary && summary.user && summary.user.username
+                                ? summary.user.username
+                                : "Anonymous"}
                             </p>
                           </div>
                           <PostSettings
@@ -157,6 +145,14 @@ function Friends({
                 }
               )
             : null}
+        </div>
+        <div className={styles.loadmoreContainer}>
+          <button
+            className={styles.loadmorebtn}
+            onClick={() => setTake(take + 20)}
+          >
+            Load more
+          </button>
         </div>
       </section>
     </>

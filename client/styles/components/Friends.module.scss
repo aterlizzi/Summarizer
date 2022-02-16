@@ -127,6 +127,26 @@
   position: relative;
   height: 100vh;
   overflow-y: scroll;
+  .loadmoreContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2em;
+    padding-bottom: 1em;
+    .loadmorebtn {
+      margin: 0;
+      font-size: 0.85rem;
+      padding: 0.5em 1em;
+      border-radius: 1em;
+      background: $clr-primaryVariant;
+      outline: none;
+      border: none;
+      color: $clr-highEmpha;
+      font-family: "Roboto", sans-serif;
+      cursor: pointer;
+    }
+  }
 }
 
 @media (max-width: 1050px) {
