@@ -2,7 +2,27 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import SideBar from "./SideBar";
 import styles from "../../styles/components/Friends.module.scss";
-import { getAccessToken } from "../../accesstoken";
+import { useQuery } from "urql";
+import StarRating from "./Friends/StarRatingFriends";
+import PostSettings from "./Friends/PostSettingsFriends";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
+
+const ReturnFriendsRecentSummaries = `
+    query($take: Float!){
+      returnFriendsRecentSummaries(take: $take){
+        summary
+        title
+        url
+        rating
+        id
+        user{
+          username
+        }
+      }
+    }
+`;
 
 function Friends({
   setSection,
@@ -19,7 +39,13 @@ function Friends({
   sort,
   setExecute,
 }) {
-  console.log(getAccessToken());
+  const router = useRouter();
+  const [returnFriendsSummariesResult, rexecuteReturnFriendsSummaries] =
+    useQuery({
+      query: ReturnFriendsRecentSummaries,
+      variables: { take: 20 },
+    });
+
   return (
     <>
       <SideBar
@@ -41,6 +67,97 @@ function Friends({
           history={history}
           setHistory={setHistory}
         />
+        <div className={styles.grid}>
+          {returnFriendsSummariesResult.data &&
+          returnFriendsSummariesResult.data.returnFriendsRecentSummaries
+            .length > 0
+            ? returnFriendsSummariesResult.data.returnFriendsRecentSummaries.map(
+                (summary, idx) => {
+                  return (
+                    <section
+                      className={`${styles.card} ${
+                        idx === 0
+                          ? styles.cardOne
+                          : idx === 1
+                          ? styles.cardTwo
+                          : idx === 2
+                          ? styles.cardThree
+                          : idx === 3
+                          ? styles.cardFour
+                          : idx === 4
+                          ? styles.cardFive
+                          : null
+                      }`}
+                      key={summary.id}
+                    >
+                      <div className={styles.top}>
+                        <div className={styles.userContainer}>
+                          <div className={styles.left}>
+                            <div className={styles.circle}>
+                              <FontAwesomeIcon
+                                icon={faUser}
+                                className={styles.icon}
+                              />
+                            </div>
+                            <p className={styles.usernameText}>
+                              {summary.user.username}
+                            </p>
+                          </div>
+                          <PostSettings
+                            summaryId={summary.id}
+                            bundleResult={bundleResult}
+                            reexecuteBundle={reexecuteBundle}
+                          />
+                        </div>
+                        <h4 className={styles.title}>
+                          {summary
+                            ? summary.title
+                              ? summary.title
+                              : "Untitled"
+                            : null}
+                        </h4>
+                        <p className={styles.summary}>
+                          {summary.summary.length > 100
+                            ? summary.summary
+                                .split("")
+                                .filter((_, idx) => {
+                                  if (idx > 100) return false;
+                                  return true;
+                                })
+                                .join("") + "..."
+                            : summary.summary}
+                        </p>
+                      </div>
+                      <StarRating
+                        currentRating={summary.rating}
+                        id={summary.id}
+                      />
+                      <div className={styles.bottom}>
+                        <a
+                          className={styles.link}
+                          href={summary.url}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          Article
+                        </a>
+                        <p
+                          className={styles.link}
+                          aria-label="Click to visit summary."
+                          onClick={() =>
+                            router.push(`/summaries/${summary.id}`)
+                          }
+                          style={{ cursor: "pointer" }}
+                        >
+                          Summary
+                        </p>
+                      </div>
+                    </section>
+                  );
+                }
+              )
+            : null}
+        </div>
       </section>
     </>
   );

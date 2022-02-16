@@ -29,8 +29,8 @@ const SendAidanFriendRequest = `
     }
 `;
 const ReturnFriendsRecentSummaries = `
-    query{
-      returnFriendsRecentSummaries{
+    query($take: Float!){
+      returnFriendsRecentSummaries(take: $take){
         summary
         title
         url
@@ -65,6 +65,7 @@ function Slider({
   const [returnFriendsSummariesResult, rexecuteReturnFriendsSummaries] =
     useQuery({
       query: ReturnFriendsRecentSummaries,
+      variables: { take: 5 },
       pause: type !== "friendsReads",
     });
   const [sendAidanFriendRequestResult, sendAidanFriendRequest] = useMutation(

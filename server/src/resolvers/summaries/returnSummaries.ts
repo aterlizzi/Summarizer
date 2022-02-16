@@ -83,7 +83,8 @@ export class ReturnSummariesResolver {
   @Query(() => [RecentSummaries])
   @UseMiddleware(isAuth)
   async returnFriendsRecentSummaries(
-    @Ctx() { payload }: MyContext
+    @Ctx() { payload }: MyContext,
+    @Arg("take") take: number
   ): Promise<RecentSummaries[]> {
     const user = await User.findOne({ where: { id: payload!.userId } });
     if (!user) return [];
@@ -114,7 +115,7 @@ export class ReturnSummariesResolver {
     });
     const relationships = [...relationshipOneArr, ...relationshipTwoArr].flat();
     const sortedRelationships = _.orderBy(relationships, "createdAt", "desc");
-    sortedRelationships.length = 5;
+    sortedRelationships.length = take;
     return sortedRelationships;
   }
 }

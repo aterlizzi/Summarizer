@@ -91,7 +91,7 @@ let ReturnSummariesResolver = class ReturnSummariesResolver {
             return recentSummary;
         });
     }
-    returnFriendsRecentSummaries({ payload }) {
+    returnFriendsRecentSummaries({ payload }, take) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield User_1.User.findOne({ where: { id: payload.userId } });
             if (!user)
@@ -122,7 +122,7 @@ let ReturnSummariesResolver = class ReturnSummariesResolver {
             });
             const relationships = [...relationshipOneArr, ...relationshipTwoArr].flat();
             const sortedRelationships = _.orderBy(relationships, "createdAt", "desc");
-            sortedRelationships.length = 5;
+            sortedRelationships.length = take;
             return sortedRelationships;
         });
     }
@@ -154,8 +154,9 @@ __decorate([
     (0, type_graphql_1.Query)(() => [RecentSummaries_1.RecentSummaries]),
     (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
     __param(0, (0, type_graphql_1.Ctx)()),
+    __param(1, (0, type_graphql_1.Arg)("take")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], ReturnSummariesResolver.prototype, "returnFriendsRecentSummaries", null);
 ReturnSummariesResolver = __decorate([
