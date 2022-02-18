@@ -8,6 +8,7 @@ import PostSettings from "./Friends/PostSettingsFriends";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import CreateBundle from "./Friends/CreateBundleFriends";
 
 const ReturnFriendsRecentSummaries = `
     query($take: Float!){
@@ -155,6 +156,12 @@ function Friends({
           </button>
         </div>
       </section>
+      {popupSection === "Create_Bundle" ? (
+        <CreateBundle
+          setPopupSection={setPopupSection}
+          reexecuteBundle={reexecuteBundle}
+        />
+      ) : null}
     </>
   );
 }

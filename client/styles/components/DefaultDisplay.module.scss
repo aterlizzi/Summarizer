@@ -367,7 +367,8 @@
 .barContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
+  // align-items: center;
   padding: 0em 2em;
   margin-top: 2em;
   position: relative;
@@ -395,19 +396,27 @@
   }
   .searchbarContainer {
     display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
     .bar {
       position: relative;
       display: flex;
       align-items: center;
       background: $clr-bg1;
+      // background: red;
       border: 1px solid $clr-bg4;
       padding: 0.5em 1em;
       border-radius: 0.75em;
+      width: 25%;
       cursor: pointer;
+      &.active {
+        animation: expand 100ms linear forwards;
+      }
       .notificationContainer {
         position: absolute;
         display: none;
-        width: 20em;
+        // width: 20em;
         background: #1e1e1e;
         border-radius: 1em;
         top: 130%;
@@ -503,7 +512,7 @@
             background: $clr-bg3;
           }
           .title {
-            margin: 0;
+            margin: 0em 1em 0em 0em;
             font-size: 1rem;
             color: $clr-medEmpha;
           }
@@ -538,10 +547,7 @@
         background: transparent;
         outline: none;
         border: none;
-        width: 17.5em;
-        &.active {
-          animation: expand 100ms linear forwards;
-        }
+        width: 100%;
         &::placeholder {
           color: $clr-medEmpha;
         }
@@ -762,6 +768,7 @@
   position: relative;
   height: 100vh;
   overflow-y: scroll;
+  width: 100%;
 }
 
 @media (max-width: 1060px) {
@@ -845,6 +852,54 @@
       }
     }
   }
+  .barContainer {
+    .returnContainer {
+      .circle {
+        height: 30px;
+        width: 30px;
+        &:last-child {
+          margin-right: 1em;
+        }
+      }
+    }
+    .searchbarContainer {
+      .bar {
+        width: 50%;
+      }
+      .circle {
+        height: 30px;
+        width: 30px;
+        .icon {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 510px) {
+  .barContainer {
+    .searchbarContainer {
+      .bar {
+        .searchResults {
+          width: 150%;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 410px) {
+  .barContainer {
+    .searchbarContainer {
+      .bar {
+        .searchResults {
+          left: 25%;
+          width: 200%;
+        }
+      }
+    }
+  }
 }
 
 @keyframes spin {
@@ -859,9 +914,9 @@
 
 @keyframes expand {
   0% {
-    width: 17.5em;
+    width: 25%;
   }
   100% {
-    width: 55em;
+    width: 80%;
   }
 }

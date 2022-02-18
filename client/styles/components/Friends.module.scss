@@ -148,6 +148,120 @@
     }
   }
 }
+.wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  padding: 1em;
+  .createBundleCard {
+    background: #1b1b1b;
+    width: 30em;
+    padding: 2em;
+    border-radius: 1em;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1em;
+      .title {
+        margin: 0;
+        font-weight: 400;
+      }
+      .exit {
+        height: 20px;
+        width: 20px;
+        position: relative;
+        cursor: pointer;
+        .exit1 {
+          width: 100%;
+          height: 1.5px;
+          background: $clr-medEmpha;
+          position: absolute;
+          top: 50%;
+          transform: rotate(45deg);
+        }
+        .exit2 {
+          width: 100%;
+          height: 1.5px;
+          background: $clr-medEmpha;
+          position: absolute;
+          top: 50%;
+          transform: rotate(-45deg);
+        }
+      }
+    }
+    .basicSettings {
+      display: flex;
+      flex-direction: column;
+      .label {
+        font-size: 1rem;
+        font-family: "Raleway", sans-serif;
+        color: $clr-medEmpha;
+        margin-bottom: 0.25em;
+      }
+      .input {
+        margin-bottom: 1em;
+        padding: 0.5em 0em;
+        font-size: 1rem;
+        color: $clr-highEmpha;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid $clr-bg4;
+        font-family: "Roboto", sans-serif;
+        outline: none;
+        &:focus {
+          border-bottom: 1px solid $clr-primary;
+        }
+        &::placeholder {
+          font-size: 1rem;
+          color: $clr-medEmpha;
+        }
+      }
+      .textarea {
+        margin-bottom: 1em;
+        resize: none;
+        height: 100px;
+        font-size: 1rem;
+        color: $clr-highEmpha;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid $clr-bg4;
+        background: transparent;
+        font-family: "Roboto", sans-serif;
+        &:focus {
+          border-bottom: 1px solid $clr-primary;
+        }
+      }
+      .count {
+        margin: 0em 0em 1em 0em;
+        align-self: flex-end;
+        font-size: 0.85rem;
+        color: $clr-highEmpha;
+      }
+      .btn {
+        width: 40%;
+        align-self: flex-end;
+        font-size: 1rem;
+        background: $clr-primaryVariant;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        color: $clr-highEmpha;
+        height: 35px;
+        border-radius: 0.5em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
 
 @media (max-width: 1050px) {
   .grid {

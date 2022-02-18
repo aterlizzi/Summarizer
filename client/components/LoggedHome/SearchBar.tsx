@@ -165,7 +165,9 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
         </div>
         <div className={styles.searchbarContainer}>
           <div
-            className={styles.bar}
+            className={
+              !searching ? `${styles.bar}` : `${styles.bar} ${styles.active}`
+            }
             ref={node}
             onClick={() => {
               searchBar.current.focus();
@@ -343,11 +345,7 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
             )}
             <input
               type="text"
-              className={
-                searching
-                  ? `${styles.search} ${styles.active}`
-                  : `${styles.search}`
-              }
+              className={searching ? `${styles.search}` : `${styles.search}`}
               onChange={handleSearchBarChange}
               placeholder="Search"
               ref={searchBar}
