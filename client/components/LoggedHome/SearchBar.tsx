@@ -213,11 +213,12 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
                 searchResult.data.search &&
                 searchResult.data.search.articles.map((article) => {
                   return (
-                    <Link passHref href={`/summaries/${article.id}`}>
-                      <div
-                        className={styles.searchResultContainer}
-                        key={article.id}
-                      >
+                    <Link
+                      passHref
+                      href={`/summaries/${article.id}`}
+                      key={article.id}
+                    >
+                      <div className={styles.searchResultContainer}>
                         <p className={styles.title}>{article.title}</p>
                         {article.rating ? (
                           <div className={styles.ratingContainer}>
