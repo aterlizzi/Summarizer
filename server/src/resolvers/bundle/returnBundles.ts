@@ -71,7 +71,10 @@ export class ReturnBundleResolver {
   @Query(() => Bundle, { nullable: true })
   @UseMiddleware(isAuth)
   async returnBundle(@Arg("id") id: number): Promise<Bundle | undefined> {
-    const bundle = Bundle.findOne({ where: { id }, relations: ["summaries"] });
+    const bundle = Bundle.findOne({
+      where: { id },
+      relations: ["summaries", "user"],
+    });
     if (!bundle) return undefined;
     return bundle;
   }

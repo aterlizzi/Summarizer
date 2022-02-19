@@ -40,6 +40,10 @@ export class Bundle extends BaseEntity {
   @Column({ default: "" })
   description: string;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  hideOwnership: boolean;
+
   @Field(() => [RecentSummaries])
   @ManyToMany(() => RecentSummaries, (recentSummary) => recentSummary.bundles, {
     cascade: true,

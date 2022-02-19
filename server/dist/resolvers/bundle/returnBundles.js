@@ -76,7 +76,10 @@ let ReturnBundleResolver = class ReturnBundleResolver {
     }
     returnBundle(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bundle = Bundle_1.Bundle.findOne({ where: { id }, relations: ["summaries"] });
+            const bundle = Bundle_1.Bundle.findOne({
+                where: { id },
+                relations: ["summaries", "user"],
+            });
             if (!bundle)
                 return undefined;
             return bundle;

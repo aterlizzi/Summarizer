@@ -13,6 +13,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "urql";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
+import router from "next/router";
 let typingTimer;
 
 const Search = `
@@ -192,6 +193,10 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
                       <div
                         className={styles.searchResultContainer}
                         key={bundle.id}
+                        onClick={() => {
+                          setSection("Bundle");
+                          router.push(`/home?bundleId=${bundle.id}`);
+                        }}
                       >
                         <p className={styles.title}>{bundle.title}</p>
                       </div>
@@ -208,12 +213,11 @@ function SearchBar({ setSection, setUserProfileId, history, setHistory }) {
                 searchResult.data.search &&
                 searchResult.data.search.articles.map((article) => {
                   return (
-                    <Link
-                      passHref
-                      key={article.id}
-                      href={`/summaries/${article.id}`}
-                    >
-                      <div className={styles.searchResultContainer}>
+                    <Link passHref href={`/summaries/${article.id}`}>
+                      <div
+                        className={styles.searchResultContainer}
+                        key={article.id}
+                      >
                         <p className={styles.title}>{article.title}</p>
                         {article.rating ? (
                           <div className={styles.ratingContainer}>

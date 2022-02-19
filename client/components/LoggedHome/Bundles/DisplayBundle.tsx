@@ -18,6 +18,11 @@ const ReturnBundle = `
         returnBundle(id: $id){
             title
             createdAt
+            hideOwnership
+            user{
+              username
+              id
+            }
             summaries{
                 id
                 title
@@ -133,13 +138,31 @@ function DisplayBundle({
               <h1 className={styles.title}>
                 {returnResult.data.returnBundle.title}
               </h1>
-              <p className={styles.createdAt}>
+              <p className={styles.createdAt} style={{ marginBottom: ".5em" }}>
                 Created:{" "}
                 <span className={styles.special}>
                   {" "}
                   {new Date(
                     parseInt(returnResult.data.returnBundle.createdAt)
                   ).toDateString()}
+                </span>
+              </p>
+              <p className={styles.createdAt}>
+                Owner:{" "}
+                <span
+                  className={styles.special}
+                  onClick={() => {
+                    if (!returnResult.data.returnBundle.hideOwnership) {
+                      setUserProfileId(
+                        parseInt(returnResult.data.returnBundle.user.id)
+                      );
+                      setSection("UserProfile");
+                    }
+                  }}
+                >
+                  {returnResult.data.returnBundle.hideOwnership
+                    ? "Anonymous"
+                    : returnResult.data.returnBundle.user.username}
                 </span>
               </p>
             </header>
@@ -240,12 +263,15 @@ function DisplayBundle({
                                 }
                               >
                                 <div className={styles.container}>
-                                  <Link href={`/summaries/${summary.id}`}>
+                                  <Link
+                                    href={`/summaries/${summary.id}`}
+                                    passHref
+                                  >
                                     <p className={styles.info}>Visit Summary</p>
                                   </Link>
                                 </div>
                                 <div className={styles.container}>
-                                  <Link href={summary.url}>
+                                  <Link href={summary.url} passHref>
                                     <p className={styles.info}>Visit Article</p>
                                   </Link>
                                 </div>

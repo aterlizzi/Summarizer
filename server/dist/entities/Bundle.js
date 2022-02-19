@@ -47,6 +47,11 @@ __decorate([
     __metadata("design:type", String)
 ], Bundle.prototype, "description", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], Bundle.prototype, "hideOwnership", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => [RecentSummaries_1.RecentSummaries]),
     (0, typeorm_1.ManyToMany)(() => RecentSummaries_1.RecentSummaries, (recentSummary) => recentSummary.bundles, {
         cascade: true,
