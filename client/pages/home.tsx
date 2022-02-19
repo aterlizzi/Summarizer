@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "urql";
 import Layout from "../components/layout";
 import DefaultDisplay from "../components/LoggedHome/DefaultDisplay";
@@ -15,10 +15,13 @@ const Bundles = dynamic(
 );
 
 import styles from "../styles/LoggedHome.module.scss";
+import { getAccessToken } from "../accesstoken";
+import { useRouter } from "next/router";
 
 const Me = `
 query{
     me{
+      id
       paymentTier
         bundles{
             title
@@ -51,6 +54,10 @@ mutation($friendId: Float!){
 `;
 
 function Home() {
+  const router = useRouter();
+
+  const { bundleId } = router.query;
+
   const [section, setSection] = useState("Home");
   const [popupSection, setPopupSection] = useState("");
   const [userProfileId, setUserProfileId] = useState("");
@@ -67,6 +74,14 @@ function Home() {
     variables: { sort },
     pause: !execute,
   });
+
+  useEffect(() => {
+    if (bundleId) {
+      setSection("Bundle");
+    }
+  }, [bundleId]);
+
+  console.log(getAccessToken());
 
   return (
     <main className={styles.main}>

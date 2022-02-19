@@ -279,7 +279,10 @@ function SideBar({
           <div className={styles.broadTopics}>
             <div
               className={styles.navContainer}
-              onClick={() => setSection("Home")}
+              onClick={() => {
+                router.replace("/home", undefined, { shallow: true });
+                setSection("Home");
+              }}
             >
               <p
                 className={styles.nav}
@@ -294,7 +297,10 @@ function SideBar({
             </div>
             <div
               className={styles.navContainer}
-              onClick={() => setSection("Explore")}
+              onClick={() => {
+                router.replace("/home", undefined, { shallow: true });
+                setSection("Explore");
+              }}
             >
               <p className={styles.nav}>
                 {windowSize.width < 950 && !sidebarActive ? (
@@ -322,7 +328,10 @@ function SideBar({
           </div>
           <div
             className={styles.utilContainer}
-            onClick={() => setSection("Friends")}
+            onClick={() => {
+              router.replace("/home", undefined, { shallow: true });
+              setSection("Friends");
+            }}
           >
             <div className={styles.iconContainer}>
               <FontAwesomeIcon icon={faUserFriends} className={styles.icon} />
@@ -336,7 +345,10 @@ function SideBar({
           </div>
           <div
             className={styles.utilContainer}
-            onClick={() => setSection("Groups")}
+            onClick={() => {
+              router.replace("/home", undefined, { shallow: true });
+              setSection("Groups");
+            }}
           >
             <div className={styles.iconContainer}>
               <FontAwesomeIcon icon={faUsers} className={styles.icon} />
