@@ -74,6 +74,14 @@ let ReturnBundleResolver = class ReturnBundleResolver {
             return sortedBundles;
         });
     }
+    returnBundle(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const bundle = Bundle_1.Bundle.findOne({ where: { id }, relations: ["summaries"] });
+            if (!bundle)
+                return undefined;
+            return bundle;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Bundle_1.Bundle]),
@@ -84,6 +92,14 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ReturnBundleResolver.prototype, "returnBundles", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Bundle_1.Bundle, { nullable: true }),
+    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ReturnBundleResolver.prototype, "returnBundle", null);
 ReturnBundleResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], ReturnBundleResolver);

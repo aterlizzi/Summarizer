@@ -18,8 +18,6 @@ function PostSettings({ bundleResult, summaryId, reexecuteBundle }) {
 
   const [editBundleResult, editBundle] = useMutation(EditBundle);
 
-  console.log(bundleResult);
-
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (showOptions && node.current && !node.current.contains(e.target)) {

@@ -1,0 +1,155 @@
+@import "../utils/variables";
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
+
+.home {
+  position: relative;
+  height: 100vh;
+  overflow-y: scroll;
+  width: 100%;
+  .loader {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-top: 2px solid;
+    border-color: white transparent;
+    animation: spin 1s linear infinite;
+    margin-top: 0em;
+  }
+}
+
+.bundleContainer {
+  padding: 2em;
+  .header {
+    .title {
+      font-size: 4rem;
+      margin: 0;
+      letter-spacing: -1.5px;
+    }
+    .createdAt {
+      color: $clr-medEmpha;
+      margin: 0;
+      .special {
+        color: $clr-primary;
+      }
+    }
+  }
+  .utils {
+    width: 100%;
+    display: flex;
+    margin-top: 1em;
+    .utilContainer {
+      justify-self: flex-end;
+      display: flex;
+      margin-left: auto;
+      .util {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 50px;
+        width: 50px;
+        cursor: pointer;
+        .utilText {
+          margin: 0.5em 0em 0em 0em;
+          font-size: 0.85rem;
+        }
+        &:hover {
+          .utilText {
+            color: $clr-medEmpha;
+          }
+          .icon {
+            color: $clr-medEmpha;
+          }
+        }
+      }
+    }
+  }
+  .table {
+    border-collapse: collapse;
+    margin-top: 2em;
+    .tableHeader {
+      .headerRow {
+        text-align: left;
+        .tableTitle {
+          &:first-child {
+            padding-left: 1em;
+          }
+        }
+      }
+    }
+    .tableBody {
+      .bodyRow {
+        &:hover {
+          background: $clr-bg3;
+        }
+        .entry {
+          padding: 1em 3em 1em 0em;
+          &:first-child {
+            padding-left: 1em;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .bundleContainer {
+    .table {
+      .tableHeader {
+        .headerRow {
+          .tableTitle {
+            &:first-child {
+              padding-left: 0em;
+            }
+          }
+        }
+      }
+      .tableBody {
+        .bodyRow {
+          .entry {
+            padding: 1em 1em 1em 0em;
+            &:first-child {
+              padding-left: 0em;
+            }
+          }
+          .popoutContainer {
+            position: relative;
+            .popout {
+              position: absolute;
+              z-index: 2;
+              left: -10em;
+              top: 4em;
+              flex-direction: column;
+              background: #252525;
+              border-radius: 0.5em;
+              -webkit-box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+              box-shadow: 1px -1px 19px 7px rgba(0, 0, 0, 0.6);
+              padding: 1em 0em;
+              .container {
+                padding: 0.5em 1.5em;
+                cursor: pointer;
+                &:hover {
+                  background: $clr-bg4;
+                }
+                .info {
+                  margin: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
+  }
+}

@@ -392,8 +392,22 @@ function SideBar({
           {bundleResult.data && bundleResult.data.returnBundles ? (
             bundleResult.data.returnBundles.map((bundle) => {
               return (
-                <div className={styles.bundle} key={bundle.id}>
-                  <p className={styles.bundleName}>
+                <div
+                  className={styles.bundle}
+                  onClick={() => {
+                    setSection("Bundle");
+                    router.push(`/home?bundleId=${bundle.id}`);
+                  }}
+                  key={bundle.id}
+                >
+                  <p
+                    className={styles.bundleName}
+                    style={
+                      section === "Bundle" && router.query.bundleId == bundle.id
+                        ? { color: "#bb86fc" }
+                        : null
+                    }
+                  >
                     {windowSize.width < 950 && !sidebarActive
                       ? bundle.title
                           .split("")

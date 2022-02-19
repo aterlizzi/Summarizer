@@ -10,6 +10,9 @@ const UserProfile = dynamic(
   () => import("../components/LoggedHome/UserProfile")
 );
 const Groups = dynamic(() => import("../components/LoggedHome/Groups"));
+const Bundles = dynamic(
+  () => import("../components/LoggedHome/Bundles/DisplayBundle")
+);
 
 import styles from "../styles/LoggedHome.module.scss";
 
@@ -119,6 +122,22 @@ function Home() {
         />
       ) : section === "Groups" ? (
         <Groups
+          setPopupSection={setPopupSection}
+          popupSection={popupSection}
+          section={section}
+          setSection={setSection}
+          setUserProfileId={setUserProfileId}
+          history={history}
+          setHistory={setHistory}
+          bundleResult={bundleResult}
+          result={result}
+          reexecuteBundle={reexecuteBundle}
+          setSort={setSort}
+          setExecute={setExecute}
+          sort={sort}
+        />
+      ) : section === "Bundle" ? (
+        <Bundles
           setPopupSection={setPopupSection}
           popupSection={popupSection}
           section={section}
