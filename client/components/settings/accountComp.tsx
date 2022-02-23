@@ -24,8 +24,6 @@ function Account() {
     requestPolicy: "network-only",
   });
 
-  console.log(meResult);
-
   return (
     <section className={styles.account}>
       {!meResult.fetching && !meResult.error ? (

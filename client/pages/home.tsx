@@ -81,8 +81,6 @@ function Home() {
     }
   }, [bundleId]);
 
-  console.log(getAccessToken());
-
   return (
     <main className={styles.main}>
       {section === "Home" ? (

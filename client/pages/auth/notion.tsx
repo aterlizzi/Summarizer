@@ -15,7 +15,6 @@ function Notion() {
   const router = useRouter();
   const [result, retrieveNotionToken] = useMutation(RetrieveNotionToken);
   const { code, error } = router.query;
-  console.log(result);
   useEffect(() => {
     if (error) {
       router.push("/users/settings?auth=true");

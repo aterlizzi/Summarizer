@@ -17,8 +17,6 @@ function Mendeley() {
   const { code } = router.query;
   const [result, retrieveToken] = useMutation(RetrieveToken);
 
-  console.log(result);
-
   useEffect(() => {
     if (code) {
       retrieveToken({ code }).then((res) => {

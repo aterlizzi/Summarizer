@@ -28,8 +28,6 @@ function Popup({ setPopup }) {
 
   const { session_id } = router.query;
 
-  console.log(result);
-
   //   if trial fails, set the failed trial.
   useEffect(() => {
     if (session_id && result.data && result.data.me && !result.data.me.prem) {

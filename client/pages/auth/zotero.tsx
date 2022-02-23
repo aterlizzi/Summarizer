@@ -15,7 +15,6 @@ function Zotero() {
   const router = useRouter();
   const [result, zotero] = useMutation(ZoteroAPI);
   const { oauth_verifier } = router.query;
-  console.log(result);
   useEffect(() => {
     if (oauth_verifier) {
       zotero({

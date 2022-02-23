@@ -30,8 +30,6 @@ function ForgotPassToken() {
   const [confirmResult, confirm] = useMutation(ConfirmForgotPassword);
   const [changeResult, change] = useMutation(ChangePassword);
 
-  console.log(changeResult);
-
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");

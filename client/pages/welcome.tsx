@@ -99,7 +99,6 @@ function Welcome() {
         referral,
       };
       registerGoogleUser(variables).then((response) => {
-        console.log(response);
         if (response) {
           if (response.data) {
             if (response.data.registerGoogleUser.accessToken === "") {

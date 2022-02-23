@@ -95,11 +95,8 @@ function DisplayBundle({
     setCopied(true);
   };
 
-  console.log(deleteResult);
-
   const handleDeleteBundle = () => {
     deleteBundle({ bundleId: id }).then((res) => {
-      console.log(res);
       if (res.data && res.data.deleteBundle) {
         router.replace("/home", undefined, { shallow: true });
         reexecuteBundle();

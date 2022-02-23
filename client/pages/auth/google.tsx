@@ -15,7 +15,6 @@ function Google() {
   const router = useRouter();
   const [result, retrieveGoogleToken] = useMutation(RetrieveGoogleToken);
   const { code } = router.query;
-  console.log(result);
   useEffect(() => {
     if (code) {
       retrieveGoogleToken({ code }).then((res) => {

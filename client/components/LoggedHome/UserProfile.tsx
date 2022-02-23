@@ -22,9 +22,7 @@ function UserProfile({
   setExecute,
 }) {
   const handleFriendRequest = () => {
-    sendFriendRequest({ friendId: parseInt(userProfileId) }).then((res) => {
-      console.log(res);
-    });
+    sendFriendRequest({ friendId: parseInt(userProfileId) }).then((res) => {});
   };
 
   return (
