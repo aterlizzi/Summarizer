@@ -47,7 +47,10 @@ function EditBundle({
         bundleResult.data.returnBundle.description.split("").length
       );
     }
-  }, []);
+  }, [
+    bundleResult.data.returnBundle.description,
+    bundleResult.data.returnBundle.title,
+  ]);
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {

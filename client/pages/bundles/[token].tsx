@@ -11,7 +11,7 @@ function BundleId() {
     if (token) {
       router.push(`/home?bundleId=${token}`);
     }
-  }, [token]);
+  }, [token, router]);
 
   return (
     <main className={styles.main}>

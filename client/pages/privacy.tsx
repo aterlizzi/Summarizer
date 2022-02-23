@@ -75,25 +75,25 @@ function Privacy() {
         <div className={styles.privacy}>
           <h1 className={styles.title}>Privacy Policy</h1>
           <p className={styles.desc}>
-            Untanglify ("Untanglify", "we", "us", and "our") provides a platform
-            for our users to read, share, collaborate, and organize article
-            summaries. Our Privacy Policy ("Privacy Policy") is designed to help
-            you understand how we collect, use and share your personal
-            information and to assist you in exercising the privacy rights at
-            your disposal.
+            Untanglify (&quot;Untanglify&quot;, &quot;we&quot;, &quot;us&quot;,
+            and &quot;our&quot;) provides a platform for our users to read,
+            share, collaborate, and organize article summaries. Our Privacy
+            Policy (&quot;Privacy Policy&quot;) is designed to help you
+            understand how we collect, use and share your personal information
+            and to assist you in exercising the privacy rights at your disposal.
           </p>
           <h3 className={styles.subtitle}>Scope</h3>
           <p className={styles.desc}>
             This Privacy Policy covers the personal information we collect about
             you when you use our products or services, or otherwise interact
             with us, including on our public website at www.untanglify.com (the
-            "Website"), and Untanglify&apos;s online software-as-service
-            platform including any related APIs provided by Untanglify, together
-            with all related mobile, desktop, and browser applications
-            (collectively, “Services”). This policy also explains your choices
-            surrounding how we use your personal information, which include how
-            you can object to certain uses of the information and how you can
-            access and update certain information.
+            &quot;Website&quot;), and Untanglify&apos;s online
+            software-as-service platform including any related APIs provided by
+            Untanglify, together with all related mobile, desktop, and browser
+            applications (collectively, &quot;Services&quot;). This policy also
+            explains your choices surrounding how we use your personal
+            information, which include how you can object to certain uses of the
+            information and how you can access and update certain information.
           </p>
           <h3 className={styles.subtitle}>
             1. Personal Information we collect
@@ -141,10 +141,10 @@ function Privacy() {
             our Website or Services may collect the information you submit or
             make available through these interactive features. Any content you
             provide via the public sections of these features will be considered
-            “public” and is not subject to the privacy protections referenced
-            herein. By using these interactive features, you understand that the
-            personal information provided by you may be viewed and used by third
-            parties for their own purposes.
+            &quot;public&quot; and is not subject to the privacy protections
+            referenced herein. By using these interactive features, you
+            understand that the personal information provided by you may be
+            viewed and used by third parties for their own purposes.
             <br /> <br />
             <strong className={styles.strong}>
               Registration for Sweepstakes or Contests:
@@ -192,7 +192,7 @@ function Privacy() {
             </strong>{" "}
             We, as well as third parties that provide content, advertising, or
             other functionality on the Services, may use cookies, pixel tags,
-            local storage, and other technologies (“Technologies”) to
+            local storage, and other technologies (&quot;Technologies&quot;) to
             automatically collect information through the Website or Services.
             Technologies are essentially small data files placed on your devices
             that allow us and our partners to record certain pieces of
@@ -276,7 +276,8 @@ function Privacy() {
             </li>
             <li className={styles.item}>
               Sending communications about new product features, promotions,
-              Untanglify's strategic partners, and other news about Untanglify
+              Untanglify&apos;s strategic partners, and other news about
+              Untanglify
             </li>
             <li className={styles.item}>
               Measuring interest and engagement in our Services, including
@@ -467,18 +468,18 @@ function Privacy() {
             device.
           </p>
           <p className={styles.desc}>
-            <strong className={styles.strong}>“Do Not Track”:</strong> Your
-            browser may offer you a “Do Not Track” option, which allows you to
-            signal to operators of websites and web applications and Service
-            that you do not wish such operators to track certain of your online
-            activities over time and/or across different websites. If your
-            browser is set to “Do Not Track”, Untanglify will attempt to honor
-            this functionality. However, our third party service providers may
-            use their own cookies, pixel tags, web beacons or other storage
-            technology to collect and store Log Data or information from
-            elsewhere on the internet, and we do not have access to, nor control
-            over, a third parties&apos; use of cookies or other tracking
-            technologies.
+            <strong className={styles.strong}>&quot;Do Not Track&quot;:</strong>{" "}
+            Your browser may offer you a &quot;Do Not Track&quot; option, which
+            allows you to signal to operators of websites and web applications
+            and Service that you do not wish such operators to track certain of
+            your online activities over time and/or across different websites.
+            If your browser is set to &quot;Do Not Track&quot;, Untanglify will
+            attempt to honor this functionality. However, our third party
+            service providers may use their own cookies, pixel tags, web beacons
+            or other storage technology to collect and store Log Data or
+            information from elsewhere on the internet, and we do not have
+            access to, nor control over, a third parties&apos; use of cookies or
+            other tracking technologies.
           </p>
           <p className={styles.desc}>
             <strong className={styles.strong}>Cookies:</strong> You may stop or
@@ -576,7 +577,7 @@ function Privacy() {
             content of such other websites or applications. Visiting these other
             websites or applications is at your own risk.
           </p>
-          <h3 className={styles.subtitle}>10. Children's Information</h3>
+          <h3 className={styles.subtitle}>10. Children&apos;s Information</h3>
           <p className={styles.desc}>
             The Services are not directed to children under 13 (or other age as
             required by local law), and we do not knowingly collect personal
@@ -603,7 +604,7 @@ function Privacy() {
             <strong className={styles.strong}>
               California Shine the Light Law:
             </strong>{" "}
-            The California “Shine the Light” law permits users who are
+            The California &quot;Shine the Light&quot; law permits users who are
             California residents to request and obtain from us once a year, free
             of charge, a list of the third parties to whom we have disclosed
             their personal information (if any) for their direct marketing
@@ -643,9 +644,9 @@ function Privacy() {
         <div className={styles.privacy}>
           <h1 className={styles.title}>GDPR</h1>
           <p className={styles.desc}>
-            At Untanglify, we're committed to complying with GDPR. To this end,
-            we offer several data portability and management tools, and we ask
-            for consent for data collection.
+            At Untanglify, we&apos;re committed to complying with GDPR. To this
+            end, we offer several data portability and management tools, and we
+            ask for consent for data collection.
           </p>
           <h3 className={styles.subtitle}>
             Data Portability & Management Tools
@@ -665,8 +666,8 @@ function Privacy() {
           <p className={styles.desc}>
             <strong className={styles.strong}>Summary Deletion: </strong>A
             user-generated summary can be deleted anytime by the user by sending
-            an email to team@untanglify.com with the subject line "Summary
-            Deletion". Once this is handled, the summary will no longer be
+            an email to team@untanglify.com with the subject line &quot;Summary
+            Deletion&quot;. Once this is handled, the summary will no longer be
             available on the site.
           </p>
           <h3 className={styles.subtitle}>Consent</h3>
@@ -691,16 +692,17 @@ function Privacy() {
         <div className={styles.privacy}>
           <h1 className={styles.title}>Cookie Policy</h1>
           <p className={styles.desc}>
-            This Cookie Notice explains how Untanglify ("Untanglify," "we,"
-            "us," and "our") uses cookies, pixel tags, local storage, and other
-            similar technologies (collectively referred to as “Cookies”) to
-            recognize you when you visit our public website at
-            www.untanglify.com (the "Website"), and Untanglify&apos;s online
+            This Cookie Notice explains how Untanglify (&quot;Untanglify,&quot;
+            &quot;we,&quot; &quot;us,&quot; and &quot;our&quot;) uses cookies,
+            pixel tags, local storage, and other similar technologies
+            (collectively referred to as &quot;Cookies&quot;) to recognize you
+            when you visit our public website at www.untanglify.com (the
+            &quot;Website&quot;), and Untanglify&apos;s online
             software-as-a-service platform including any related APIs provided
             by Untanglify, together with all related mobile and desktop
-            applications (collectively, “Services”). It explains what these
-            technologies are and why we use them, as well as your rights to
-            control our use of them. Please take a look at our{" "}
+            applications (collectively, &quot;Services&quot;). It explains what
+            these technologies are and why we use them, as well as your rights
+            to control our use of them. Please take a look at our{" "}
             <span
               className={styles.special}
               onClick={() => router.push("/privacy?policy=privacy")}
@@ -721,37 +723,38 @@ function Privacy() {
             creating website analytics.
             <br />
             <br />
-            Cookies are typically classified as either “session cookies” which
-            are automatically deleted when you close your browser, or
-            “persistent cookies” which will usually remain on your device until
-            you delete them or they expire. Cookies set by the website owner (in
-            this case, Untanglify) are called "first party cookies". Only
-            Untanglify can access the first party cookies we set. Cookies set by
-            parties other than the website owner are called "third party
-            cookies". Third party cookies enable third party features or
-            functionality to be provided on or through the website (e.g. like
-            advertising, interactive content and social sharing). The parties
-            that set these third party cookies can recognize your device both
-            when it visits the website in question and also when it visits other
-            websites that have partnered with them.
+            Cookies are typically classified as either &quot;session
+            cookies&quot; which are automatically deleted when you close your
+            browser, or &quot;persistent cookies&quot; which will usually remain
+            on your device until you delete them or they expire. Cookies set by
+            the website owner (in this case, Untanglify) are called &quot;first
+            party cookies&quot;. Only Untanglify can access the first party
+            cookies we set. Cookies set by parties other than the website owner
+            are called &quot;third party cookies&quot;. Third party cookies
+            enable third party features or functionality to be provided on or
+            through the website (e.g. like advertising, interactive content and
+            social sharing). The parties that set these third party cookies can
+            recognize your device both when it visits the website in question
+            and also when it visits other websites that have partnered with
+            them.
             <br />
             <br />
             In addition to cookies, we may use other similar technologies like
-            web beacons (sometimes called "tracking pixels" or "clear gifs") or
-            local storage. Web beacons are tiny graphics files that contain a
-            unique identifier that enable us to recognize when someone has
-            visited our Services or opened an e-mail that we have sent them.
-            This allows us, for example, to monitor the traffic patterns of
-            users from one page within our Services to another, to deliver or
-            communicate with cookies, to understand whether you have come to our
-            Services from an online advertisement displayed on a third-party
-            website, to improve site performance, and to measure the success of
-            e-mail marketing campaigns. Local storage enables a website or
-            application to store information locally on your device(s) in order
-            to enable certain functionality in our Services. Local storage may
-            be used to improve your experience with our Services, for example,
-            by enabling features, remembering your preferences, and speeding up
-            site functionality.
+            web beacons (sometimes called &quot;tracking pixels&quot; or
+            &quot;clear gifs&quot;) or local storage. Web beacons are tiny
+            graphics files that contain a unique identifier that enable us to
+            recognize when someone has visited our Services or opened an e-mail
+            that we have sent them. This allows us, for example, to monitor the
+            traffic patterns of users from one page within our Services to
+            another, to deliver or communicate with cookies, to understand
+            whether you have come to our Services from an online advertisement
+            displayed on a third-party website, to improve site performance, and
+            to measure the success of e-mail marketing campaigns. Local storage
+            enables a website or application to store information locally on
+            your device(s) in order to enable certain functionality in our
+            Services. Local storage may be used to improve your experience with
+            our Services, for example, by enabling features, remembering your
+            preferences, and speeding up site functionality.
           </p>
           <h3 className={styles.subtitle}>Why does Untanglify use Cookies?</h3>
           <p className={styles.desc}>
@@ -776,8 +779,8 @@ function Privacy() {
             Where can I get further information?
           </h3>
           <p className={styles.desc}>
-            If you have any questions about our use of Cookies, please don't
-            hesitate to reach out at team@untanglify.com.
+            If you have any questions about our use of Cookies, please
+            don&apos;t hesitate to reach out at team@untanglify.com.
           </p>
           <p className={styles.desc}>
             <strong className={styles.strong}>
