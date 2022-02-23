@@ -300,6 +300,53 @@ $clr-medEmpha: rgba(white, 0.6);
     background: #1b1b1b;
   }
 }
+.bundleContainer {
+  margin-top: 1em;
+  .bundleHead {
+    padding-bottom: 1em;
+    border-bottom: 1px solid $clr-bg4;
+    .bundleSection {
+      text-align: center;
+      font-size: 1rem;
+      color: $clr-medEmpha;
+      text-transform: uppercase;
+    }
+  }
+  .bundles {
+    .emptyCell {
+      padding: 1em 1em;
+      .insideP {
+        text-align: center;
+        font-size: 1rem;
+        color: $clr-highEmpha;
+      }
+    }
+    .bundleCell {
+      border-radius: 0.5em;
+      padding: 1em 1em;
+      cursor: pointer;
+      &:hover {
+        background: $clr-bg3;
+      }
+      .bundleTitle {
+        text-align: center;
+        font-size: 1rem;
+        color: $clr-highEmpha;
+      }
+    }
+  }
+  .exitBundles {
+    background: $clr-primaryVariant;
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    padding: 0.5em 1em;
+    width: 100%;
+    border-radius: 0.5em;
+    cursor: pointer;
+    margin-top: 1em;
+  }
+}
 
 .manualTextarea:focus ~ .manualLabel,
 .manualTextarea:not(:placeholder-shown).manualTextarea:not(:focus)

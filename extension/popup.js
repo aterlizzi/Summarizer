@@ -35,6 +35,9 @@ const summaryContainer = document.querySelector(".container");
 const bookmark = document.querySelector(".save");
 const saveRejectContainer = document.querySelector(".saveRejectContainer");
 const popoutBtn = document.querySelector(".reject");
+const bundles = document.querySelector(".bundles");
+const bundleContainer = document.querySelector(".bundleContainer");
+const exitBundles = document.querySelector(".exitBundles");
 
 // icons
 const pdfIcon = document.querySelector(".pdficon");
@@ -102,10 +105,55 @@ hTrashBtn.addEventListener("click", () => {
     }
   });
 });
+
+// display bundles
 bookmark.addEventListener("click", () => {
-  chrome.runtime.sendMessage({ key: "saveSummary" }, (response) => {
-    console.log(response);
+  chrome.runtime.sendMessage({ key: "retrieveBundles" }, (response) => {
+    saveRejectContainer.classList.add("none");
+    bundleContainer.classList.remove("none");
+    if (response.length > 0) {
+      response.map((bundle) => {
+        const bundleCell = document.createElement("div");
+        bundleCell.dataset.id = bundle.id;
+        bundleCell.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          chrome.runtime.sendMessage(
+            { key: "addToBundle", payload: id },
+            (res) => {
+              if (res) {
+                bundleCell.classList.add("none");
+              }
+            }
+          );
+        });
+        const bundleTitle = document.createElement("p");
+        bundleTitle.textContent = bundle.title;
+
+        // appending
+        bundleTitle.classList.add("bundleTitle");
+        bundleCell.classList.add("bundleCell");
+        bundleCell.appendChild(bundleTitle);
+        bundles.appendChild(bundleCell);
+      });
+    } else {
+      const emptyCell = document.createElement("div");
+      const insideP = document.createElement("p");
+      insideP.classList.add("insideP");
+      emptyCell.classList.add("emptyCell");
+      insideP.textContent = "You need to make a bundle first.";
+
+      // if no bundles message is already there, don't display it again
+      if (bundles.querySelectorAll(".emptyCell").length === 0) {
+        emptyCell.appendChild(insideP);
+        bundles.appendChild(emptyCell);
+      }
+    }
   });
+});
+
+exitBundles.addEventListener("click", () => {
+  bundleContainer.classList.add("none");
+  saveRejectContainer.classList.remove("none");
 });
 
 // main listener, listens for login success and failure upon completion of login page.

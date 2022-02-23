@@ -273,6 +273,52 @@
   background: #1b1b1b;
 }
 
+.bundleContainer {
+  margin-top: 1em;
+}
+.bundleContainer .bundleHead {
+  padding-bottom: 1em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bundleContainer .bundleHead .bundleSection {
+  text-align: center;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+.bundleContainer .bundles .emptyCell {
+  padding: 1em 1em;
+}
+.bundleContainer .bundles .emptyCell .insideP {
+  text-align: center;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.87);
+}
+.bundleContainer .bundles .bundleCell {
+  border-radius: 0.5em;
+  padding: 1em 1em;
+  cursor: pointer;
+}
+.bundleContainer .bundles .bundleCell:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.bundleContainer .bundles .bundleCell .bundleTitle {
+  text-align: center;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.87);
+}
+.bundleContainer .exitBundles {
+  background: #4740d1;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  width: 100%;
+  border-radius: 0.5em;
+  cursor: pointer;
+  margin-top: 1em;
+}
+
 .manualTextarea:focus ~ .manualLabel,
 .manualTextarea:not(:placeholder-shown).manualTextarea:not(:focus) ~ .manualLabel {
   top: -0.5em;

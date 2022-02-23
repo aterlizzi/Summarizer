@@ -27,7 +27,7 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 });
 
-function receiver(req, sender, sendResponse) {
+async function receiver(req, sender, sendResponse) {
   switch (req.key) {
     case "status":
       verifyUserStatus().then((res) => {
@@ -259,47 +259,19 @@ function receiver(req, sender, sendResponse) {
       });
       sendResponse(true);
       break;
-    case "saveSummary":
-      retrieveSummaryAndUrl().then((data) => {
-        verifyUserStatus().then((data2) => {
-          if (!data2.userInfo.email || !data2.userInfo.sub)
-            sendResponse("Something has gone wrong, try again.");
-          const email = data2.userInfo.email;
-          const sub = data2.userInfo.sub;
-          const summary = data.summary;
-          const url = data.summaryUrl;
-          if (data.error) {
-            sendResponse("Wasn't able to retrieve the summary.");
-          } else {
-            const query = `mutation SaveSummary($options: SaveSummaryInputObj!) {
-              saveSummary(options: $options) {
-                id
-              }
-            }`;
-            const summaryBody = JSON.stringify({
-              query,
-              variables: {
-                options: {
-                  email,
-                  sub,
-                  summary,
-                  url,
-                },
-              },
-            });
-            fetch("https://untanglify.com/graphql", {
-              headers: { "content-type": "application/json" },
-              method: "POST",
-              body: summaryBody,
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data);
-                sendResponse("Saved");
-              });
-          }
-        });
-      });
+    case "retrieveBundles":
+      const response = await verifyUserStatus();
+      const userInfo = response.userInfo;
+      const bundles = await handleRetrieveBundles(userInfo);
+      sendResponse(bundles);
+      break;
+    case "addToBundle":
+      const bundleResponse = await verifyUserStatus();
+      const boolean = await handleAddToBundle(
+        req.payload,
+        bundleResponse.userInfo
+      );
+      sendResponse(boolean);
       break;
     default:
       break;
@@ -320,6 +292,66 @@ function receiver2(req, sender, sendResponse) {
   }
   return true;
 }
+
+// function handles request to display bundles
+const handleRetrieveBundles = async (userInfo) => {
+  let token = userInfo.accessToken;
+  const { exp } = parseJwt(token);
+  if (Date.now() >= exp * 1000) {
+    token = await refreshAccessToken(userInfo);
+  }
+  const body = JSON.stringify({
+    query: `query {
+        returnBundles {
+          title
+          id
+          }
+      }`,
+  });
+  const response = await fetch("https://untanglify.com/graphql", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body,
+  });
+
+  const data = await response.json();
+  return data.data.returnBundles;
+};
+
+// add summary to bundle
+const handleAddToBundle = async (bundleId, userInfo) => {
+  let token = userInfo.accessToken;
+  const { exp } = parseJwt(token);
+  if (Date.now() >= exp * 1000) {
+    token = await refreshAccessToken(userInfo);
+  }
+  const res = await retrieveSummaryAndUrl();
+  const summaryId = res.summaryId;
+  const query = `mutation addToBundle($bundleId: Float!, $summaryId: Float!) {
+      addToBundle(bundleId: $bundleId, summaryId: $summaryId)
+    }`;
+  const summaryBody = JSON.stringify({
+    query,
+    variables: {
+      summaryId,
+      bundleId: parseInt(bundleId),
+    },
+  });
+  const response = await fetch("https://untanglify.com/graphql", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body: summaryBody,
+  });
+  const data = await response.json();
+  console.log(data);
+  return data.data.addToBundle;
+};
 
 // functions section
 // parse jwt into a usable form.
@@ -429,16 +461,23 @@ const retrieveArticleText = () => {
 // returns the saved summaries.
 const retrieveSummaryAndUrl = () => {
   return new Promise((resolve) => {
-    chrome.storage.local.get(["summary, summaryUrl"], (response) => {
-      if (chrome.runtime.lastError) {
-        resolve({ error: "Wasn't able to retrieve." });
+    chrome.storage.local.get(
+      ["summary", "summaryUrl", "summaryId"],
+      (response) => {
+        if (chrome.runtime.lastError) {
+          resolve({ error: "Wasn't able to retrieve." });
+        }
+        resolve(
+          response.summary === undefined
+            ? { error: "Wasn't able to retrieve." }
+            : {
+                summary: response.summary,
+                summaryUrl: response.summaryUrl,
+                summaryId: response.summaryId,
+              }
+        );
       }
-      resolve(
-        response.summary === undefined
-          ? { error: "Wasn't able to retrieve." }
-          : { summary: response.summary, summaryUrl: response.summaryUrl }
-      );
-    });
+    );
   });
 };
 // returns article title
@@ -584,8 +623,12 @@ const summarizeFunc = async (action, retries = 0) => {
     }
     if (data.data && data.data.summarize) {
       const summary = data.data.summarize.summary;
-      console.log(data);
-      chrome.storage.local.set({ summaryUrl: url, summary });
+      const summaryId = data.data.summarize.id;
+      chrome.storage.local.set({
+        summary: summary,
+        summaryUrl: url,
+        summaryId,
+      });
       return data;
     }
   } else {
