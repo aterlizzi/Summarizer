@@ -156,11 +156,28 @@
       }
     }
   }
+  .links {
+    margin-top: 2em;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    .link {
+      background: transparent;
+      padding: 0.5em 1em;
+      border-radius: 0.5em;
+      margin: 0;
+      cursor: pointer;
+      &.active {
+        background: $clr-primaryVariant;
+      }
+    }
+  }
   .privacy {
     padding: 2em;
     .title {
       font-size: 4rem;
       color: $clr-primary;
+      margin: 0.5em 0em;
     }
     .list {
       .item {

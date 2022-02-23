@@ -17,6 +17,12 @@ function Privacy() {
       if (policy === "cookie") {
         setPage("cookie");
       }
+      if (policy === "gdpr") {
+        setPage("gdpr");
+      }
+      if (policy === "privacy") {
+        setPage("privacy");
+      }
     }
   }, [policy]);
 
@@ -24,7 +30,47 @@ function Privacy() {
     <main className={styles.main}>
       <BannerComp isOpen={isOpen} setOpen={setOpen} />
       <MobileMenu isOpen={isOpen} />
-
+      <div className={styles.links}>
+        <p
+          className={
+            page === "privacy"
+              ? `${styles.active} ${styles.link}`
+              : `${styles.link}`
+          }
+          onClick={() => {
+            setPage("privacy");
+            router.replace("/privacy", undefined, { shallow: true });
+          }}
+        >
+          Privacy Policy
+        </p>
+        <p
+          className={
+            page === "gdpr"
+              ? `${styles.active} ${styles.link}`
+              : `${styles.link}`
+          }
+          onClick={() => {
+            setPage("gdpr");
+            router.replace("/privacy", undefined, { shallow: true });
+          }}
+        >
+          GDPR
+        </p>
+        <p
+          className={
+            page === "cookie"
+              ? `${styles.active} ${styles.link}`
+              : `${styles.link}`
+          }
+          onClick={() => {
+            setPage("cookie");
+            router.replace("/privacy", undefined, { shallow: true });
+          }}
+        >
+          Cookie Policy
+        </p>
+      </div>
       {page === "privacy" ? (
         <div className={styles.privacy}>
           <h1 className={styles.title}>Privacy Policy</h1>
@@ -594,7 +640,151 @@ function Privacy() {
           </p>
         </div>
       ) : page === "gdpr" ? (
-        <div></div>
+        <div className={styles.privacy}>
+          <h1 className={styles.title}>GDPR</h1>
+          <p className={styles.desc}>
+            At Untanglify, we're committed to complying with GDPR. To this end,
+            we offer several data portability and management tools, and we ask
+            for consent for data collection.
+          </p>
+          <h3 className={styles.subtitle}>
+            Data Portability & Management Tools
+          </h3>
+          <p className={styles.desc}>
+            <strong className={styles.strong}>Import: </strong>
+            We current provide the ability to import text from webpages, text
+            you highlight, manually inputted text, text extracted via OCR in
+            pdfs, and text written in pdfs. This could be updated in the future
+            based on user feedback.
+          </p>
+          <p className={styles.desc}>
+            <strong className={styles.strong}>Export: </strong>
+            We allow the export of summaries to 3rd Parties only accessible
+            through authentication in the settings page.
+          </p>
+          <p className={styles.desc}>
+            <strong className={styles.strong}>Summary Deletion: </strong>A
+            user-generated summary can be deleted anytime by the user by sending
+            an email to team@untanglify.com with the subject line "Summary
+            Deletion". Once this is handled, the summary will no longer be
+            available on the site.
+          </p>
+          <h3 className={styles.subtitle}>Consent</h3>
+          <p className={styles.desc}>
+            For European customers, we show a consent dialog during signup that
+            explains our data collection practices. Therefore, our lawful basis
+            for collecting personal data is consent. We use cookies to securely
+            identify your account and keep you signed in. We use analytics
+            services to improve the product and troubleshoot customer issues.
+            These include Google Analytics. A customer may withdraw their
+            consent and delete their account at any time by deleting their
+            account via our status options in user settings page.
+          </p>
+          <h3 className={styles.subtitle}>Data Transfers</h3>
+          <p className={styles.desc}>
+            We rely on standard contractual clauses (SCCs) to ensure appropriate
+            safeguards for personal data transfers from the EU to countries
+            outside of the EU.
+          </p>
+        </div>
+      ) : page === "cookie" ? (
+        <div className={styles.privacy}>
+          <h1 className={styles.title}>Cookie Policy</h1>
+          <p className={styles.desc}>
+            This Cookie Notice explains how Untanglify ("Untanglify," "we,"
+            "us," and "our") uses cookies, pixel tags, local storage, and other
+            similar technologies (collectively referred to as “Cookies”) to
+            recognize you when you visit our public website at
+            www.untanglify.com (the "Website"), and Untanglify&apos;s online
+            software-as-a-service platform including any related APIs provided
+            by Untanglify, together with all related mobile and desktop
+            applications (collectively, “Services”). It explains what these
+            technologies are and why we use them, as well as your rights to
+            control our use of them. Please take a look at our{" "}
+            <span
+              className={styles.special}
+              onClick={() => router.push("/privacy?policy=privacy")}
+            >
+              Privacy Policy
+            </span>{" "}
+            if you&apos;d like more information about how Untanglify collects,
+            uses, and shares your personal information.
+          </p>
+          <h3 className={styles.subtitle}>What are Cookies?</h3>
+          <p className={styles.desc}>
+            Cookies are small text files that are placed on your computer or
+            mobile device when you visit a website. Cookies contain information
+            that can later be read by a web server in the domain that issued the
+            Cookie. Owners of a website can use Cookies for a variety of reasons
+            that can include enabling their websites to work (or work more
+            efficiently), providing personalized content and advertising, and
+            creating website analytics.
+            <br />
+            <br />
+            Cookies are typically classified as either “session cookies” which
+            are automatically deleted when you close your browser, or
+            “persistent cookies” which will usually remain on your device until
+            you delete them or they expire. Cookies set by the website owner (in
+            this case, Untanglify) are called "first party cookies". Only
+            Untanglify can access the first party cookies we set. Cookies set by
+            parties other than the website owner are called "third party
+            cookies". Third party cookies enable third party features or
+            functionality to be provided on or through the website (e.g. like
+            advertising, interactive content and social sharing). The parties
+            that set these third party cookies can recognize your device both
+            when it visits the website in question and also when it visits other
+            websites that have partnered with them.
+            <br />
+            <br />
+            In addition to cookies, we may use other similar technologies like
+            web beacons (sometimes called "tracking pixels" or "clear gifs") or
+            local storage. Web beacons are tiny graphics files that contain a
+            unique identifier that enable us to recognize when someone has
+            visited our Services or opened an e-mail that we have sent them.
+            This allows us, for example, to monitor the traffic patterns of
+            users from one page within our Services to another, to deliver or
+            communicate with cookies, to understand whether you have come to our
+            Services from an online advertisement displayed on a third-party
+            website, to improve site performance, and to measure the success of
+            e-mail marketing campaigns. Local storage enables a website or
+            application to store information locally on your device(s) in order
+            to enable certain functionality in our Services. Local storage may
+            be used to improve your experience with our Services, for example,
+            by enabling features, remembering your preferences, and speeding up
+            site functionality.
+          </p>
+          <h3 className={styles.subtitle}>Why does Untanglify use Cookies?</h3>
+          <p className={styles.desc}>
+            At the moment we only use cookies for one purpose. Our cookies are
+            essential for our Services to operate and provide user-requested
+            functionality. Because of their necessity for our application to
+            run, we do not allow users to switch them off.
+          </p>
+          <h3 className={styles.subtitle}>
+            How often will we update this Cookie Notice?
+          </h3>
+          <p className={styles.desc}>
+            We may update this Cookie Notice from time to time in order to
+            reflect, for example, changes to the Cookies we use or for other
+            operational, legal or regulatory reasons. Please therefore re-visit
+            this Cookie Notice regularly to stay informed about our use of
+            cookies and related technologies. <br />
+            The date at the bottom of this Cookie Notice indicates when it was
+            last updated.
+          </p>
+          <h3 className={styles.subtitle}>
+            Where can I get further information?
+          </h3>
+          <p className={styles.desc}>
+            If you have any questions about our use of Cookies, please don't
+            hesitate to reach out at team@untanglify.com.
+          </p>
+          <p className={styles.desc}>
+            <strong className={styles.strong}>
+              Last Updated: February 22, 2022
+            </strong>
+          </p>
+        </div>
       ) : null}
     </main>
   );
