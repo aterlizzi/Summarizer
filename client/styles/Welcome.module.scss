@@ -340,6 +340,21 @@
           margin-bottom: 0.5em;
           margin-top: 1em;
         }
+        .checkbox {
+          margin-top: 1em;
+          display: flex;
+          align-items: center;
+          .box {
+            margin-right: 1em;
+          }
+          .label {
+            font-size: 0.85rem;
+            .special {
+              cursor: pointer;
+              color: $clr-primary;
+            }
+          }
+        }
         .inputContainer {
           position: relative;
           .icon {

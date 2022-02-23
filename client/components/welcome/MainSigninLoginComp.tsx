@@ -15,6 +15,7 @@ import Image from "next/image";
 import logo from "../../public/favicon.png";
 import googleLogo from "../../public/googleLogo.png";
 import ForgotPassword from "./ForgotPasswordComp";
+import router, { useRouter } from "next/router";
 
 function MainSigninLoginComp({
   setSignin,
@@ -34,6 +35,7 @@ function MainSigninLoginComp({
   disabledLoginAttempt,
   setUsername,
 }) {
+  const router = useRouter();
   const [forgotPass, setForgotPass] = useState(false);
   return (
     <div className={styles.gridWrap}>
@@ -108,6 +110,35 @@ function MainSigninLoginComp({
                   onClick={() => setRevealPass(!revealPass)}
                 />
               </div>
+              {signin ? (
+                <div className={styles.checkbox}>
+                  <input
+                    type="checkbox"
+                    id="check"
+                    name="check"
+                    className={styles.box}
+                    required
+                  />
+                  <label htmlFor="check" className={styles.label}>
+                    By clicking, you consent to our{" "}
+                    <span
+                      className={styles.special}
+                      onClick={() => {
+                        router.push("/privacy");
+                      }}
+                    >
+                      Privacy Policy
+                    </span>{" "}
+                    &{" "}
+                    <span
+                      className={styles.special}
+                      onClick={() => router.push("/terms")}
+                    >
+                      Terms of Service
+                    </span>
+                  </label>
+                </div>
+              ) : null}
               <p
                 className={styles.forgotPass}
                 onClick={() => setForgotPass(true)}
