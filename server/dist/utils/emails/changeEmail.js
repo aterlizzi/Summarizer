@@ -29,7 +29,7 @@ function sendChangeEmailMail(email, username) {
                 },
             });
             const mailOptions = {
-                from: "untanglify@gmail.com",
+                from: '"Untanglify" <team@untanglify.com>',
                 to: email,
                 subject: `[ACTION REQUIRED] Email Updated`,
                 text: `Hi ${username}, please confirm your account by clicking the link below.`,

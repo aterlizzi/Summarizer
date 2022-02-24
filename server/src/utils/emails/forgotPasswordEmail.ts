@@ -25,7 +25,7 @@ export async function sendForgotPasswordEmail(email: string, token: string) {
         },
       });
       const mailOptions = {
-        from: "team@untanglify.com", // sender address
+        from: '"Untanglify" <team@untanglify.com>', // sender address
         to: email, // list of receivers
         subject: `[ACTION REQUIRED] Untanglify Reset Password`, // Subject line
         text: `Click the following link to reset your password on Untanglify: ${url}`, // plain text body

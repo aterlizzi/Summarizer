@@ -32,7 +32,7 @@ function sendForgotPasswordEmail(email, token) {
                     },
                 });
                 const mailOptions = {
-                    from: "team@untanglify.com",
+                    from: '"Untanglify" <team@untanglify.com>',
                     to: email,
                     subject: `[ACTION REQUIRED] Untanglify Reset Password`,
                     text: `Click the following link to reset your password on Untanglify: ${url}`,

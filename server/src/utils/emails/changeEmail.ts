@@ -19,7 +19,7 @@ export async function sendChangeEmailMail(email: string, username: string) {
     });
 
     const mailOptions = {
-      from: "untanglify@gmail.com",
+      from: '"Untanglify" <team@untanglify.com>',
       to: email,
       subject: `[ACTION REQUIRED] Email Updated`, // Subject line
       text: `Hi ${username}, please confirm your account by clicking the link below.`, // plain text body
