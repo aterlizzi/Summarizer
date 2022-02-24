@@ -69,7 +69,11 @@ function BannerComp({ isOpen, setOpen }) {
             Settings
           </button>
         )}
-        <a href="https://www.youtube.com" target="_blank" rel="noreferrer">
+        <a
+          href="https://chrome.google.com/webstore/detail/untanglify/jfojfkbdmdgldjoodnjbbfahglinhkaa"
+          target="_blank"
+          rel="noreferrer"
+        >
           <button className={styles.try}>Try for free</button>
         </a>
         <div className={styles.burgerContainer}>
