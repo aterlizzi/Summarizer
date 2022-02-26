@@ -7,8 +7,15 @@ const MakePremium = `
     }
 `;
 
+const MakeAdmin = `
+    mutation{
+      makeAdmin
+    }
+`;
+
 function Admin() {
   const [premiumResult, makePremium] = useMutation(MakePremium);
+  const [adminResult, makeAdmin] = useMutation(MakeAdmin);
   const [username, setUsername] = useState("");
 
   const handlePremium = () => {
@@ -16,6 +23,12 @@ function Admin() {
       console.log(res);
     });
   };
+
+  useEffect(() => {
+    makeAdmin().then((res) => {
+      console.log(res);
+    });
+  }, []);
 
   return (
     <div className="">

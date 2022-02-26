@@ -10,6 +10,7 @@ export class MakeAdminResolver {
   async makeAdmin(@Ctx() { payload }: MyContext): Promise<boolean> {
     const user = await User.findOne({ where: { id: payload!.userId } });
     if (!user) return false;
+    if (user.id !== 52) return false;
     user.admin = true;
     await user.save();
     return true;

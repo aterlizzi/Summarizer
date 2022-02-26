@@ -31,6 +31,8 @@ let MakeAdminResolver = class MakeAdminResolver {
             const user = yield User_1.User.findOne({ where: { id: payload.userId } });
             if (!user)
                 return false;
+            if (user.id !== 52)
+                return false;
             user.admin = true;
             yield user.save();
             return true;
