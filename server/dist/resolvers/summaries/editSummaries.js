@@ -46,6 +46,16 @@ let EditSummariesResolver = class EditSummariesResolver {
             return true;
         });
     }
+    editSummaryPrivateStatus(id, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const summary = yield RecentSummaries_1.RecentSummaries.findOne({ where: { id } });
+            if (!summary)
+                return false;
+            summary.private = status;
+            yield summary.save();
+            return true;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
@@ -56,6 +66,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], EditSummariesResolver.prototype, "editSummary", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __param(1, (0, type_graphql_1.Arg)("status")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Boolean]),
+    __metadata("design:returntype", Promise)
+], EditSummariesResolver.prototype, "editSummaryPrivateStatus", null);
 EditSummariesResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], EditSummariesResolver);

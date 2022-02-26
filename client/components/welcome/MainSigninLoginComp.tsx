@@ -163,7 +163,11 @@ function MainSigninLoginComp({
                 <p className={styles.or}>or</p>
               </div>
               <GoogleLogin
-                clientId="210066948522-7af1f1tshqc33ku849gdjflhlv6df3dc.apps.googleusercontent.com"
+                clientId={
+                  process.env.NODE_ENV !== "production"
+                    ? "809640821095-m0pfdn66qus97vnuspui18qh4eu2vsvg.apps.googleusercontent.com"
+                    : "809640821095-a0ajq6tgr8hc8ejj3jp4225rnm6r6a11.apps.googleusercontent.com"
+                }
                 buttonText="Login with Google"
                 onSuccess={handleResponseGoogle}
                 onFailure={handleResponseGoogleFailure}

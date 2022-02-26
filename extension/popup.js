@@ -12,6 +12,9 @@ const errorContainer = document.querySelector(".errorContainer");
 const circle = document.querySelector(".circle");
 const settingsCircle = document.querySelector(".settingsCircle");
 const referFriendCircle = document.querySelector(".referFriendLink");
+const privateCircle = document.querySelector(".privateCircle");
+const unlockIcon = document.querySelector(".fa-user");
+const lockIcon = document.querySelector(".fa-user-secret");
 const sumNum = document.querySelector(".sumNum");
 const articleContainer = document.querySelector(".entireArticle");
 const highlightedContainer = document.querySelector(".highlighted");
@@ -54,6 +57,7 @@ let manualAction = true;
 let pdfAction = true;
 let typingTimer;
 let sumId;
+let privateSummary = false;
 
 // get status check when loading the popup, if login fails show login if login succeeds, proceed to application.
 // also retrieves the remaining word count from backend
@@ -226,6 +230,14 @@ const checkOptions = (options) => {
   if (options.referFriendLink === false) {
     referFriendCircle.classList.add("none");
   }
+  if (options.showPrivacyCircle === false) {
+    privateCircle.classList.add("none");
+  }
+  if (options.privateByDefault === true) {
+    lockIcon.classList.remove("none");
+    unlockIcon.classList.add("none");
+    privateSummary = true;
+  }
 };
 
 // converts the wordcount into appropriate sizes.
@@ -262,18 +274,19 @@ const handleOnLoadClassChanges = () => {
   settingsCircle.classList.remove("none");
   referFriendCircle.classList.remove("none");
   circle.classList.remove("none");
+  privateCircle.classList.remove("none");
 };
 
 // if cookie is found for website, navigate to settings, else navigate to login
 const checkCookies = () => {
   chrome.cookies.get(
-    { url: "https://untanglify.com/", name: "jid" },
+    { url: "http://localhost:4000/", name: "jid" },
     (cookie) => {
       if (cookie) {
-        chrome.tabs.create({ url: "https://untanglify.com/users/settings" });
+        chrome.tabs.create({ url: "http://localhost:4000/users/settings" });
       } else {
         chrome.tabs.create({
-          url: `https://untanglify.com/welcome?return_url=${encodeURIComponent(
+          url: `http://localhost:4000/welcome?return_url=${encodeURIComponent(
             "/users/settings"
           )}`,
         });
@@ -307,7 +320,7 @@ manualTextArea.addEventListener("keydn", () => {
 
 popoutBtn.addEventListener("click", () => {
   chrome.tabs.create({
-    url: `https://untanglify.com/summaries/${sumId}`,
+    url: `http://localhost:4000/summaries/${sumId}`,
   });
 });
 
@@ -317,7 +330,7 @@ button.addEventListener("click", () => {
   spinner.classList.toggle("hidden");
   summaryContainer.classList.remove("none");
   chrome.runtime.sendMessage(
-    { key: "summarize", payload: action },
+    { key: "summarize", payload: { action, private: privateSummary } },
     (response) => {
       console.log(response);
       if (response) {
@@ -345,7 +358,7 @@ button.addEventListener("click", () => {
             // if user wants the summary to popout, this will automatically handle that action.
             if (response.data.summarize.popout) {
               chrome.tabs.create({
-                url: `https://untanglify.com/summaries/${sumId}`,
+                url: `http://localhost:4000/summaries/${sumId}`,
               });
             }
           }
@@ -376,7 +389,7 @@ fileUpload.addEventListener("change", (e) => {
     const fileName = file.name;
     const formData = new FormData();
     formData.append("file", file);
-    fetch("https://untanglify.com/api/upload", {
+    fetch("http://localhost:3000/api/upload", {
       method: "POST",
       body: formData,
     })
@@ -438,7 +451,7 @@ articleContainer.addEventListener("click", () => {
 // allows for pdf submission
 pdfContainer.addEventListener("click", () => {
   if (!pdfAction) {
-    chrome.tabs.create({ url: "https://untanglify.com/begin" });
+    chrome.tabs.create({ url: "http://localhost:4000/begin" });
     return;
   }
   highlightedContainer.classList.remove("active");
@@ -484,7 +497,7 @@ highlightedContainer.addEventListener("click", () => {
 // selects manually inputted text
 manualContainer.addEventListener("click", () => {
   if (!manualAction) {
-    chrome.tabs.create({ url: "https://untanglify.com/begin" });
+    chrome.tabs.create({ url: "http://localhost:4000/begin" });
     return;
   }
   articleContainer.classList.remove("active");
@@ -516,7 +529,14 @@ settingsCircle.addEventListener("click", () => {
   checkCookies();
 });
 
+// handle private summary
+privateCircle.addEventListener("click", () => {
+  lockIcon.classList.toggle("none");
+  unlockIcon.classList.toggle("none");
+  privateSummary = !privateSummary;
+});
+
 // opens refer a friend link when clicked
 referFriendCircle.addEventListener("click", () => {
-  chrome.tabs.create({ url: "https://untanglify.com/referral" });
+  chrome.tabs.create({ url: "http://localhost:4000/referral" });
 });

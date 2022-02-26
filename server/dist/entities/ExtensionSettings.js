@@ -66,6 +66,16 @@ __decorate([
     (0, type_graphql_1.Field)(() => Boolean),
     (0, typeorm_1.Column)({ default: true }),
     __metadata("design:type", Boolean)
+], ExtensionSettings.prototype, "showPrivacyCircle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], ExtensionSettings.prototype, "privateByDefault", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    (0, typeorm_1.Column)({ default: true }),
+    __metadata("design:type", Boolean)
 ], ExtensionSettings.prototype, "referFriendLink", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),

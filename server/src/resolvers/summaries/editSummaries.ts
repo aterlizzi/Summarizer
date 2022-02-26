@@ -25,4 +25,16 @@ export class EditSummariesResolver {
     await summary.save();
     return true;
   }
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async editSummaryPrivateStatus(
+    @Arg("id") id: number,
+    @Arg("status") status: boolean
+  ): Promise<boolean> {
+    const summary = await RecentSummaries.findOne({ where: { id } });
+    if (!summary) return false;
+    summary.private = status;
+    await summary.save();
+    return true;
+  }
 }

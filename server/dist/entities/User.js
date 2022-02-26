@@ -166,6 +166,12 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "groups", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => [Groups_1.Groups]),
+    (0, typeorm_1.ManyToMany)(() => Groups_1.Groups, (group) => group.admins, { cascade: true }),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], User.prototype, "adminGroups", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => [Bundle_1.Bundle]),
     (0, typeorm_1.OneToMany)(() => Bundle_1.Bundle, (group) => group.user, { cascade: true }),
     __metadata("design:type", Array)
@@ -185,6 +191,11 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => UserRelationship_1.UserRelationship, (relationship) => relationship.userTwo),
     __metadata("design:type", Array)
 ], User.prototype, "relationshipTwo", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isAdmin", void 0);
 User = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

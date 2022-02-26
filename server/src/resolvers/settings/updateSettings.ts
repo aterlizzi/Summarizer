@@ -36,6 +36,8 @@ export class UpdateSettingsResolver {
       onlyFriendsCanView,
       showSettings,
       referFriendLink,
+      privateByDefault,
+      showPrivacyCircle,
     }: UpdateExtensionSettingsInput
   ): Promise<boolean> {
     const user = await User.findOne({
@@ -47,6 +49,8 @@ export class UpdateSettingsResolver {
     user.settings.extensionSettings.showSettingsLink = showSettings;
     user.settings.extensionSettings.onlyFriendsCanView = onlyFriendsCanView;
     user.settings.extensionSettings.popoutSummary = popout;
+    user.settings.extensionSettings.privateByDefault = privateByDefault;
+    user.settings.extensionSettings.showPrivacyCircle = showPrivacyCircle;
     await user.save();
     return true;
   }

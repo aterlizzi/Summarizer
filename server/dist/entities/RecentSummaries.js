@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecentSummaries = void 0;
+const Groups_1 = require("./Groups");
 const Bundle_1 = require("./Bundle");
 const User_1 = require("./User");
 const type_graphql_1 = require("type-graphql");
@@ -68,6 +69,21 @@ __decorate([
     (0, typeorm_1.ManyToMany)(() => Bundle_1.Bundle, (bundle) => bundle.summaries),
     __metadata("design:type", Array)
 ], RecentSummaries.prototype, "bundles", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Groups_1.Groups]),
+    (0, typeorm_1.ManyToMany)(() => Groups_1.Groups, (group) => group.pinnedSummaries),
+    __metadata("design:type", Array)
+], RecentSummaries.prototype, "pinnedGroups", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Groups_1.Groups]),
+    (0, typeorm_1.ManyToMany)(() => Groups_1.Groups, (group) => group.summaries),
+    __metadata("design:type", Array)
+], RecentSummaries.prototype, "groups", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], RecentSummaries.prototype, "private", void 0);
 RecentSummaries = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

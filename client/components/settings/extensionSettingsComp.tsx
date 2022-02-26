@@ -11,6 +11,8 @@ const Me = `
                     popoutSummary
                     showSettingsLink
                     referFriendLink
+                    privateByDefault
+                    showPrivacyCircle
                 }
             }
         }
@@ -29,6 +31,8 @@ function ExtensionSettings() {
   const [popoutSummary, setPopoutSummary] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [referFriendLink, setReferFriendLink] = useState(false);
+  const [privateByDefault, setPrivateByDefault] = useState(false);
+  const [showPrivacyCircle, setShowPrivacyCircle] = useState(false);
 
   const [result, reexecuteMe] = useQuery({ query: Me });
   const [updateSettingsResult, updateSettings] = useMutation(UpdateSettings);
@@ -74,6 +78,28 @@ function ExtensionSettings() {
     ) {
       setReferFriendLink(
         result.data.me.settings.extensionSettings.referFriendLink
+      );
+    }
+    if (
+      result.data &&
+      result.data.me &&
+      result.data.me.settings &&
+      result.data.me.settings.extensionSettings &&
+      result.data.me.settings.extensionSettings.privateByDefault
+    ) {
+      setPrivateByDefault(
+        result.data.me.settings.extensionSettings.privateByDefault
+      );
+    }
+    if (
+      result.data &&
+      result.data.me &&
+      result.data.me.settings &&
+      result.data.me.settings.extensionSettings &&
+      result.data.me.settings.extensionSettings.showPrivacyCircle
+    ) {
+      setShowPrivacyCircle(
+        result.data.me.settings.extensionSettings.showPrivacyCircle
       );
     }
   }, [result]);
@@ -122,6 +148,32 @@ function ExtensionSettings() {
     });
   };
 
+  const handleChangeShowPrivacyCircleSettings = (value) => {
+    updateSettings({
+      options: {
+        popout: popoutSummary,
+        onlyFriendsCanView: friendsOnly,
+        showSettings: showSettings,
+        referFriendLink: referFriendLink,
+        showPrivacyCircle: value,
+        privateByDefault: privateByDefault,
+      },
+    });
+  };
+
+  const handleChangePrivacyByDefault = (value) => {
+    updateSettings({
+      options: {
+        popout: popoutSummary,
+        onlyFriendsCanView: friendsOnly,
+        showSettings: showSettings,
+        referFriendLink: referFriendLink,
+        showPrivacyCircle: showPrivacyCircle,
+        privateByDefault: value,
+      },
+    });
+  };
+
   return (
     <section className={styles.extension}>
       {result.fetching ? (
@@ -152,10 +204,9 @@ function ExtensionSettings() {
               </div>
             </div>
             <p className={styles.extensionDesc}>
-              When enabled, clicking &quote;Summarize&quote; in the extension
-              will open a new tab with the summary and related information. This
-              is useful for individuals who want to see a larger font-size
-              summary.
+              When enabled, clicking &quot;Summarize&quot; in the extension will
+              open a new tab with the summary and related information. This is
+              useful for individuals who want to see a larger font-size summary.
             </p>
           </div>
           <div className={styles.extensionContainer}>
@@ -184,6 +235,35 @@ function ExtensionSettings() {
             <p className={styles.extensionDesc}>
               When enabled, only your friends will be able to view your posts.
               If disabled, everyone can view your posts.
+            </p>
+          </div>
+          <div className={styles.extensionContainer}>
+            <div className={styles.top}>
+              <h3 className={styles.label}>Private by Default</h3>
+              <div className={styles.toggleContainer}>
+                <input
+                  type="checkbox"
+                  name="switch"
+                  id="switch"
+                  className={styles.switch}
+                  defaultChecked={
+                    result.data &&
+                    result.data.me &&
+                    result.data.me.settings &&
+                    result.data.me.settings.extensionSettings &&
+                    result.data.me.settings.extensionSettings.privateByDefault
+                  }
+                  onChange={(e) => {
+                    setPrivateByDefault(e.currentTarget.checked);
+                    handleChangePrivacyByDefault(e.currentTarget.checked);
+                  }}
+                />
+              </div>
+            </div>
+            <p className={styles.extensionDesc}>
+              When enabled, all of your summaries will be private by default and
+              require you to &quot;unprivate&quot; them to allow your friends to
+              see your summaries.
             </p>
           </div>
           <div className={styles.extensionContainer}>
@@ -242,6 +322,37 @@ function ExtensionSettings() {
               When enabled, you have quick access to the referral page through
               the icon in the bottom left corner of the extension. When
               disabled, this icon disappears.
+            </p>
+          </div>
+          <div className={styles.extensionContainer}>
+            <div className={styles.top}>
+              <h3 className={styles.label}>Show Private Toggle Button</h3>
+              <div className={styles.toggleContainer}>
+                <input
+                  type="checkbox"
+                  name="switch"
+                  id="switch"
+                  className={styles.switch}
+                  defaultChecked={
+                    result.data &&
+                    result.data.me &&
+                    result.data.me.settings &&
+                    result.data.me.settings.extensionSettings &&
+                    result.data.me.settings.extensionSettings.showPrivacyCircle
+                  }
+                  onChange={(e) => {
+                    setShowPrivacyCircle(e.currentTarget.checked);
+                    handleChangeShowPrivacyCircleSettings(
+                      e.currentTarget.checked
+                    );
+                  }}
+                />
+              </div>
+            </div>
+            <p className={styles.extensionDesc}>
+              When enabled, you have quick access to a toggle that allows you to
+              summarize privately. In other words, you can summarize without any
+              of your friends seeing your summary.
             </p>
           </div>
         </>

@@ -1,3 +1,4 @@
+import { RecentSummaries } from "./RecentSummaries";
 import { User } from "./User";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
@@ -5,6 +6,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -32,4 +34,30 @@ export class Groups extends BaseEntity {
   @Field(() => [User])
   @ManyToMany(() => User, (user) => user.groups)
   users: User[];
+
+  @Field(() => [User])
+  @ManyToMany(() => User, (user) => user.adminGroups)
+  admins: User[];
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  publicPosts: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: true })
+  inviteOnly: boolean;
+
+  @Field(() => [RecentSummaries])
+  @ManyToMany(() => RecentSummaries, (summary) => summary.pinnedGroups)
+  @JoinTable()
+  pinnedSummaries: RecentSummaries[];
+
+  @Field(() => [RecentSummaries])
+  @ManyToMany(() => RecentSummaries, (summary) => summary.groups)
+  @JoinTable()
+  summaries: RecentSummaries[];
+
+  @Field(() => String)
+  @Column()
+  description: string;
 }

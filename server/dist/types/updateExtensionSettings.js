@@ -29,6 +29,14 @@ __decorate([
     (0, type_graphql_1.Field)(() => Boolean),
     __metadata("design:type", Boolean)
 ], UpdateExtensionSettingsInput.prototype, "referFriendLink", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    __metadata("design:type", Boolean)
+], UpdateExtensionSettingsInput.prototype, "privateByDefault", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    __metadata("design:type", Boolean)
+], UpdateExtensionSettingsInput.prototype, "showPrivacyCircle", void 0);
 UpdateExtensionSettingsInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], UpdateExtensionSettingsInput);

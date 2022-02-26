@@ -1,2 +1,52 @@
 @import "../utils/variables";
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;500;700&family=Roboto:wght@100;300;400;500;700&display=swap");
+
+.home {
+  .groups {
+    padding: 2em;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left {
+        display: flex;
+        align-items: center;
+        .title {
+          margin: 0em 1em 0em 0em;
+        }
+        .groupNumber {
+        }
+      }
+      .right {
+        display: flex;
+        align-items: center;
+        .options {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: $clr-bg3;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid $clr-bg4;
+          cursor: pointer;
+          &:hover {
+            background: $clr-bg5;
+          }
+        }
+        .newGroup {
+          background: $clr-primaryVariant;
+          margin-left: 1em;
+          padding: 0.5em 1em;
+          border-radius: 0.5em;
+          color: $clr-highEmpha;
+          font-family: "Roboto", sans-serif;
+          font-size: 1rem;
+          outline: none;
+          border: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

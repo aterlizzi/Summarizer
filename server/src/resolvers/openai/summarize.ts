@@ -13,7 +13,7 @@ export class SummarizeResolver {
   @Mutation(() => SummaryReturnObj, { nullable: true })
   @UseMiddleware(isAuth)
   async summarize(
-    @Arg("options") { text, url, title }: SummaryInputObj,
+    @Arg("options") { text, url, title, privateSummary }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
     const wordCount = countWords(text);
@@ -54,7 +54,8 @@ export class SummarizeResolver {
         user.id,
         url,
         saveSummary,
-        title
+        title,
+        privateSummary
       );
       return {
         summary,
@@ -113,7 +114,13 @@ export class SummarizeResolver {
       user.wordCount = user.wordCount - wordCount;
       user.totalWordsSummarized += wordCount;
       await user.save();
-      const sumId = await handleSaveRecentSummary(user.id, url, summary, title);
+      const sumId = await handleSaveRecentSummary(
+        user.id,
+        url,
+        summary,
+        title,
+        privateSummary
+      );
       try {
         console.log(user.settings.extensionSettings.popoutSummary);
       } catch (err) {
@@ -343,7 +350,8 @@ const handleSaveRecentSummary = async (
   userId: number,
   url: string | undefined,
   summary: string,
-  title: string
+  title: string,
+  privateSummary: boolean
 ) => {
   const user = await User.findOne({
     where: { id: userId },
@@ -355,6 +363,7 @@ const handleSaveRecentSummary = async (
     url,
     summary,
     title,
+    private: privateSummary,
   });
   switch (user.paymentTier) {
     case "Free":

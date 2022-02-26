@@ -10,4 +10,7 @@ export class SummaryInputObj {
 
   @Field(() => String)
   url: string;
+
+  @Field(() => Boolean)
+  privateSummary: boolean;
 }

@@ -44,7 +44,7 @@ let UpdateSettingsResolver = class UpdateSettingsResolver {
             return true;
         });
     }
-    updateExtensionSettings({ payload }, { popout, onlyFriendsCanView, showSettings, referFriendLink, }) {
+    updateExtensionSettings({ payload }, { popout, onlyFriendsCanView, showSettings, referFriendLink, privateByDefault, showPrivacyCircle, }) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield User_1.User.findOne({
                 where: { id: payload.userId },
@@ -56,6 +56,8 @@ let UpdateSettingsResolver = class UpdateSettingsResolver {
             user.settings.extensionSettings.showSettingsLink = showSettings;
             user.settings.extensionSettings.onlyFriendsCanView = onlyFriendsCanView;
             user.settings.extensionSettings.popoutSummary = popout;
+            user.settings.extensionSettings.privateByDefault = privateByDefault;
+            user.settings.extensionSettings.showPrivacyCircle = showPrivacyCircle;
             yield user.save();
             return true;
         });

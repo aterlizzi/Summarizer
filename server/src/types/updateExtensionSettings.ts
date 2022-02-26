@@ -13,4 +13,10 @@ export class UpdateExtensionSettingsInput {
 
   @Field(() => Boolean)
   referFriendLink: boolean;
+
+  @Field(() => Boolean)
+  privateByDefault: boolean;
+
+  @Field(() => Boolean)
+  showPrivacyCircle: boolean;
 }

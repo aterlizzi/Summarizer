@@ -31,7 +31,7 @@ const type_graphql_1 = require("type-graphql");
 const OpenAI = require("openai-api");
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 let SummarizeResolver = class SummarizeResolver {
-    summarize({ text, url, title }, { payload }) {
+    summarize({ text, url, title, privateSummary }, { payload }) {
         return __awaiter(this, void 0, void 0, function* () {
             const wordCount = countWords(text);
             console.log(text, wordCount);
@@ -62,7 +62,7 @@ let SummarizeResolver = class SummarizeResolver {
                 user.wordCount = user.wordCount - wordCount;
                 user.totalWordsSummarized += wordCount;
                 yield user.save();
-                const sumId = yield handleSaveRecentSummary(user.id, url, saveSummary, title);
+                const sumId = yield handleSaveRecentSummary(user.id, url, saveSummary, title, privateSummary);
                 return {
                     summary,
                     remainingSummaries: user.wordCount,
@@ -105,7 +105,7 @@ let SummarizeResolver = class SummarizeResolver {
                 user.wordCount = user.wordCount - wordCount;
                 user.totalWordsSummarized += wordCount;
                 yield user.save();
-                const sumId = yield handleSaveRecentSummary(user.id, url, summary, title);
+                const sumId = yield handleSaveRecentSummary(user.id, url, summary, title, privateSummary);
                 try {
                     console.log(user.settings.extensionSettings.popoutSummary);
                 }
@@ -305,7 +305,7 @@ const handlePromiseChain = (textArr) => __awaiter(void 0, void 0, void 0, functi
     });
     return editedSummaries.join("NEWSECTION");
 });
-const handleSaveRecentSummary = (userId, url, summary, title) => __awaiter(void 0, void 0, void 0, function* () {
+const handleSaveRecentSummary = (userId, url, summary, title, privateSummary) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield User_1.User.findOne({
         where: { id: userId },
         relations: ["recentSummaries"],
@@ -317,6 +317,7 @@ const handleSaveRecentSummary = (userId, url, summary, title) => __awaiter(void 
         url,
         summary,
         title,
+        private: privateSummary,
     });
     switch (user.paymentTier) {
         case "Free":

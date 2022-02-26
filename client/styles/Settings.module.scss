@@ -398,6 +398,9 @@ $switch-animation-bounce-distance: 0.4em;
           }
           .extensionContainer {
             margin: 0 3em;
+            &:last-of-type {
+              margin: 0em 3em 2em 3em;
+            }
             padding-bottom: 1em;
             border-bottom: 2px solid $clr-bg4;
             &:not(:first-of-type) {

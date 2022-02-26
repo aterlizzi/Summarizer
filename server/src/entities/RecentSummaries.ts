@@ -1,3 +1,4 @@
+import { Groups } from "./Groups";
 import { Bundle } from "./Bundle";
 import { User } from "./User";
 import { Field, ID, ObjectType } from "type-graphql";
@@ -56,4 +57,16 @@ export class RecentSummaries extends BaseEntity {
   @Field(() => [Bundle])
   @ManyToMany(() => Bundle, (bundle) => bundle.summaries)
   bundles: Bundle[];
+
+  @Field(() => [Groups])
+  @ManyToMany(() => Groups, (group) => group.pinnedSummaries)
+  pinnedGroups: Groups[];
+
+  @Field(() => [Groups])
+  @ManyToMany(() => Groups, (group) => group.summaries)
+  groups: Groups[];
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  private: boolean;
 }

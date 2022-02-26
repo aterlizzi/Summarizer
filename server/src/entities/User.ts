@@ -140,6 +140,11 @@ export class User extends BaseEntity {
   @JoinTable()
   groups: Groups[];
 
+  @Field(() => [Groups])
+  @ManyToMany(() => Groups, (group) => group.admins, { cascade: true })
+  @JoinTable()
+  adminGroups: Groups[];
+
   @Field(() => [Bundle])
   @OneToMany(() => Bundle, (group) => group.user, { cascade: true })
   bundles: Bundle[];
@@ -155,4 +160,8 @@ export class User extends BaseEntity {
   @Field(() => [UserRelationship])
   @OneToMany(() => UserRelationship, (relationship) => relationship.userTwo)
   relationshipTwo: UserRelationship[];
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isAdmin: boolean;
 }

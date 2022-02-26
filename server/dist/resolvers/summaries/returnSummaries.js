@@ -122,8 +122,13 @@ let ReturnSummariesResolver = class ReturnSummariesResolver {
             });
             const relationships = [...relationshipOneArr, ...relationshipTwoArr].flat();
             const sortedRelationships = _.orderBy(relationships, "createdAt", "desc");
-            sortedRelationships.length = take;
-            return sortedRelationships;
+            const resortedRelationships = sortedRelationships.filter((summary) => {
+                if (summary.private)
+                    return false;
+                return true;
+            });
+            resortedRelationships.length = take;
+            return resortedRelationships;
         });
     }
 };

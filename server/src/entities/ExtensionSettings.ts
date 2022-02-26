@@ -53,6 +53,14 @@ export class ExtensionSettings extends BaseEntity {
 
   @Field(() => Boolean)
   @Column({ default: true })
+  showPrivacyCircle: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  privateByDefault: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: true })
   referFriendLink: boolean;
 
   @Field(() => String)

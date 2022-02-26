@@ -115,7 +115,15 @@ export class ReturnSummariesResolver {
     });
     const relationships = [...relationshipOneArr, ...relationshipTwoArr].flat();
     const sortedRelationships = _.orderBy(relationships, "createdAt", "desc");
-    sortedRelationships.length = take;
-    return sortedRelationships;
+
+    // cut out any private summaries
+    const resortedRelationships = sortedRelationships.filter(
+      (summary: RecentSummaries) => {
+        if (summary.private) return false;
+        return true;
+      }
+    );
+    resortedRelationships.length = take;
+    return resortedRelationships;
   }
 }

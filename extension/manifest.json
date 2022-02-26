@@ -1,10 +1,10 @@
 {
-  "name": "Untanglify",
+  "name": "Untanglify Development",
   "version": "0.0.0.1",
   "description": "Get the key takeaways of articles, blogs, pdfs, and manually inputted text saving your time.",
   "permissions": ["activeTab", "tabs", "storage", "identity", "cookies"],
   "icons": { "128": "images/icon_128.png" },
-  "host_permissions": ["https://untanglify.com/"],
+  "host_permissions": ["http://localhost:3000/"],
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtGt89Sd6Wxc4Jo3t1PNzjvFQ7YxmdfUr2rF5iLjrNl89Rrbp35bd1qbSxxU2D43K2duSiPgSHlM0qIzYaeWinPMAyMzTW5FG8NRIOcU3KScbl6QOElyc+MNoHSxLMSUY58alWHBWKVKuTMblF/vRBs26s+PLLCoef8Sm5WENpDHmtcW+0oKmWzEUNdL3fDX91OKHObBzT9QEiKR+l1SNxADbF2Jw3xaKPo9ZPxRRw4So/H52xJrHXMVsFVsBScAmt+TpyOIlq7PG8QhfwcHgXt9ucZ5tzfGTmlNj34/NtCBeCxsj3EtS2iRoIkYEnLAIrSxF9KtiU39Fm2VtTIw4QwIDAQAB",
   "background": {
     "service_worker": "background.js",

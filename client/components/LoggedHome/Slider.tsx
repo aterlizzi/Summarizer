@@ -2,11 +2,12 @@ import dynamic from "next/dynamic";
 import {
   faChevronLeft,
   faChevronRight,
+  faEyeSlash,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "urql";
 import styles from "../../styles/components/DefaultDisplay.module.scss";
 const PostSettings = dynamic(() => import("./PostSettings"));
@@ -20,6 +21,7 @@ const ReturnRecentSummaries = `
             url
             id
             rating
+            private
         }
     }
 `;
@@ -58,6 +60,7 @@ function Slider({
   reexecuteBundle,
 }: SliderProps) {
   const router = useRouter();
+
   const [returnSummariesResult, rexecuteReturnSummaries] = useQuery({
     query: ReturnRecentSummaries,
     pause: type !== "recentReads",
@@ -138,6 +141,7 @@ function Slider({
                       summaryId={summary.id}
                       bundleResult={bundleResult}
                       reexecuteBundle={reexecuteBundle}
+                      privated={summary.private}
                     />
                   </div>
                   <h4 className={styles.title}>

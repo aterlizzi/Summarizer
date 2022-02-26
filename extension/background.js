@@ -2,7 +2,7 @@ let returnMsg;
 let userSignedIn = false;
 
 const CLIENT_ID = encodeURIComponent(
-  "81520595006-bkakq683858d7cg539fhg0slauptfcdv.apps.googleusercontent.com"
+  "809640821095-1rmudsgh1oa1q0gfmkdpmfdlc7lvc7hv.apps.googleusercontent.com"
 );
 const RESPONSE_TYPE = encodeURIComponent("id_token");
 const REDIRECT_URI = encodeURIComponent(
@@ -17,10 +17,10 @@ chrome.runtime.onMessage.addListener(receiver);
 chrome.runtime.onInstalled.addListener((details) => {
   switch (details.reason) {
     case "install":
-      chrome.tabs.create({ url: "https://untanglify.com/welcome" });
+      chrome.tabs.create({ url: "http://localhost:4000/welcome" });
       break;
     case "update":
-      chrome.tabs.create({ url: "https://untanglify.com/update" });
+      chrome.tabs.create({ url: "http://localhost:4000/update" });
       break;
     default:
       break;
@@ -61,7 +61,7 @@ async function receiver(req, sender, sendResponse) {
           }
         }`,
       });
-      fetch("https://untanglify.com/graphql", {
+      fetch("http://localhost:3000/graphql", {
         headers: { "content-type": "application/json" },
         method: "POST",
         body,
@@ -124,7 +124,7 @@ async function receiver(req, sender, sendResponse) {
                       }
                     }`,
                   });
-                  fetch("https://untanglify.com/graphql", {
+                  fetch("http://localhost:3000/graphql", {
                     headers: { "content-type": "application/json" },
                     method: "POST",
                     body,
@@ -178,7 +178,7 @@ async function receiver(req, sender, sendResponse) {
         }
       }`,
       });
-      fetch("https://untanglify.com/graphql", {
+      fetch("http://localhost:3000/graphql", {
         headers: { "content-type": "application/json" },
         method: "POST",
         body: bodyTwo,
@@ -242,8 +242,9 @@ async function receiver(req, sender, sendResponse) {
       storePDFText(text, filename);
       break;
     case "summarize":
-      const action = req.payload;
-      summarizeFunc(action).then((result) => {
+      const action = req.payload.action;
+      const privateSummary = req.payload.private;
+      summarizeFunc(action, privateSummary).then((result) => {
         console.log(result);
         sendResponse(result);
       });
@@ -308,7 +309,7 @@ const handleRetrieveBundles = async (userInfo) => {
           }
       }`,
   });
-  const response = await fetch("https://untanglify.com/graphql", {
+  const response = await fetch("http://localhost:3000/graphql", {
     headers: {
       Authorization: `Bearer ${token}`,
       "content-type": "application/json",
@@ -340,7 +341,7 @@ const handleAddToBundle = async (bundleId, userInfo) => {
       bundleId: parseInt(bundleId),
     },
   });
-  const response = await fetch("https://untanglify.com/graphql", {
+  const response = await fetch("http://localhost:3000/graphql", {
     headers: {
       Authorization: `Bearer ${token}`,
       "content-type": "application/json",
@@ -393,12 +394,14 @@ const confirmUserStatus = async (userInfo) => {
             extensionSettings{
               showSettingsLink
               referFriendLink
+              privateByDefault
+              showPrivacyCircle
             }
           }
         }
       }`,
   });
-  const response = await fetch("https://untanglify.com/graphql", {
+  const response = await fetch("http://localhost:3000/graphql", {
     headers: {
       Authorization: `Bearer ${token}`,
       "content-type": "application/json",
@@ -415,6 +418,10 @@ const confirmUserStatus = async (userInfo) => {
     data.data.me.settings.extensionSettings.showSettingsLink;
   options.referFriendLink =
     data.data.me.settings.extensionSettings.referFriendLink;
+  options.showPrivacyCircle =
+    data.data.me.settings.extensionSettings.showPrivacyCircle;
+  options.privateByDefault =
+    data.data.me.settings.extensionSettings.privateByDefault;
   return { key: "loginTrue", payload, tier, options };
 };
 
@@ -532,7 +539,7 @@ const retrieveManualText = () => {
 const refreshAccessToken = async (userInfo) => {
   // token has expired. Request new token.
   let token;
-  const response = await fetch("https://untanglify.com/api/refresh_token", {
+  const response = await fetch("http://localhost:3000/api/refresh_token", {
     method: "POST",
     credentials: "include",
   });
@@ -552,7 +559,7 @@ const refreshAccessToken = async (userInfo) => {
 const returnWhetherCookie = async () => {
   return new Promise((resolve) => {
     chrome.cookies.get(
-      { url: "https://untanglify.com/", name: "jid" },
+      { url: "http://localhost:3000/", name: "jid" },
       (cookie) => {
         if (cookie) {
           resolve(true);
@@ -564,7 +571,7 @@ const returnWhetherCookie = async () => {
   });
 };
 
-const summarizeFunc = async (action, retries = 0) => {
+const summarizeFunc = async (action, privateSummary, retries = 0) => {
   // retrieve fails depending on the action required.
   const initObj = await retrieveSummaryParameters(action);
   const titleObj = await retrieveArticleTitle();
@@ -599,10 +606,11 @@ const summarizeFunc = async (action, retries = 0) => {
           text,
           url,
           title: titleObj.articleTitle,
+          privateSummary,
         },
       },
     });
-    const response = await fetch("https://untanglify.com/graphql", {
+    const response = await fetch("http://localhost:3000/graphql", {
       headers: {
         Authorization: `Bearer ${token}`,
         "content-type": "application/json",
