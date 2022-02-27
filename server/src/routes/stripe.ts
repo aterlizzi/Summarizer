@@ -57,7 +57,7 @@ const stripeWebhook = (fastify: any, _: void, next: any) => {
           break;
         default:
           console.log(`Unhandled event type: ${event.type}`);
-          return reply.status(400).end();
+          return reply.send(400);
       }
       reply.send({ received: true });
     },
