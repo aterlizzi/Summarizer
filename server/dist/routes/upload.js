@@ -32,7 +32,8 @@ const uploadEndpoint = (fastify, _, next) => {
     fastify.post("/api/upload", { preHandler: upload.single("file") }, (req, reply) => __awaiter(void 0, void 0, void 0, function* () {
         const filename = req.file.filename;
         const pathName = path_1.default.join(__dirname, `../uploads/${filename}`);
-        const childPython = (0, child_process_1.spawn)("python3.9", [
+        const pythonType = process.env.NODE_ENV === "production" ? "python3" : "python3.9";
+        const childPython = (0, child_process_1.spawn)(pythonType, [
             path_1.default.join(__dirname, "../uploads/pythonPDF.py"),
             pathName,
             filename,

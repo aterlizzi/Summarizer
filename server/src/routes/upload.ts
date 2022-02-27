@@ -24,7 +24,9 @@ const uploadEndpoint = (fastify: any, _: void, next: any) => {
     async (req: any, reply: any) => {
       const filename = req.file.filename;
       const pathName = path.join(__dirname, `../uploads/${filename}`);
-      const childPython = spawn("python3.9", [
+      const pythonType =
+        process.env.NODE_ENV === "production" ? "python3" : "python3.9";
+      const childPython = spawn(pythonType, [
         path.join(__dirname, "../uploads/pythonPDF.py"),
         pathName,
         filename,
