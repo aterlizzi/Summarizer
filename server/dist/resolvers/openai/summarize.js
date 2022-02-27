@@ -33,6 +33,7 @@ const openai = new OpenAI(process.env.OPENAI_API_KEY);
 let SummarizeResolver = class SummarizeResolver {
     summarize({ text, url, title, privateSummary }, { payload }) {
         return __awaiter(this, void 0, void 0, function* () {
+            privateSummary = false;
             const wordCount = countWords(text);
             console.log(text, wordCount);
             const user = yield User_1.User.findOne({

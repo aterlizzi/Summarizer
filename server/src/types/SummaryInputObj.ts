@@ -11,6 +11,6 @@ export class SummaryInputObj {
   @Field(() => String)
   url: string;
 
-  @Field(() => Boolean)
-  privateSummary: boolean;
+  @Field(() => Boolean, { nullable: true })
+  privateSummary?: boolean;
 }

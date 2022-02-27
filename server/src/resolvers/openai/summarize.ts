@@ -16,6 +16,7 @@ export class SummarizeResolver {
     @Arg("options") { text, url, title, privateSummary }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
+    privateSummary = false;
     const wordCount = countWords(text);
     console.log(text, wordCount);
 
