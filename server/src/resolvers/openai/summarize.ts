@@ -16,7 +16,10 @@ export class SummarizeResolver {
     @Arg("options") { text, url, title, privateSummary }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
-    privateSummary = false;
+    let privated = privateSummary;
+    if (privated === undefined || privated === null) {
+      privated = false;
+    }
     const wordCount = countWords(text);
     console.log(text, wordCount);
 
@@ -56,7 +59,7 @@ export class SummarizeResolver {
         url,
         saveSummary,
         title,
-        privateSummary
+        privated
       );
       return {
         summary,
@@ -120,7 +123,7 @@ export class SummarizeResolver {
         url,
         summary,
         title,
-        privateSummary
+        privated
       );
       try {
         console.log(user.settings.extensionSettings.popoutSummary);
@@ -352,7 +355,7 @@ const handleSaveRecentSummary = async (
   url: string | undefined,
   summary: string,
   title: string,
-  privateSummary: boolean
+  privated: boolean
 ) => {
   const user = await User.findOne({
     where: { id: userId },
@@ -364,7 +367,7 @@ const handleSaveRecentSummary = async (
     url,
     summary,
     title,
-    private: privateSummary,
+    private: privated,
   });
   switch (user.paymentTier) {
     case "Free":
