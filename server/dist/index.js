@@ -70,7 +70,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app.use((0, cors_1.default)({
             credentials: true,
             origin: process.env.NODE_ENV === "production"
-                ? "https://untanglify.com"
+                ? ["https://untanglify.com", "https://www.untanglify.com"]
                 : "http://localhost:4000",
         }));
     });

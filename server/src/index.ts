@@ -64,7 +64,7 @@ const main = async () => {
         credentials: true,
         origin:
           process.env.NODE_ENV === "production"
-            ? "https://untanglify.com"
+            ? ["https://untanglify.com", "https://www.untanglify.com"]
             : "http://localhost:4000",
       })
     );
