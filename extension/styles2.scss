@@ -126,6 +126,10 @@ $clr-medEmpha: rgba(white, 0.6);
   }
 }
 .hTextPara {
+  .hTextParaText {
+    max-width: 12.5em;
+    overflow-wrap: break-word;
+  }
   .utilContainer {
     display: flex;
     position: relative;

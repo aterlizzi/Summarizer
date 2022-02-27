@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Update.module.scss";
 
 function Update() {
+  const [showUpdates, setShowUpdates] = useState(false);
+
   return (
     <main className={styles.main}>
       <svg
@@ -243,10 +245,26 @@ function Update() {
           <h1 className={styles.title}>
             You&apos;re using an updated Untanglify!
           </h1>
-          <h5 className={styles.subtitle}>
-            <span className={styles.special}>Click here</span> to see the
-            changes.
-          </h5>
+          {!showUpdates ? (
+            <h5
+              className={styles.subtitle}
+              onClick={() => setShowUpdates(true)}
+            >
+              <span className={styles.special}>Click here</span> to see the
+              changes.
+            </h5>
+          ) : (
+            <div className={styles.updates} style={{ textAlign: "left" }}>
+              <ul className={styles.list}>
+                <li className={styles.item}>
+                  Added ability to summarize privately
+                </li>
+                <li className={styles.item}>
+                  Fixed overflowing text on highlighted text
+                </li>
+              </ul>
+            </div>
+          )}
         </header>
       </section>
     </main>

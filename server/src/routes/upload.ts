@@ -31,8 +31,11 @@ const uploadEndpoint = (fastify: any, _: void, next: any) => {
       ]);
       const result = await spawnProcess(childPython);
       try {
+        // delete the file
         fs.unlinkSync(pathName);
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
       reply.send({ result });
     }
   );
@@ -41,6 +44,8 @@ const uploadEndpoint = (fastify: any, _: void, next: any) => {
 
 const spawnProcess = async (childPython: ChildProcessWithoutNullStreams) => {
   let id: any;
+
+  // if the pdf isn't extracted in time, kill the process
   const timeout = new Promise((resolve) => {
     id = setTimeout(() => {
       kill(childPython.pid!);
@@ -60,6 +65,8 @@ const spawnProcess = async (childPython: ChildProcessWithoutNullStreams) => {
     });
   });
   const result = await Promise.race([promise, timeout]);
+  console.log(result);
+  console.log("FUNCTION SUCCESSFULLY RETURNED");
   clearTimeout(id);
   return result;
 };

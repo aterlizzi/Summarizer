@@ -98,6 +98,10 @@
   max-width: 15px;
 }
 
+.hTextPara .hTextParaText {
+  max-width: 12.5em;
+  overflow-wrap: break-word;
+}
 .hTextPara .utilContainer {
   display: flex;
   position: relative;

@@ -50,7 +50,5 @@ export class MendeleyResolver {
     } catch (err) {
       console.log(err);
     }
-
-    console.log(responseObject);
   }
 }

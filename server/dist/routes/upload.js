@@ -41,7 +41,9 @@ const uploadEndpoint = (fastify, _, next) => {
         try {
             fs_1.default.unlinkSync(pathName);
         }
-        catch (err) { }
+        catch (err) {
+            console.log(err);
+        }
         reply.send({ result });
     }));
     next();
@@ -67,6 +69,8 @@ const spawnProcess = (childPython) => __awaiter(void 0, void 0, void 0, function
         });
     });
     const result = yield Promise.race([promise, timeout]);
+    console.log(result);
+    console.log("FUNCTION SUCCESSFULLY RETURNED");
     clearTimeout(id);
     return result;
 });

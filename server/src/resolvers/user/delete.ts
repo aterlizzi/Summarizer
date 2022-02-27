@@ -1,5 +1,3 @@
-import { RecentSummaries } from "./../../entities/RecentSummaries";
-import { ExtensionSettings } from "./../../entities/ExtensionSettings";
 import { EmailSettings } from "./../../entities/EmailSettings";
 import { MyContext } from "./../../types/MyContext";
 import { User } from "./../../entities/User";

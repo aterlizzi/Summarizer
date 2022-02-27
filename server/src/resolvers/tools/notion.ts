@@ -222,7 +222,6 @@ export class NotionResolver {
         },
       ],
     });
-    const page_id = response.id;
     console.log(response);
     return true;
   }
