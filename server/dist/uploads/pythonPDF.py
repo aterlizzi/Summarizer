@@ -1,26 +1,24 @@
+import os
+import pdfminer.high_level
+import sys
+import re
+
+filename = sys.argv[2]
+path_to_pdf = sys.argv[1]
 try:
-    import sys
-    import pdfminer.high_level
-    import ocrmypdf
-    import re
-
-    # initial arguments
-    path_to_pdf = sys.argv[1]
-    filename = sys.argv[2]
-
-    # non-ocr procedure
+    # check if page already has text.
     text = pdfminer.high_level.extract_text(path_to_pdf)
 
-    # check to see if ocr is necessary
+    # if no text, perform ocr
     if not re.search("a", text):
-        if __name__ == '__main__':
-            ocrmypdf.ocr(path_to_pdf, path_to_pdf, deskew=True)
+        os.system(f'ocrmypdf {path_to_pdf} {path_to_pdf} --quiet')
 
-    # extract text again
-    text = pdfminer.high_level.extract_text(path_to_pdf)
-    print(text)
+        text = pdfminer.high_level.extract_text(path_to_pdf)
+        print(text)
+
 except Exception as e:
     print(e)
+
 
 
 

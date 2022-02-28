@@ -16,7 +16,6 @@ const child_process_1 = require("child_process");
 const fastify_multer_1 = __importDefault(require("fastify-multer"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const process_1 = require("process");
 const uuid_1 = require("uuid");
 const storage = fastify_multer_1.default.diskStorage({
     destination: (_, __, cb) => {
@@ -52,12 +51,17 @@ const uploadEndpoint = (fastify, _, next) => {
 const spawnProcess = (childPython) => __awaiter(void 0, void 0, void 0, function* () {
     let id;
     const timeout = new Promise((resolve) => {
-        id = setTimeout(() => {
-            (0, process_1.kill)(childPython.pid);
-            clearTimeout(id);
-            console.log("killed");
-            resolve("Ran out of allotted time to extract text from PDF.");
-        }, 60000);
+        try {
+            id = setTimeout(() => {
+                childPython.kill("SIGINT");
+                clearTimeout(id);
+                console.log("killed");
+                resolve("Ran out of allotted time to extract text from PDF.");
+            }, 60000);
+        }
+        catch (err) {
+            console.log(err);
+        }
     });
     const promise = new Promise((resolve) => {
         childPython.stdout.on("data", (data) => {

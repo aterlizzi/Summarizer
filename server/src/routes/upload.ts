@@ -2,7 +2,6 @@ import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import multer from "fastify-multer";
 import fs from "fs";
 import path from "path";
-import { kill } from "process";
 import { v4 } from "uuid";
 
 const storage = multer.diskStorage({
@@ -47,14 +46,19 @@ const uploadEndpoint = (fastify: any, _: void, next: any) => {
 const spawnProcess = async (childPython: ChildProcessWithoutNullStreams) => {
   let id: any;
 
-  // if the pdf isn't extracted in time, kill the process
+  // if the pdf isn't extracted in 60s, kill the process
   const timeout = new Promise((resolve) => {
-    id = setTimeout(() => {
-      kill(childPython.pid!);
-      clearTimeout(id);
-      console.log("killed");
-      resolve("Ran out of allotted time to extract text from PDF.");
-    }, 60000);
+    try {
+      id = setTimeout(() => {
+        // kill child process
+        childPython.kill("SIGINT");
+        clearTimeout(id);
+        console.log("killed");
+        resolve("Ran out of allotted time to extract text from PDF.");
+      }, 60000);
+    } catch (err) {
+      console.log(err);
+    }
   });
   const promise = new Promise((resolve) => {
     childPython.stdout.on("data", (data) => {
