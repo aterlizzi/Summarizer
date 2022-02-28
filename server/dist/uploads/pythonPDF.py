@@ -13,8 +13,8 @@ try:
     if not re.search("a", text):
         os.system(f'ocrmypdf {path_to_pdf} {path_to_pdf} --quiet')
 
-        text = pdfminer.high_level.extract_text(path_to_pdf)
-        print(text)
+    text = pdfminer.high_level.extract_text(path_to_pdf)
+    print(text)
 
 except Exception as e:
     print(e)
