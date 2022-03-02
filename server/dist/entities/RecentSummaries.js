@@ -51,6 +51,11 @@ __decorate([
 ], RecentSummaries.prototype, "summary", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
+    (0, typeorm_1.Column)({ default: "entire" }),
+    __metadata("design:type", String)
+], RecentSummaries.prototype, "type", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.Column)({ default: "" }),
     __metadata("design:type", String)
 ], RecentSummaries.prototype, "title", void 0);

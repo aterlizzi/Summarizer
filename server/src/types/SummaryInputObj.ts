@@ -11,6 +11,9 @@ export class SummaryInputObj {
   @Field(() => String)
   url: string;
 
+  @Field(() => String, { nullable: true })
+  actionType?: string;
+
   @Field(() => Boolean, { nullable: true })
   privateSummary?: boolean;
 }

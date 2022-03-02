@@ -607,6 +607,7 @@ const summarizeFunc = async (action, privateSummary, retries = 0) => {
           url,
           title: titleObj.articleTitle,
           privateSummary,
+          actionType: action,
         },
       },
     });

@@ -26,6 +26,10 @@ __decorate([
     __metadata("design:type", String)
 ], SummaryInputObj.prototype, "url", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    __metadata("design:type", String)
+], SummaryInputObj.prototype, "actionType", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => Boolean, { nullable: true }),
     __metadata("design:type", Boolean)
 ], SummaryInputObj.prototype, "privateSummary", void 0);

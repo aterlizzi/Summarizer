@@ -58,6 +58,7 @@ let pdfAction = true;
 let typingTimer;
 let sumId;
 let privateSummary = false;
+let retrieving = false;
 
 // get status check when loading the popup, if login fails show login if login succeeds, proceed to application.
 // also retrieves the remaining word count from backend
@@ -79,11 +80,13 @@ window.onload = () => {
     mainSpinnerContainer.classList.add("none");
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const url = tabs[0].url;
+      retrieving = true;
       chrome.runtime.sendMessage(
         { key: "retrieveText", payload: url },
         (response) => {
           console.log(response);
           textSpinner.classList.add("none");
+          retrieving = false;
           if (logged) {
             wordCountContainer.classList.remove("none");
           }
@@ -325,6 +328,7 @@ popoutBtn.addEventListener("click", () => {
 });
 
 button.addEventListener("click", () => {
+  if (retrieving) return;
   saveRejectContainer.classList.add("none");
   button.classList.toggle("hidden");
   spinner.classList.toggle("hidden");
