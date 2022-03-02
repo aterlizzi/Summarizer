@@ -1,3 +1,4 @@
+import { User } from "./../../entities/User";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
@@ -13,7 +14,4 @@ export class CreateGroupInput {
 
   @Field(() => Boolean)
   publicPosts: boolean;
-
-  @Field(() => [Number])
-  invitees: number[];
 }

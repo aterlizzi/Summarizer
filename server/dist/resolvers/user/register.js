@@ -40,6 +40,7 @@ const jwt_decode_1 = __importDefault(require("jwt-decode"));
 const registerUserOutput_1 = require("../../types/registerUserOutput");
 const Settings_1 = require("../../entities/Settings");
 const uuid_1 = require("uuid");
+const newUserEmail_1 = require("src/utils/emails/newUserEmail");
 const voucher_codes = require("voucher-code-generator");
 let RegisterResolver = class RegisterResolver {
     registerGoogleUser(token, usecase, referral, ctx) {
@@ -78,6 +79,7 @@ let RegisterResolver = class RegisterResolver {
             newUser.settings = userSettings;
             const code = yield generateCode();
             newUser.referralCode = code;
+            (0, newUserEmail_1.sendNewUserEmail)(email, name);
             yield newUser.save();
             if (referral) {
                 yield handleReferralCode(referral, newUser.id);
@@ -153,6 +155,7 @@ let RegisterResolver = class RegisterResolver {
                 handleReferralCode(referral, user.id);
             }
             yield handleEmailSend(user);
+            (0, newUserEmail_1.sendNewUserEmail)(email, username);
             return {
                 registered: true,
                 error: {},

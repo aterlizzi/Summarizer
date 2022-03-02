@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchBar from "./SearchBar";
 import SideBar from "./SideBar";
 import styles from "../../styles/components/Groups.module.scss";

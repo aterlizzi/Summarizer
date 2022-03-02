@@ -21,41 +21,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateGroupResolver = void 0;
-const createGroupInput_1 = require("./../../types/group/createGroupInput");
-const isAuth_1 = require("./../../middlewares/isAuth");
+exports.DeleteGroupResolver = void 0;
+const Groups_1 = require("./../../entities/Groups");
 const type_graphql_1 = require("type-graphql");
-const User_1 = require("../../entities/User");
-const Groups_1 = require("../../entities/Groups");
-let CreateGroupResolver = class CreateGroupResolver {
-    createGroup({ payload }, { name, description, inviteOnly, publicPosts }) {
+let DeleteGroupResolver = class DeleteGroupResolver {
+    deleteGroup(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield User_1.User.findOne({ where: { id: payload.userId } });
-            if (!user)
+            try {
+                yield Groups_1.Groups.delete(id);
+                return true;
+            }
+            catch (err) {
+                console.log(err);
                 return false;
-            const group = Groups_1.Groups.create({
-                name,
-                description,
-                inviteOnly,
-                publicPosts,
-                admins: [user],
-            });
-            yield group.save();
-            return true;
+            }
         });
     }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
-    __param(0, (0, type_graphql_1.Ctx)()),
-    __param(1, (0, type_graphql_1.Arg)("options")),
+    __param(0, (0, type_graphql_1.Arg)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, createGroupInput_1.CreateGroupInput]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], CreateGroupResolver.prototype, "createGroup", null);
-CreateGroupResolver = __decorate([
+], DeleteGroupResolver.prototype, "deleteGroup", null);
+DeleteGroupResolver = __decorate([
     (0, type_graphql_1.Resolver)()
-], CreateGroupResolver);
-exports.CreateGroupResolver = CreateGroupResolver;
-//# sourceMappingURL=createGroup.js.map
+], DeleteGroupResolver);
+exports.DeleteGroupResolver = DeleteGroupResolver;
+//# sourceMappingURL=deleteGroup.js.map

@@ -14,6 +14,7 @@ import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
 import { Settings } from "../../entities/Settings";
 import { v4 } from "uuid";
+import { sendNewUserEmail } from "src/utils/emails/newUserEmail";
 const voucher_codes = require("voucher-code-generator");
 
 @Resolver()
@@ -57,6 +58,7 @@ export class RegisterResolver {
     newUser.settings = userSettings;
     const code = await generateCode();
     newUser.referralCode = code;
+    sendNewUserEmail(email, name);
     await newUser.save();
     if (referral) {
       await handleReferralCode(referral, newUser.id);
@@ -144,6 +146,7 @@ export class RegisterResolver {
       handleReferralCode(referral, user.id);
     }
     await handleEmailSend(user);
+    sendNewUserEmail(email, username);
     return {
       registered: true,
       error: {},

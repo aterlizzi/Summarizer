@@ -29,10 +29,6 @@ __decorate([
     (0, type_graphql_1.Field)(() => Boolean),
     __metadata("design:type", Boolean)
 ], CreateGroupInput.prototype, "publicPosts", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Number]),
-    __metadata("design:type", Array)
-], CreateGroupInput.prototype, "invitees", void 0);
 CreateGroupInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateGroupInput);
