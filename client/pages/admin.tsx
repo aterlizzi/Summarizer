@@ -28,7 +28,7 @@ function Admin() {
     makeAdmin().then((res) => {
       console.log(res);
     });
-  }, []);
+  }, [makeAdmin]);
 
   return (
     <div className="">
