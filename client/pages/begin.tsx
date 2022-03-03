@@ -378,10 +378,10 @@ function Begin() {
                   <button
                     style={{
                       background: "rgba(255, 255, 255, 0.05)",
-                      cursor: "default",
+                      cursor: "pointer",
                     }}
-                    disabled={true}
                     className={styles.paymentBtn}
+                    onClick={() => router.push("/home")}
                   >
                     Get started
                   </button>

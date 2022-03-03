@@ -281,24 +281,6 @@ const handleOnLoadClassChanges = () => {
   circle.classList.remove("none");
   privateCircle.classList.remove("none");
 };
-
-// if cookie is found for website, navigate to settings, else navigate to login
-const checkCookies = () => {
-  chrome.cookies.get(
-    { url: "http://localhost:4000/", name: "jid" },
-    (cookie) => {
-      if (cookie) {
-        chrome.tabs.create({ url: "http://localhost:4000/users/settings" });
-      } else {
-        chrome.tabs.create({
-          url: `http://localhost:4000/welcome?return_url=${encodeURIComponent(
-            "/users/settings"
-          )}`,
-        });
-      }
-    }
-  );
-};
 // count number of words in text.
 const countWords = (text) => {
   // remove any excess characters that are not A-Z or a-z
@@ -536,11 +518,6 @@ manualContainer.addEventListener("click", () => {
       count.textContent = text.split(" ").length.toString();
     }
   });
-});
-
-// opens settings when clicked.
-settingsCircle.addEventListener("click", () => {
-  checkCookies();
 });
 
 // handle private summary
