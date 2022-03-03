@@ -14,7 +14,7 @@ import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
 import { Settings } from "../../entities/Settings";
 import { v4 } from "uuid";
-import { sendNewUserEmail } from "src/utils/emails/newUserEmail";
+import { sendNewUserEmail } from "../../utils/emails/newUserEmail";
 const voucher_codes = require("voucher-code-generator");
 
 @Resolver()

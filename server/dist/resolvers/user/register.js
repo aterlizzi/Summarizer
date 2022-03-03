@@ -40,7 +40,7 @@ const jwt_decode_1 = __importDefault(require("jwt-decode"));
 const registerUserOutput_1 = require("../../types/registerUserOutput");
 const Settings_1 = require("../../entities/Settings");
 const uuid_1 = require("uuid");
-const newUserEmail_1 = require("src/utils/emails/newUserEmail");
+const newUserEmail_1 = require("../../utils/emails/newUserEmail");
 const voucher_codes = require("voucher-code-generator");
 let RegisterResolver = class RegisterResolver {
     registerGoogleUser(token, usecase, referral, ctx) {

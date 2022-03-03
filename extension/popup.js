@@ -30,6 +30,8 @@ const saveSpinner = document.querySelector(".saveSpinner");
 const wordCountContainer = document.querySelector(".wordCountContainer");
 const count = document.querySelector(".count");
 const filePara = document.querySelector(".filePara");
+let upload = document.querySelector(".upload");
+let uploadBtn = document.querySelector(".upload__button");
 const fileUpload = document.querySelector(".fileUpload");
 const rightContainer = document.querySelector(".rightContainer");
 const mTrashBtn = document.querySelector(".mTrash");
@@ -382,13 +384,14 @@ button.addEventListener("click", () => {
   );
 });
 
-fileUpload.addEventListener("change", (e) => {
+upload.addEventListener("change", (e) => {
   if (e.target.files[0].type !== "application/pdf") {
     alert("invalid file type");
   } else {
+    retrieving = true;
+    upload.classList.add("uploading");
     textSpinner.classList.remove("none");
     action = "file";
-    rightContainer.classList.add("animation");
     const file = fileUpload.files[0];
     const fileName = file.name;
     const formData = new FormData();
@@ -398,7 +401,7 @@ fileUpload.addEventListener("change", (e) => {
       body: formData,
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         textSpinner.classList.add("none");
         if (data.result) {
           const wordCount = countWords(data.result).toString();
@@ -407,6 +410,13 @@ fileUpload.addEventListener("change", (e) => {
             key: "storeFileText",
             payload: { filename: fileName, text: data.result },
           });
+          retrieving = false;
+          upload.classList.add("uploaded");
+          await sleep(2000);
+          upload.classList.remove("uploading");
+          upload.classList.add("uploaded-after");
+          await sleep(1000);
+          upload.className = "upload";
         }
       });
   }
@@ -544,3 +554,6 @@ privateCircle.addEventListener("click", () => {
 referFriendCircle.addEventListener("click", () => {
   chrome.tabs.create({ url: "http://localhost:4000/referral" });
 });
+
+let sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+uploadBtn.addEventListener("click", async () => {});

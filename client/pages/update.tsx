@@ -262,6 +262,10 @@ function Update() {
                 <li className={styles.item}>
                   Fixed overflowing text on highlighted text
                 </li>
+                <li className={styles.item}>
+                  Overhauled PDF optical character recognition
+                </li>
+                <li className={styles.item}>Prettied PDF upload button</li>
               </ul>
             </div>
           )}

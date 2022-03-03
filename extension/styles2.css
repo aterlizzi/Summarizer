@@ -218,35 +218,120 @@
   justify-content: center;
   align-items: center;
 }
-.filePara .file {
+.filePara .upload {
+  --btn-color: #4740d1;
+  --progress-color: #2d334c;
+  --ease-in-out-quartic: cubic-bezier(0.77, 0, 0.175, 1);
+  position: relative;
   display: flex;
-  height: 35px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 1.7px 1.4px rgba(0, 0, 0, 0.02), 0 4px 3.3px rgba(0, 0, 0, 0.028), 0 7.5px 6.3px rgba(0, 0, 0, 0.035), 0 13.4px 11.2px rgba(0, 0, 0, 0.042), 0 25.1px 20.9px rgba(0, 0, 0, 0.05), 0 60px 50px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  transform: rotate(0);
   cursor: pointer;
 }
-.filePara .file .leftContainer {
+.filePara .upload__info {
   display: flex;
-  border-top-left-radius: 0.25em;
-  border-bottom-left-radius: 0.25em;
+  align-items: center;
+  padding: 6px;
+  margin-right: 15px;
+}
+.filePara .upload__filename {
+  padding-left: 8px;
+}
+.filePara .upload__button {
+  position: relative;
+  padding: 10px;
+  margin: 0;
+  font-size: 100%;
+  font-family: inherit;
+  color: white;
+  background: none;
+  border: none;
+  border-radius: inherit;
+  outline: none;
+  cursor: pointer;
+  transform: scale(0.9);
+}
+.filePara .upload__button__text {
+  font-size: 0.75rem;
+}
+.filePara .upload__button::before {
+  position: absolute;
+  content: "";
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--btn-color);
+  border-radius: inherit;
+  transform-origin: right;
+}
+.filePara .upload__hint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
   justify-content: center;
   align-items: center;
-  background: #7d41a5;
-  padding: 0em 1em;
+  width: 100%;
+  height: 100%;
+  color: white;
+  transform: translateY(100%);
 }
-.filePara .file .leftContainer .icon {
-  color: rgba(255, 255, 255, 0.87);
-  font-size: 1em;
-}
-.filePara .file .rightContainer {
+.filePara .upload__progress {
+  position: absolute;
+  content: "";
+  top: 90%;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0em 1em;
-  background: #bb86fc;
-  border-top-right-radius: 0.25em;
-  border-bottom-right-radius: 0.25em;
+  width: 100%;
+  height: 100%;
+  color: white;
+  background: var(--progress-color);
+  transform: scaleX(0);
+  transform-origin: left;
 }
-.filePara .file .fileUpload {
-  display: none;
+.filePara .upload__progress .check {
+  stroke-dasharray: 16px;
+  stroke-dashoffset: 16px;
+  margin-right: 6px;
+}
+.filePara .upload.uploading .upload__button {
+  animation: expand 0.3s forwards;
+}
+.filePara .upload.uploading .upload__button::before {
+  animation: fill-left 1.2s 0.4s var(--ease-in-out-quartic) forwards;
+}
+.filePara .upload.uploading .upload__info > *,
+.filePara .upload.uploading .upload__button__text {
+  animation: fade-up-out 0.4s 0.4s forwards;
+}
+.filePara .upload.uploading .upload__hint {
+  animation: fade-up-in 0.4s 0.8s forwards;
+}
+.filePara .upload.uploading .upload__progress {
+  animation: fill-right 2s 1s var(--ease-in-out-quartic) forwards;
+}
+.filePara .upload.uploaded .upload__progress {
+  animation: slide-up 1s var(--ease-in-out-quartic) forwards;
+}
+.filePara .upload.uploaded .upload__progress .check {
+  animation: stroke-in 0.6s 0.4s var(--ease-in-out-quartic) forwards;
+}
+.filePara .upload.uploaded-after .upload__info {
+  animation: slide-down-info 1s var(--ease-in-out-quartic) forwards;
+}
+.filePara .upload.uploaded-after .upload__button {
+  animation: slide-down-button 1s var(--ease-in-out-quartic) forwards;
+}
+.filePara .upload.uploaded-after .upload__progress {
+  animation: slide-down-progress 1s var(--ease-in-out-quartic) forwards;
 }
 
 .wordCountContainer {
@@ -355,22 +440,6 @@
   animation: uploadAnimRightContainer 1.5s forwards;
 }
 
-@keyframes anim-rotate {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes uploadAnimRightContainer {
-  0% {
-    width: 100%;
-  }
-  100% {
-    width: 0%;
-  }
-}
 .spinner {
   display: inline-block;
   position: absolute;
@@ -477,6 +546,87 @@
   height: 100%;
   background: #b2f1f5;
   border-radius: 2px;
+}
+
+@keyframes anim-rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes uploadAnimRightContainer {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+@keyframes expand {
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes fill-left {
+  to {
+    transform: scale(4, 1.2);
+  }
+}
+@keyframes fade-up-out {
+  to {
+    opacity: 0;
+    transform: translateY(-40%);
+  }
+}
+@keyframes fade-up-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fill-right {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: scaleX(1) translateY(0);
+  }
+  to {
+    transform: scaleX(1) translateY(-90%);
+  }
+}
+@keyframes stroke-in {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes slide-down-info {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes slide-down-button {
+  from {
+    transform: scale(0.9) translateY(-100%);
+  }
+  to {
+    transform: scale(0.9) translateY(0);
+  }
+}
+@keyframes slide-down-progress {
+  from {
+    transform: scaleX(1) translateY(-90%);
+  }
+  to {
+    transform: scaleX(1) translateY(10%);
+  }
 }
 
 /*# sourceMappingURL=styles2.css.map */
