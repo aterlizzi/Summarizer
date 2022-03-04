@@ -23,6 +23,7 @@ const FindUsers = `
     query{
       findUsersAdmin{
         email
+        id
       }
     }
 `;
@@ -68,7 +69,7 @@ function Admin() {
       </button>
       {findUsersResult.data && findUsersResult.data.findUsersAdmin
         ? findUsersResult.data.findUsersAdmin.map((user) => {
-            return <p>{user.email}</p>;
+            return <p key={user.id}>{user.email}</p>;
           })
         : null}
     </div>
