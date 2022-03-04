@@ -28,6 +28,9 @@ chrome.runtime.onInstalled.addListener((details) => {
 });
 
 async function receiver(req, sender, sendResponse) {
+  if (chrome.runtime.lastError) {
+    setTimeout(receiver(req, sender, sendResponse), 1000);
+  }
   switch (req.key) {
     case "status":
       verifyUserStatus().then((res) => {
@@ -282,6 +285,9 @@ async function receiver(req, sender, sendResponse) {
 
 // built for when a receiver might have to process more than one request at a time.
 function receiver2(req, sender, sendResponse) {
+  if (chrome.runtime.lastError) {
+    setTimeout(receiver2(req, sender, sendResponse), 1000);
+  }
   switch (req.key) {
     case "retrieveManualText":
       retrieveManualText().then((response) => {

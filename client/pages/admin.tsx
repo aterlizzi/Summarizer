@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useMutation } from "urql";
+import { useMutation, useQuery } from "urql";
 
 const MakePremium = `
     mutation($username: String!){
@@ -19,10 +19,19 @@ const DeleteUser = `
     }
 `;
 
+const FindUsers = `
+    query{
+      findUsersAdmin{
+        email
+      }
+    }
+`;
+
 function Admin() {
   const [premiumResult, makePremium] = useMutation(MakePremium);
   const [adminResult, makeAdmin] = useMutation(MakeAdmin);
   const [deleteUserResult, deleteUser] = useMutation(DeleteUser);
+  const [findUsersResult, findUsers] = useQuery({ query: FindUsers });
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
@@ -43,6 +52,7 @@ function Admin() {
   //     console.log(res);
   //   });
   // }, [makeAdmin]);
+  console.log(findUsersResult);
 
   return (
     <div className="">
@@ -56,6 +66,11 @@ function Admin() {
       <button type="button" onClick={handleDeleteUser}>
         Delete User
       </button>
+      {findUsersResult.data && findUsersResult.data.findUsersAdmin
+        ? findUsersResult.data.findUsersAdmin.map((user) => {
+            return <p>{user.email}</p>;
+          })
+        : null}
     </div>
   );
 }
