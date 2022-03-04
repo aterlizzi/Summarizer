@@ -1,3 +1,4 @@
+import { isAdmin } from "./../../middlewares/isAdmin";
 import { EmailSettings } from "./../../entities/EmailSettings";
 import { MyContext } from "./../../types/MyContext";
 import { User } from "./../../entities/User";
@@ -57,6 +58,45 @@ export class DeleteResolver {
       console.log(err);
     }
     reply.clearCookie("jid", { path: "/" });
+    return true;
+  }
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAdmin)
+  async deleteUserAdmin(
+    @Arg("email", { nullable: true }) email: string
+  ): Promise<boolean> {
+    let user;
+    if (email) {
+      user = await User.findOne({
+        where: { email },
+        relations: [
+          "settings",
+          "settings.emailSettings",
+          "recentSummaries",
+
+          // "settings.extensionSettings",
+        ],
+      });
+    }
+    if (!user || user.admin) return false;
+    if (user.subKey !== "" && user.prem) {
+      try {
+        await stripe.subscriptions.del(user.subKey);
+      } catch {
+        return false;
+      }
+    }
+    const settingsId = user.settings.id;
+    const emailSettingsId = user.settings.emailSettings.id;
+    // const extensionSettingsId = user.settings.extensionSettings.id;
+    await EmailSettings.delete(emailSettingsId);
+    // await ExtensionSettings.delete(extensionSettingsId);
+    await Settings.delete(settingsId);
+    try {
+      await User.delete(user.id);
+    } catch (err) {
+      console.log(err);
+    }
     return true;
   }
 }

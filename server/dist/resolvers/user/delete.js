@@ -22,6 +22,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteResolver = void 0;
+const isAdmin_1 = require("./../../middlewares/isAdmin");
 const EmailSettings_1 = require("./../../entities/EmailSettings");
 const User_1 = require("./../../entities/User");
 const type_graphql_1 = require("type-graphql");
@@ -76,6 +77,42 @@ let DeleteResolver = class DeleteResolver {
             return true;
         });
     }
+    deleteUserAdmin(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let user;
+            if (email) {
+                user = yield User_1.User.findOne({
+                    where: { email },
+                    relations: [
+                        "settings",
+                        "settings.emailSettings",
+                        "recentSummaries",
+                    ],
+                });
+            }
+            if (!user || user.admin)
+                return false;
+            if (user.subKey !== "" && user.prem) {
+                try {
+                    yield stripe.subscriptions.del(user.subKey);
+                }
+                catch (_a) {
+                    return false;
+                }
+            }
+            const settingsId = user.settings.id;
+            const emailSettingsId = user.settings.emailSettings.id;
+            yield EmailSettings_1.EmailSettings.delete(emailSettingsId);
+            yield Settings_1.Settings.delete(settingsId);
+            try {
+                yield User_1.User.delete(user.id);
+            }
+            catch (err) {
+                console.log(err);
+            }
+            return true;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
@@ -86,6 +123,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], DeleteResolver.prototype, "deleteUser", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.UseMiddleware)(isAdmin_1.isAdmin),
+    __param(0, (0, type_graphql_1.Arg)("email", { nullable: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], DeleteResolver.prototype, "deleteUserAdmin", null);
 DeleteResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], DeleteResolver);

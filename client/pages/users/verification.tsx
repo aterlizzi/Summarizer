@@ -124,7 +124,7 @@ Verification.getLayout = (page) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  if (!req.cookies.hasOwnProperty("rid")) {
+  if (req.cookies.hasOwnProperty("jid")) {
     return {
       redirect: {
         destination: "/",

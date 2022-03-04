@@ -13,10 +13,18 @@ const MakeAdmin = `
     }
 `;
 
+const DeleteUser = `
+    mutation($email: String!){
+      deleteUserAdmin(email: $email)
+    }
+`;
+
 function Admin() {
   const [premiumResult, makePremium] = useMutation(MakePremium);
   const [adminResult, makeAdmin] = useMutation(MakeAdmin);
+  const [deleteUserResult, deleteUser] = useMutation(DeleteUser);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
 
   const handlePremium = () => {
     makePremium({ username }).then((res) => {
@@ -24,11 +32,17 @@ function Admin() {
     });
   };
 
-  useEffect(() => {
-    makeAdmin().then((res) => {
+  const handleDeleteUser = () => {
+    deleteUser({ email }).then((res) => {
       console.log(res);
     });
-  }, [makeAdmin]);
+  };
+
+  // useEffect(() => {
+  //   makeAdmin().then((res) => {
+  //     console.log(res);
+  //   });
+  // }, [makeAdmin]);
 
   return (
     <div className="">
@@ -36,6 +50,11 @@ function Admin() {
       <input type="text" onChange={(e) => setUsername(e.currentTarget.value)} />
       <button type="button" onClick={handlePremium}>
         Make Premium
+      </button>
+      <label htmlFor="">Delete User</label>
+      <input type="text" onChange={(e) => setUsername(e.currentTarget.value)} />
+      <button type="button" onClick={handleDeleteUser}>
+        Delete User
       </button>
     </div>
   );
