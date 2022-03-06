@@ -28,7 +28,7 @@ const type_graphql_1 = require("type-graphql");
 const User_1 = require("../../entities/User");
 const Groups_1 = require("../../entities/Groups");
 let CreateGroupResolver = class CreateGroupResolver {
-    createGroup({ payload }, { name, description, inviteOnly, publicPosts }) {
+    createGroup({ payload }, { name, description, inviteOnly, publicPosts, allowMemberToInvite, }) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield User_1.User.findOne({ where: { id: payload.userId } });
             if (!user)
@@ -38,6 +38,7 @@ let CreateGroupResolver = class CreateGroupResolver {
                 description,
                 inviteOnly,
                 publicPosts,
+                allowMemberToInvite,
                 admins: [user],
             });
             yield group.save();

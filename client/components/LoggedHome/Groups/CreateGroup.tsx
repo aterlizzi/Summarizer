@@ -8,12 +8,13 @@ const CreateGroupMutation = `
   }
 `;
 
-function CreateGroup({ setPopupSection }) {
+function CreateGroup({ setPopupSection, reexecuteGroups }) {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
   const [inviteOnly, setInviteOnly] = useState(true);
   const [publicPosts, setPublicPosts] = useState(false);
+  const [allowMemberToInvite, setAllowMemberToInvite] = useState(true);
 
   const [createResult, create] = useMutation(CreateGroupMutation);
 
@@ -27,9 +28,11 @@ function CreateGroup({ setPopupSection }) {
         description: desc,
         inviteOnly,
         publicPosts,
+        allowMemberToInvite,
       },
     }).then((res) => {
       if (res.data && res.data.createGroup) {
+        reexecuteGroups();
         setPopupSection("");
       }
     });
@@ -117,6 +120,21 @@ function CreateGroup({ setPopupSection }) {
                 id="switch"
                 className={styles.switch}
                 onClick={() => setPublicPosts(!publicPosts)}
+              />
+            </div>
+          </div>
+          <div className={styles.toggleOptions}>
+            <label htmlFor="switch" className={styles.label}>
+              Members Can Invite Users?
+            </label>
+            <div className={styles.toggleContainer}>
+              <input
+                type="checkbox"
+                name="switch"
+                id="switch"
+                className={styles.switch}
+                defaultChecked
+                onClick={() => setAllowMemberToInvite(!allowMemberToInvite)}
               />
             </div>
           </div>

@@ -54,6 +54,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             Groups_1.Groups,
             Bundle_1.Bundle,
             UserRelationship_1.UserRelationship,
+            Notification,
         ],
         synchronize: true,
         logging: process.env.NODE_ENV !== "production",

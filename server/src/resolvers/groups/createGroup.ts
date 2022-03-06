@@ -12,7 +12,13 @@ export class CreateGroupResolver {
   async createGroup(
     @Ctx() { payload }: MyContext,
     @Arg("options")
-    { name, description, inviteOnly, publicPosts }: CreateGroupInput
+    {
+      name,
+      description,
+      inviteOnly,
+      publicPosts,
+      allowMemberToInvite,
+    }: CreateGroupInput
   ): Promise<boolean> {
     const user = await User.findOne({ where: { id: payload!.userId } });
     if (!user) return false;
@@ -21,6 +27,7 @@ export class CreateGroupResolver {
       description,
       inviteOnly,
       publicPosts,
+      allowMemberToInvite,
       admins: [user],
     });
     await group.save();

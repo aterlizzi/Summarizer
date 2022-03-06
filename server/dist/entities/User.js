@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+const Notification_1 = require("./Notification");
 const UserRelationship_1 = require("./UserRelationship");
 const Bundle_1 = require("./Bundle");
 const Groups_1 = require("./Groups");
@@ -196,6 +197,11 @@ __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isAdmin", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Notification_1.Notification]),
+    (0, typeorm_1.OneToMany)(() => Notification_1.Notification, (Notification) => Notification.user),
+    __metadata("design:type", Array)
+], User.prototype, "notifications", void 0);
 User = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

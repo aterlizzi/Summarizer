@@ -66,6 +66,7 @@ function sendForgotPasswordEmail(email, token) {
             }
         }
         catch (err) {
+            console.log(err);
             return err;
         }
     });

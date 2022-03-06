@@ -47,6 +47,10 @@ export class Groups extends BaseEntity {
   @Column({ default: true })
   inviteOnly: boolean;
 
+  @Field(() => Boolean)
+  @Column({ default: true })
+  allowMemberToInvite: boolean;
+
   @Field(() => [RecentSummaries])
   @ManyToMany(() => RecentSummaries, (summary) => summary.pinnedGroups)
   @JoinTable()

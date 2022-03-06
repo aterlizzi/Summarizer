@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendChangeEmailMail = void 0;
-const googleapi_1 = require("./../googleapi");
+exports.sendInterestEmail = void 0;
 ("use strict");
 const nodemailer = require("nodemailer");
-function sendChangeEmailMail(email, username) {
+const googleapi_1 = require("./../googleapi");
+function sendInterestEmail(email) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("snet");
         try {
             if (process.env.NODE_ENV === "production") {
                 const accessToken = (0, googleapi_1.GetAccessToken)();
@@ -31,10 +32,10 @@ function sendChangeEmailMail(email, username) {
                 });
                 const mailOptions = {
                     from: '"Untanglify" <team@untanglify.com>',
-                    to: email,
-                    subject: `[ACTION REQUIRED] Email Updated`,
-                    text: `Hi ${username}, please confirm your account by clicking the link below.`,
-                    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/>`,
+                    to: "aidan@untanglify.com",
+                    subject: `[ACTION REQUIRED] User Interest - Untanglify`,
+                    text: `User with email ${email} filled out interest.`,
+                    html: `<p>User with email ${email} filled out interest.</p>`,
                 };
                 let info = yield transport.sendMail(mailOptions);
                 console.log("Message sent: %s", info.messageId);
@@ -53,10 +54,10 @@ function sendChangeEmailMail(email, username) {
                 });
                 const mailOptions = {
                     from: '"Fred Foo 👻" <foo@example.com>',
-                    to: email,
-                    subject: `[ACTION REQUIRED] Email Updated`,
-                    text: `Hi ${username}, please confirm your account by clicking the link below.`,
-                    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/>`,
+                    to: "aidan@untanglify.com",
+                    subject: `[ACTION REQUIRED] User Interest - Untanglify`,
+                    text: `User with email ${email} filled out interest.`,
+                    html: `<p>User with email ${email} filled out interest.</p>`,
                 };
                 let info = yield transporter.sendMail(mailOptions);
                 console.log("Message sent: %s", info.messageId);
@@ -64,9 +65,10 @@ function sendChangeEmailMail(email, username) {
             }
         }
         catch (err) {
+            console.log(err);
             return err;
         }
     });
 }
-exports.sendChangeEmailMail = sendChangeEmailMail;
-//# sourceMappingURL=changeEmail.js.map
+exports.sendInterestEmail = sendInterestEmail;
+//# sourceMappingURL=interestEmail.js.map

@@ -1,11 +1,11 @@
 import {
   faChevronDown,
   faChevronUp,
+  faCrown,
   faHistory,
   faHome,
   faLayerGroup,
   faMap,
-  faNewspaper,
   faPlus,
   faUser,
   faUserFriends,
@@ -362,9 +362,9 @@ function SideBar({
           </div>
           <div className={styles.utilContainer}>
             <div className={styles.iconContainer}>
-              <FontAwesomeIcon icon={faNewspaper} className={styles.icon} />
+              <FontAwesomeIcon icon={faCrown} className={styles.icon} />
             </div>
-            <p className={styles.label}>Posts</p>
+            <p className={styles.label}>Challenges</p>
           </div>
           <div className={styles.utilContainer}>
             <div className={styles.iconContainer}>

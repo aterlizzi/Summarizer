@@ -565,7 +565,7 @@ const refreshAccessToken = async (userInfo) => {
 const returnWhetherCookie = async () => {
   return new Promise((resolve) => {
     chrome.cookies.get(
-      { url: "http://localhost:3000/", name: "jid" },
+      { url: "http://localhost:4000/", name: "jid" },
       (cookie) => {
         if (cookie) {
           resolve(true);

@@ -1,3 +1,4 @@
+import { Notification } from "./Notification";
 import { UserRelationship } from "./UserRelationship";
 import { Bundle } from "./Bundle";
 import { Groups } from "./Groups";
@@ -164,4 +165,8 @@ export class User extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   isAdmin: boolean;
+
+  @Field(() => [Notification])
+  @OneToMany(() => Notification, (Notification) => Notification.user)
+  notifications: Notification[];
 }

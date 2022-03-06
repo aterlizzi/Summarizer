@@ -5,6 +5,7 @@ import styles from "../../styles/Home.module.scss";
 import logo from "../../public/logo.png";
 import { useQuery } from "urql";
 import { Sling as Hamburger } from "hamburger-react";
+import Link from "next/link";
 
 const Me = `
     query{
@@ -69,13 +70,12 @@ function BannerComp({ isOpen, setOpen }) {
             Settings
           </button>
         )}
-        <a
+        <Link
           href="https://chrome.google.com/webstore/detail/untanglify/jfojfkbdmdgldjoodnjbbfahglinhkaa"
-          target="_blank"
-          rel="noreferrer"
+          passHref
         >
           <button className={styles.try}>Try for free</button>
-        </a>
+        </Link>
         <div className={styles.burgerContainer}>
           <Hamburger
             size={25}

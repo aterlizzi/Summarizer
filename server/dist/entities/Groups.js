@@ -57,6 +57,11 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Groups.prototype, "inviteOnly", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => Boolean),
+    (0, typeorm_1.Column)({ default: true }),
+    __metadata("design:type", Boolean)
+], Groups.prototype, "allowMemberToInvite", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => [RecentSummaries_1.RecentSummaries]),
     (0, typeorm_1.ManyToMany)(() => RecentSummaries_1.RecentSummaries, (summary) => summary.pinnedGroups),
     (0, typeorm_1.JoinTable)(),

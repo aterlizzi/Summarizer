@@ -45,6 +45,7 @@ const main = async () => {
       Groups,
       Bundle,
       UserRelationship,
+      Notification,
     ],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",

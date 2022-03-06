@@ -21,54 +21,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReturnGroupResolver = void 0;
-const isAuth_1 = require("./../../middlewares/isAuth");
-const Groups_1 = require("./../../entities/Groups");
+exports.SendUserInterestResolver = void 0;
 const type_graphql_1 = require("type-graphql");
-const User_1 = require("../../entities/User");
-let ReturnGroupResolver = class ReturnGroupResolver {
-    returnGroups() {
+const interestEmail_1 = require("../../utils/emails/interestEmail");
+let SendUserInterestResolver = class SendUserInterestResolver {
+    sendUserInterest(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const groups = yield Groups_1.Groups.find({ relations: ["admins"] });
-            return groups;
-        });
-    }
-    returnUserGroups({ payload }) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield User_1.User.findOne({
-                where: { id: payload.userId },
-                relations: [
-                    "groups",
-                    "adminGroups",
-                    "groups.users",
-                    "adminGroups.users",
-                    "groups.admins",
-                    "adminGroups.admins",
-                ],
-            });
-            if (!user)
-                return [];
-            const arr = [...user.adminGroups, ...user.groups];
-            return arr;
+            try {
+                yield (0, interestEmail_1.sendInterestEmail)(email);
+                return true;
+            }
+            catch (err) {
+                console.log(err);
+                return false;
+            }
         });
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(() => [Groups_1.Groups]),
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, type_graphql_1.Arg)("email")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], ReturnGroupResolver.prototype, "returnGroups", null);
-__decorate([
-    (0, type_graphql_1.Query)(() => [Groups_1.Groups]),
-    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
-    __param(0, (0, type_graphql_1.Ctx)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], ReturnGroupResolver.prototype, "returnUserGroups", null);
-ReturnGroupResolver = __decorate([
+], SendUserInterestResolver.prototype, "sendUserInterest", null);
+SendUserInterestResolver = __decorate([
     (0, type_graphql_1.Resolver)()
-], ReturnGroupResolver);
-exports.ReturnGroupResolver = ReturnGroupResolver;
-//# sourceMappingURL=returnGroups.js.map
+], SendUserInterestResolver);
+exports.SendUserInterestResolver = SendUserInterestResolver;
+//# sourceMappingURL=sendUserInterest.js.map

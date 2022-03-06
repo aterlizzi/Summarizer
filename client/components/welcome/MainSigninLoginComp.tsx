@@ -192,7 +192,10 @@ function MainSigninLoginComp({
       </section>
       <section className={styles.right}>
         <Svg4 />
-        <section className={styles.rightContent}>
+        <section
+          className={styles.rightContent}
+          style={forgotPass ? { marginBottom: "3em" } : null}
+        >
           <h5 className={styles.tagLine}>Untanglify</h5>
           <h3 className={styles.mainTag}>
             {slide === 1

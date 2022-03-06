@@ -33,7 +33,7 @@ function ForgotPassword({ setForgotPass }) {
         <p className={styles.back}>Back</p>
       </div>
       <section className={styles.forgotPassContainer}>
-        <header className={styles.head}>
+        <header className={styles.head} style={{ marginTop: "3em" }}>
           <h3 className={styles.title}>Reset password</h3>
           <p className={styles.desc}>
             Enter the email associated with your account and we&apos;ll send an
