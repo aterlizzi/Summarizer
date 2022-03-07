@@ -18,6 +18,7 @@ const Groups_1 = require("./entities/Groups");
 const ExtensionSettings_1 = require("./entities/ExtensionSettings");
 const RecentSummaries_1 = require("./entities/RecentSummaries");
 const CreditCard_1 = require("./entities/CreditCard");
+const Notification_1 = require("./entities/Notification");
 const EmailSettings_1 = require("./entities/EmailSettings");
 const Settings_1 = require("./entities/Settings");
 const SavedSummary_1 = require("./entities/SavedSummary");
@@ -54,7 +55,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             Groups_1.Groups,
             Bundle_1.Bundle,
             UserRelationship_1.UserRelationship,
-            Notification,
+            Notification_1.Notification,
         ],
         synchronize: true,
         logging: process.env.NODE_ENV !== "production",

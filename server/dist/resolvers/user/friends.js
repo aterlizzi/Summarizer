@@ -132,6 +132,26 @@ let FriendResolver = class FriendResolver {
             return relationships;
         });
     }
+    returnFriendships({ payload }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield User_1.User.findOne({
+                where: { id: payload.userId },
+                relations: [
+                    "relationshipOne",
+                    "relationshipTwo",
+                    "relationshipOne.userTwo",
+                    "relationshipTwo.userOne",
+                ],
+            });
+            if (!user)
+                return [];
+            const relationOne = user.relationshipOne.filter((relationship) => relationship.type === "friends");
+            const relationTwo = user.relationshipTwo.filter((relationship) => relationship.type === "friends");
+            const friendOne = relationOne.map((friend) => friend.userTwo);
+            const friendTwo = relationTwo.map((friend) => friend.userOne);
+            return [...friendOne, ...friendTwo];
+        });
+    }
     deleteRelationship(id) {
         return __awaiter(this, void 0, void 0, function* () {
             yield UserRelationship_1.UserRelationship.delete(id);
@@ -180,6 +200,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], FriendResolver.prototype, "returnRelationships", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [User_1.User]),
+    (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FriendResolver.prototype, "returnFriendships", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
     __param(0, (0, type_graphql_1.Arg)("id")),

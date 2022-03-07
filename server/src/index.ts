@@ -4,6 +4,7 @@ import { Groups } from "./entities/Groups";
 import { ExtensionSettings } from "./entities/ExtensionSettings";
 import { RecentSummaries } from "./entities/RecentSummaries";
 import { CreditCard } from "./entities/CreditCard";
+import { Notification } from "./entities/Notification";
 import { EmailSettings } from "./entities/EmailSettings";
 import { Settings } from "./entities/Settings";
 import { SavedSummary } from "./entities/SavedSummary";

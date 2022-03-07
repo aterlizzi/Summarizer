@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH, faUser } from "@fortawesome/free-solid-svg-icons";
 import CreateGroup from "./Groups/CreateGroup";
 import { useQuery } from "urql";
+import InviteUsers from "./Groups/InviteUsers";
 
 const testArr = [0, 1, 2, 3, 4];
 
@@ -44,6 +45,7 @@ function Groups({
 }) {
   const [groupsResult, reexecuteGroups] = useQuery({ query: ReturnGroups });
   const [revealAside, setRevealAside] = useState({});
+  const [groupName, setGroupName] = useState("");
 
   const node = useRef(null);
 
@@ -116,47 +118,49 @@ function Groups({
                 ? groupsResult.data.returnUserGroups.map((group) => {
                     return (
                       <div className={styles.card} key={group.id}>
-                        <header className={styles.cardHead}>
-                          <h3 className={styles.groupName}>{group.name}</h3>
-                          {/* Check if one of the admin ids match the user id */}
-                          {group.admins.filter(
-                            (admin) => admin.id === result.data.me.id
-                          ).length > 0 ? (
-                            <div
-                              className={styles.status}
-                              style={{ border: "1px solid #cf6679" }}
-                            >
-                              <p
-                                className={styles.statusType}
-                                style={{ color: "#cf6679" }}
+                        <div className={styles.top}>
+                          <header className={styles.cardHead}>
+                            <h3 className={styles.groupName}>{group.name}</h3>
+                            {/* Check if one of the admin ids match the user id */}
+                            {group.admins.filter(
+                              (admin) => admin.id === result.data.me.id
+                            ).length > 0 ? (
+                              <div
+                                className={styles.status}
+                                style={{ border: "1px solid #cf6679" }}
                               >
-                                Admin
-                              </p>
-                            </div>
-                          ) : (
-                            <div
-                              className={styles.status}
-                              style={{ border: "1px solid #03dac6" }}
-                            >
-                              <p
-                                className={styles.statusType}
-                                style={{ color: "#03dac6" }}
+                                <p
+                                  className={styles.statusType}
+                                  style={{ color: "#cf6679" }}
+                                >
+                                  Admin
+                                </p>
+                              </div>
+                            ) : (
+                              <div
+                                className={styles.status}
+                                style={{ border: "1px solid #03dac6" }}
                               >
-                                Member
-                              </p>
-                            </div>
-                          )}
-                        </header>
-                        <section className={styles.content}>
-                          <p className={styles.desc}>
-                            {group.description.length > 100
-                              ? group.description
-                                  .split("")
-                                  .filter((_, idx) => idx < 100)
-                                  .join("") + "..."
-                              : group.description}
-                          </p>
-                        </section>
+                                <p
+                                  className={styles.statusType}
+                                  style={{ color: "#03dac6" }}
+                                >
+                                  Member
+                                </p>
+                              </div>
+                            )}
+                          </header>
+                          <section className={styles.content}>
+                            <p className={styles.desc}>
+                              {group.description.length > 100
+                                ? group.description
+                                    .split("")
+                                    .filter((_, idx) => idx < 100)
+                                    .join("") + "..."
+                                : group.description}
+                            </p>
+                          </section>
+                        </div>
                         <div className={styles.bottom}>
                           <div className={styles.left}>
                             <div className={styles.users}>
@@ -164,7 +168,7 @@ function Groups({
                                 // only display first 4 users
                                 if (idx > 3) return null;
                                 return (
-                                  <div className={styles.userCircle}>
+                                  <div className={styles.userCircle} key={idx}>
                                     <FontAwesomeIcon
                                       icon={faUser}
                                       className={styles.icon}
@@ -221,7 +225,13 @@ function Groups({
                               {group.admins.filter(
                                 (admin) => admin.id === result.data.me.id
                               ).length > 0 || group.allowMemberToInvite ? (
-                                <div className={styles.container}>
+                                <div
+                                  className={styles.container}
+                                  onClick={() => {
+                                    setGroupName(group.name);
+                                    setPopupSection("Invite_Users");
+                                  }}
+                                >
                                   <p className={styles.option}>Invite User</p>
                                 </div>
                               ) : null}
@@ -260,6 +270,8 @@ function Groups({
           setPopupSection={setPopupSection}
           reexecuteGroups={reexecuteGroups}
         />
+      ) : popupSection === "Invite_Users" ? (
+        <InviteUsers setPopupSection={setPopupSection} groupName={groupName} />
       ) : null}
     </>
   );

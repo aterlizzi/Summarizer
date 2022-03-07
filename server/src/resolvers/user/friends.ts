@@ -90,7 +90,6 @@ export class FriendResolver {
     await relationship.save();
     return true;
   }
-
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async declineFriendRequest(
@@ -118,6 +117,33 @@ export class FriendResolver {
       relations: ["userOne", "userTwo"],
     });
     return relationships;
+  }
+  @Query(() => [User])
+  @UseMiddleware(isAuth)
+  async returnFriendships(@Ctx() { payload }: MyContext): Promise<User[]> {
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: [
+        "relationshipOne",
+        "relationshipTwo",
+        "relationshipOne.userTwo",
+        "relationshipTwo.userOne",
+      ],
+    });
+    if (!user) return [];
+    // extract relationship one
+    const relationOne = user.relationshipOne.filter(
+      (relationship) => relationship.type === "friends"
+    );
+    // extract relationship two
+    const relationTwo = user.relationshipTwo.filter(
+      (relationship) => relationship.type === "friends"
+    );
+    // remap for only user type
+    const friendOne = relationOne.map((friend) => friend.userTwo);
+    const friendTwo = relationTwo.map((friend) => friend.userOne);
+
+    return [...friendOne, ...friendTwo];
   }
   @Mutation(() => Boolean)
   async deleteRelationship(@Arg("id") id: number): Promise<boolean> {
