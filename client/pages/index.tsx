@@ -6,8 +6,11 @@ import Layout from "../components/layout";
 import styles from "../styles/Home.module.scss";
 import BannerComp from "../components/home/bannerComp";
 const Svg = dynamic(() => import("../components/home/svg"));
+const StatsBar = dynamic(() => import("../components/home/statsbar"));
 import UnderConstruction from "../components/home/underConstruction";
 import MobileMenu from "../components/home/mobileMenuComp";
+import TitlePage from "../components/home/titlePage";
+import Why from "../components/home/why";
 
 function Home() {
   const [isOpen, setOpen] = useState(false);
@@ -15,11 +18,24 @@ function Home() {
   return (
     <main className={styles.main}>
       <BannerComp isOpen={isOpen} setOpen={setOpen} />
-      <div className={styles.gridWrap}>
+      {/* <div className={styles.gridWrap}>
         <UnderConstruction />
         <Svg />
-      </div>
+      </div> */}
       <MobileMenu isOpen={isOpen} />
+      <section className={styles.titlePage}>
+        <div className={styles.circle}></div>
+        <div className={styles.circle2}></div>
+        <TitlePage />
+      </section>
+      <section className={styles.statistics}>
+        <StatsBar type={"usedby"} />
+        <StatsBar type={"stats"} />
+      </section>
+      <section className={styles.why}>
+        <Why />
+      </section>
+      <section className={styles.content}></section>
     </main>
   );
 }
