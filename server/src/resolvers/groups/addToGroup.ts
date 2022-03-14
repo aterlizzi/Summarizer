@@ -1,4 +1,3 @@
-import { CreateGroupInput } from "./../../types/group/createGroupInput";
 import { isAuth } from "./../../middlewares/isAuth";
 import { MyContext } from "../../types/MyContext";
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
@@ -29,9 +28,9 @@ export class CreateGroupResolver {
           usernames.map((username) => doSomethingAsync(username))
         );
       };
-      getUsers(usernames).then((data) => {
-        console.log(data);
-      });
+      const data = await getUsers(usernames);
+      console.log(data);
+      return true;
     } catch (err) {
       console.log(err);
       return false;

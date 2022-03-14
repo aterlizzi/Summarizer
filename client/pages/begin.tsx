@@ -90,6 +90,10 @@ function Begin() {
       <MobileMenu isOpen={isOpen} />
       <header className={styles.head}>
         <h1 className={styles.title}>Which Untanglify is best for me?</h1>
+        <p className={styles.byline}>
+          <span className={styles.special}>*</span> Our prices are determined
+          through customer surveys, so you pay only what is fair.
+        </p>
         <div className={styles.switchPayment}>
           <button
             style={

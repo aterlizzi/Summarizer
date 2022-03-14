@@ -43,9 +43,9 @@ let CreateGroupResolver = class CreateGroupResolver {
                 const getUsers = (usernames) => __awaiter(this, void 0, void 0, function* () {
                     return Promise.all(usernames.map((username) => doSomethingAsync(username)));
                 });
-                getUsers(usernames).then((data) => {
-                    console.log(data);
-                });
+                const data = yield getUsers(usernames);
+                console.log(data);
+                return true;
             }
             catch (err) {
                 console.log(err);

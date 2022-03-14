@@ -175,6 +175,12 @@
       letter-spacing: -0.5px;
       text-align: center;
     }
+    .byline {
+      color: $clr-medEmpha;
+      .special {
+        color: $clr-primary;
+      }
+    }
     .switchPayment {
       padding: 0.25em;
       background: $clr-bg4;
