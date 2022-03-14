@@ -46,6 +46,7 @@ function Groups({
   const [groupsResult, reexecuteGroups] = useQuery({ query: ReturnGroups });
   const [revealAside, setRevealAside] = useState({});
   const [groupName, setGroupName] = useState("");
+  const [groupId, setGroupId] = useState(0);
 
   const node = useRef(null);
 
@@ -229,6 +230,7 @@ function Groups({
                                   className={styles.container}
                                   onClick={() => {
                                     setGroupName(group.name);
+                                    setGroupId(group.id);
                                     setPopupSection("Invite_Users");
                                   }}
                                 >
@@ -271,7 +273,11 @@ function Groups({
           reexecuteGroups={reexecuteGroups}
         />
       ) : popupSection === "Invite_Users" ? (
-        <InviteUsers setPopupSection={setPopupSection} groupName={groupName} />
+        <InviteUsers
+          setPopupSection={setPopupSection}
+          groupName={groupName}
+          groupId={groupId}
+        />
       ) : null}
     </>
   );

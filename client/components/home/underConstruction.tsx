@@ -54,7 +54,7 @@ function UnderConstruction() {
       </div>
       {success ? (
         <p className={styles.success}>
-          Received your request, I'll follow up soon.
+          Received your request, I&apos;ll follow up soon.
         </p>
       ) : null}
     </div>

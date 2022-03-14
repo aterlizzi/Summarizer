@@ -194,7 +194,7 @@ function InviteUsers({ setPopupSection, groupName, groupId }) {
         </div>
         <div className={styles.bottom}>
           <p className={styles.label}>
-            Don't see your friend? Type their email below:
+            Don&apos;t see your friend? Type their email below:
           </p>
           <input
             type="email"
