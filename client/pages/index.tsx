@@ -5,10 +5,8 @@ import React, { useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.scss";
 import BannerComp from "../components/home/bannerComp";
-const Svg = dynamic(() => import("../components/home/svg"));
 const StatsBar = dynamic(() => import("../components/home/statsbar"));
 const Feature = dynamic(() => import("../components/home/feature"));
-import UnderConstruction from "../components/home/underConstruction";
 import MobileMenu from "../components/home/mobileMenuComp";
 import TitlePage from "../components/home/titlePage";
 import Why from "../components/home/why";
@@ -19,10 +17,6 @@ function Home() {
   return (
     <main className={styles.main}>
       <BannerComp isOpen={isOpen} setOpen={setOpen} />
-      {/* <div className={styles.gridWrap}>
-        <UnderConstruction />
-        <Svg />
-      </div> */}
       <MobileMenu isOpen={isOpen} />
       <section className={styles.titlePage}>
         <div className={styles.circle}></div>
