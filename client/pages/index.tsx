@@ -7,6 +7,7 @@ import styles from "../styles/Home.module.scss";
 import BannerComp from "../components/home/bannerComp";
 const Svg = dynamic(() => import("../components/home/svg"));
 const StatsBar = dynamic(() => import("../components/home/statsbar"));
+const Feature = dynamic(() => import("../components/home/feature"));
 import UnderConstruction from "../components/home/underConstruction";
 import MobileMenu from "../components/home/mobileMenuComp";
 import TitlePage from "../components/home/titlePage";
@@ -35,7 +36,12 @@ function Home() {
       <section className={styles.why}>
         <Why />
       </section>
-      <section className={styles.content}></section>
+      <section className={styles.content}>
+        <Feature section={1} />
+        <Feature section={2} />
+        <Feature section={3} />
+        <Feature section={4} />
+      </section>
     </main>
   );
 }

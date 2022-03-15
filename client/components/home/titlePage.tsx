@@ -13,9 +13,12 @@ function TitlePage() {
         Faster.
       </h1>
       <p className={styles.desc}>
-        All that anyone ever wants in the end is more time. Untanglify uses
-        advanced AI and deep learning to extract the key information in text,
-        faster and more accurately than ever before. Oh, and it&apos;s free.
+        <span className={styles.italic}>
+          All that anyone ever wants in the end is more time.
+        </span>{" "}
+        Untanglify uses advanced AI and deep learning to extract the key
+        information in text, faster and more accurately than ever before. Oh,
+        and it&apos;s free.
       </p>
       <Link
         href="https://chrome.google.com/webstore/detail/untanglify/jfojfkbdmdgldjoodnjbbfahglinhkaa"
