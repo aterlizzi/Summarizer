@@ -4,8 +4,13 @@ import {
   faGlobe,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import React from "react";
 import styles from "../../styles/Home.module.scss";
+import UntanglifySummarize from "../../public/UntanglifySummarize.jpg";
+import UntanglifyBundle from "../../public/UntanglifyBundle.jpg";
+import UntanglifyGroups from "../../public/UntanglifyGroups.jpg";
+import UntanglifyShare from "../../public/UntanglifyShare.jpg";
 
 interface FeatureSettings {
   section: number;
@@ -57,6 +62,12 @@ function Feature({ section }: FeatureSettings) {
               loop
               muted
             ></video>
+            <div className={styles.image}>
+              <Image
+                src={UntanglifySummarize}
+                alt="Untanglify Summarize Feature"
+              />
+            </div>
           </div>
         </>
       ) : section === 2 ? (
@@ -69,6 +80,9 @@ function Feature({ section }: FeatureSettings) {
               loop
               muted
             ></video>
+            <div className={styles.image}>
+              <Image src={UntanglifyShare} alt="Untanglify Share Feature" />
+            </div>
           </div>
           <div className={styles.left} style={{ textAlign: "right" }}>
             <h4 className={styles.subtitle}>
@@ -97,6 +111,9 @@ function Feature({ section }: FeatureSettings) {
               loop
               muted
             ></video>
+            <div className={styles.image}>
+              <Image src={UntanglifyBundle} alt="Untanglify Bundle Feature" />
+            </div>
           </div>
         </>
       ) : section === 4 ? (
@@ -109,6 +126,9 @@ function Feature({ section }: FeatureSettings) {
               loop
               muted
             ></video>
+            <div className={styles.image}>
+              <Image src={UntanglifyGroups} alt="Untanglify Groups Feature" />
+            </div>
           </div>
           <div className={styles.left} style={{ textAlign: "right" }}>
             <h4 className={styles.subtitle}>
