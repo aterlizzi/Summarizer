@@ -5,18 +5,44 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/Home.module.scss";
 import UntanglifySummarize from "../../public/UntanglifySummarize.jpg";
 import UntanglifyBundle from "../../public/UntanglifyBundle.jpg";
 import UntanglifyGroups from "../../public/UntanglifyGroups.jpg";
 import UntanglifyShare from "../../public/UntanglifyShare.jpg";
+import dynamic from "next/dynamic";
+const Video = dynamic(() => import("./video"));
 
 interface FeatureSettings {
   section: number;
 }
 
 function Feature({ section }: FeatureSettings) {
+  const getMobileDetect = (userAgent: NavigatorID["userAgent"]) => {
+    const isAndroid = () => Boolean(userAgent.match(/Android/i));
+    const isIos = () => Boolean(userAgent.match(/iPhone|iPad|iPod/i));
+    const isOpera = () => Boolean(userAgent.match(/Opera Mini/i));
+    const isWindows = () => Boolean(userAgent.match(/IEMobile/i));
+    const isSSR = () => Boolean(userAgent.match(/SSR/i));
+    const isMobile = () =>
+      Boolean(isAndroid() || isIos() || isOpera() || isWindows());
+    const isDesktop = () => Boolean(!isMobile() && !isSSR());
+    return {
+      isMobile,
+      isDesktop,
+      isAndroid,
+      isIos,
+      isSSR,
+    };
+  };
+  const useMobileDetect = () => {
+    useEffect(() => {}, []);
+    const userAgent =
+      typeof navigator === "undefined" ? "SSR" : navigator.userAgent;
+    return getMobileDetect(userAgent);
+  };
+
   return (
     <div
       className={
@@ -55,34 +81,28 @@ function Feature({ section }: FeatureSettings) {
             </div>
           </div>
           <div className={styles.right}>
-            <video
-              className={styles.video}
-              src="/UntanglifySummarize.mp4"
-              autoPlay
-              loop
-              muted
-            ></video>
-            <div className={styles.image}>
-              <Image
-                src={UntanglifySummarize}
-                alt="Untanglify Summarize Feature"
-              />
-            </div>
+            {useMobileDetect().isMobile() ? (
+              <div className={styles.image}>
+                <Image
+                  src={UntanglifySummarize}
+                  alt="Untanglify Summarize Feature"
+                />
+              </div>
+            ) : (
+              <Video type={"summary"} />
+            )}
           </div>
         </>
       ) : section === 2 ? (
         <>
           <div className={styles.right}>
-            <video
-              className={styles.video}
-              src="/UntanglifyShare.mp4"
-              autoPlay
-              loop
-              muted
-            ></video>
-            <div className={styles.image}>
-              <Image src={UntanglifyShare} alt="Untanglify Share Feature" />
-            </div>
+            {useMobileDetect().isMobile() ? (
+              <div className={styles.image}>
+                <Image src={UntanglifyShare} alt="Untanglify Share Feature" />
+              </div>
+            ) : (
+              <Video type={"share"} />
+            )}
           </div>
           <div className={styles.left} style={{ textAlign: "right" }}>
             <h4 className={styles.subtitle}>
@@ -104,31 +124,25 @@ function Feature({ section }: FeatureSettings) {
             </p>
           </div>
           <div className={styles.right}>
-            <video
-              className={styles.video}
-              src="/UntanglifyBundlesVideo.mp4"
-              autoPlay
-              loop
-              muted
-            ></video>
-            <div className={styles.image}>
-              <Image src={UntanglifyBundle} alt="Untanglify Bundle Feature" />
-            </div>
+            {useMobileDetect().isMobile() ? (
+              <div className={styles.image}>
+                <Image src={UntanglifyBundle} alt="Untanglify Bundle Feature" />
+              </div>
+            ) : (
+              <Video type={"bundle"} />
+            )}
           </div>
         </>
       ) : section === 4 ? (
         <>
           <div className={styles.right}>
-            <video
-              className={styles.video}
-              src="/UntanglifyGroups.mp4"
-              autoPlay
-              loop
-              muted
-            ></video>
-            <div className={styles.image}>
-              <Image src={UntanglifyGroups} alt="Untanglify Groups Feature" />
-            </div>
+            {useMobileDetect().isMobile() ? (
+              <div className={styles.image}>
+                <Image src={UntanglifyGroups} alt="Untanglify Groups Feature" />
+              </div>
+            ) : (
+              <Video type={"group"} />
+            )}
           </div>
           <div className={styles.left} style={{ textAlign: "right" }}>
             <h4 className={styles.subtitle}>

@@ -412,7 +412,6 @@
           border-radius: 0.5em;
         }
         .image {
-          display: none;
           max-width: 760px;
           width: 100%;
           border-radius: 0.5em;
@@ -484,22 +483,6 @@
       top: 250px;
       border-radius: 50%;
       border: 2px solid #bb86fc;
-    }
-  }
-}
-@media (max-width: 760px) {
-  .main {
-    .content {
-      .featureContainer {
-        .right {
-          .video {
-            display: none;
-          }
-          .image {
-            display: block;
-          }
-        }
-      }
     }
   }
 }
