@@ -12,6 +12,7 @@ import UntanglifyBundle from "../../public/UntanglifyBundle.jpg";
 import UntanglifyGroups from "../../public/UntanglifyGroups.jpg";
 import UntanglifyShare from "../../public/UntanglifyShare.jpg";
 import dynamic from "next/dynamic";
+import useMobileDetect from "./util";
 const Video = dynamic(() => import("./video"));
 
 interface FeatureSettings {
@@ -19,29 +20,7 @@ interface FeatureSettings {
 }
 
 function Feature({ section }: FeatureSettings) {
-  const getMobileDetect = (userAgent: NavigatorID["userAgent"]) => {
-    const isAndroid = () => Boolean(userAgent.match(/Android/i));
-    const isIos = () => Boolean(userAgent.match(/iPhone|iPad|iPod/i));
-    const isOpera = () => Boolean(userAgent.match(/Opera Mini/i));
-    const isWindows = () => Boolean(userAgent.match(/IEMobile/i));
-    const isSSR = () => Boolean(userAgent.match(/SSR/i));
-    const isMobile = () =>
-      Boolean(isAndroid() || isIos() || isOpera() || isWindows());
-    const isDesktop = () => Boolean(!isMobile() && !isSSR());
-    return {
-      isMobile,
-      isDesktop,
-      isAndroid,
-      isIos,
-      isSSR,
-    };
-  };
-  const useMobileDetect = () => {
-    useEffect(() => {}, []);
-    const userAgent =
-      typeof navigator === "undefined" ? "SSR" : navigator.userAgent;
-    return getMobileDetect(userAgent);
-  };
+  const isMobile = useMobileDetect().isMobile();
 
   return (
     <div
@@ -81,7 +60,7 @@ function Feature({ section }: FeatureSettings) {
             </div>
           </div>
           <div className={styles.right}>
-            {useMobileDetect().isMobile() ? (
+            {isMobile ? (
               <div className={styles.image}>
                 <Image
                   src={UntanglifySummarize}
@@ -96,7 +75,7 @@ function Feature({ section }: FeatureSettings) {
       ) : section === 2 ? (
         <>
           <div className={styles.right}>
-            {useMobileDetect().isMobile() ? (
+            {isMobile ? (
               <div className={styles.image}>
                 <Image src={UntanglifyShare} alt="Untanglify Share Feature" />
               </div>
@@ -124,7 +103,7 @@ function Feature({ section }: FeatureSettings) {
             </p>
           </div>
           <div className={styles.right}>
-            {useMobileDetect().isMobile() ? (
+            {isMobile ? (
               <div className={styles.image}>
                 <Image src={UntanglifyBundle} alt="Untanglify Bundle Feature" />
               </div>
@@ -136,7 +115,7 @@ function Feature({ section }: FeatureSettings) {
       ) : section === 4 ? (
         <>
           <div className={styles.right}>
-            {useMobileDetect().isMobile() ? (
+            {isMobile ? (
               <div className={styles.image}>
                 <Image src={UntanglifyGroups} alt="Untanglify Groups Feature" />
               </div>
