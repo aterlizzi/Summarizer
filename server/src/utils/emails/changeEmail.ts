@@ -2,7 +2,15 @@ import { GetAccessToken } from "./../googleapi";
 ("use strict");
 const nodemailer = require("nodemailer");
 
-export async function sendChangeEmailMail(email: string, username: string) {
+export async function sendChangeEmailMail(
+  username: string,
+  email: string,
+  token: string
+) {
+  const url =
+    process.env.NODE_ENV === "production"
+      ? `https://untanglify.com/users/change-email/${token}`
+      : `http://localhost:4000/users/change-email/${token}`;
   try {
     if (process.env.NODE_ENV === "production") {
       const accessToken = GetAccessToken();
@@ -23,8 +31,8 @@ export async function sendChangeEmailMail(email: string, username: string) {
         from: '"Untanglify" <team@untanglify.com>',
         to: email,
         subject: `[ACTION REQUIRED] Email Updated`, // Subject line
-        text: `Hi ${username}, please confirm your account by clicking the link below.`, // plain text body
-        html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/>`, // html body
+        text: `Hi ${username}, please confirm your account by clicking the link below: ${url}`, // plain text body
+        html: `Hi ${username}, <br/>Please confirm your account by clicking the link below. ${url}<br/>`, // html body
       };
 
       let info = await transport.sendMail(mailOptions);
@@ -49,8 +57,8 @@ export async function sendChangeEmailMail(email: string, username: string) {
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: email,
         subject: `[ACTION REQUIRED] Email Updated`, // Subject line
-        text: `Hi ${username}, please confirm your account by clicking the link below.`, // plain text body
-        html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/>`, // html body
+        text: `Hi ${username}, please confirm your account by clicking the link below: ${url}`, // plain text body
+        html: `Hi ${username}, <br/>Please confirm your account by clicking the link below. ${url}<br/>`, // html body
       };
 
       let info = await transporter.sendMail(mailOptions);

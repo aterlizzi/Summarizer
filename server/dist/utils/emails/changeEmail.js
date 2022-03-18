@@ -13,8 +13,11 @@ exports.sendChangeEmailMail = void 0;
 const googleapi_1 = require("./../googleapi");
 ("use strict");
 const nodemailer = require("nodemailer");
-function sendChangeEmailMail(email, username) {
+function sendChangeEmailMail(username, email, token) {
     return __awaiter(this, void 0, void 0, function* () {
+        const url = process.env.NODE_ENV === "production"
+            ? `https://untanglify.com/users/change-email/${token}`
+            : `http://localhost:4000/users/change-email/${token}`;
         try {
             if (process.env.NODE_ENV === "production") {
                 const accessToken = (0, googleapi_1.GetAccessToken)();
@@ -33,8 +36,8 @@ function sendChangeEmailMail(email, username) {
                     from: '"Untanglify" <team@untanglify.com>',
                     to: email,
                     subject: `[ACTION REQUIRED] Email Updated`,
-                    text: `Hi ${username}, please confirm your account by clicking the link below.`,
-                    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/>`,
+                    text: `Hi ${username}, please confirm your account by clicking the link below: ${url}`,
+                    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below. ${url}<br/>`,
                 };
                 let info = yield transport.sendMail(mailOptions);
                 console.log("Message sent: %s", info.messageId);
@@ -55,8 +58,8 @@ function sendChangeEmailMail(email, username) {
                     from: '"Fred Foo 👻" <foo@example.com>',
                     to: email,
                     subject: `[ACTION REQUIRED] Email Updated`,
-                    text: `Hi ${username}, please confirm your account by clicking the link below.`,
-                    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below.<br/>`,
+                    text: `Hi ${username}, please confirm your account by clicking the link below: ${url}`,
+                    html: `Hi ${username}, <br/>Please confirm your account by clicking the link below. ${url}<br/>`,
                 };
                 let info = yield transporter.sendMail(mailOptions);
                 console.log("Message sent: %s", info.messageId);

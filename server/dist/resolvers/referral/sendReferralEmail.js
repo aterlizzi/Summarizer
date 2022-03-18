@@ -33,7 +33,7 @@ let SendReferralEmailResolver = class SendReferralEmailResolver {
             if (!user)
                 return false;
             const referralCode = user.referralCode;
-            yield (0, referralInviteEmail_1.sendReferralInviteEmail)(email, `http://localhost:3000/${referralCode}`);
+            yield (0, referralInviteEmail_1.sendReferralInviteEmail)(email, `http://localhost:3000/${referralCode}`, user.username, user.createdAt);
             return true;
         });
     }

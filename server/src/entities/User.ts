@@ -47,6 +47,10 @@ export class User extends BaseEntity {
   @Column()
   email: string;
 
+  @Field(() => String)
+  @Column({ default: "" })
+  tempChangeEmail: string;
+
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   username?: string;

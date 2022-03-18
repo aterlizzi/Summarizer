@@ -112,15 +112,8 @@ function MainSigninLoginComp({
               </div>
               {signin ? (
                 <div className={styles.checkbox}>
-                  <input
-                    type="checkbox"
-                    id="check"
-                    name="check"
-                    className={styles.box}
-                    required
-                  />
                   <label htmlFor="check" className={styles.label}>
-                    By clicking, you consent to our{" "}
+                    By signing up, you consent to our{" "}
                     <span
                       className={styles.special}
                       onClick={() => {

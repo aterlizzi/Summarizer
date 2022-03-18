@@ -17,7 +17,9 @@ export class SendReferralEmailResolver {
     const referralCode = user.referralCode;
     await sendReferralInviteEmail(
       email,
-      `http://localhost:3000/${referralCode}`
+      `http://localhost:3000/${referralCode}`,
+      user.username!,
+      user.createdAt
     );
     return true;
   }

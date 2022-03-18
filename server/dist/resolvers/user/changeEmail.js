@@ -20,12 +20,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChangeEmailResolver = void 0;
+const argon2_1 = __importDefault(require("argon2"));
+const redis_1 = require("./../../redis");
 const changeEmail_1 = require("./../../types/changeEmail");
 const User_1 = require("./../../entities/User");
 const type_graphql_1 = require("type-graphql");
 const isAuth_1 = require("../../middlewares/isAuth");
+const redisPrefixes_1 = require("../../constants/redisPrefixes");
+const uuid_1 = require("uuid");
 const changeEmail_2 = require("../../utils/emails/changeEmail");
 let ChangeEmailResolver = class ChangeEmailResolver {
     changeEmail({ payload }, email) {
@@ -36,11 +43,30 @@ let ChangeEmailResolver = class ChangeEmailResolver {
                 return { success: false, error: "Not authenticated." };
             if (possibleUser)
                 return { success: false, error: "User with that email already exists." };
-            const oldEmail = user.email;
-            yield (0, changeEmail_2.sendChangeEmailMail)(oldEmail, user.username ? user.username : "User");
-            user.email = email;
+            user.tempChangeEmail = email;
             yield user.save();
+            const CODE = (0, uuid_1.v4)();
+            yield redis_1.redis.set(redisPrefixes_1.changeEmailToken + CODE, user.id, "ex", 60 * 60 * 24);
+            yield (0, changeEmail_2.sendChangeEmailMail)(user.username, email, CODE);
             return { success: true, error: "" };
+        });
+    }
+    confirmChangeEmail(token, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = yield redis_1.redis.get(redisPrefixes_1.changeEmailToken + token);
+            if (!userId)
+                return false;
+            const user = yield User_1.User.findOne({ where: { id: userId } });
+            if (!user)
+                return false;
+            if (!(yield argon2_1.default.verify(user.password, password)))
+                return false;
+            yield redis_1.redis.del(redisPrefixes_1.changeEmailToken + token);
+            const newEmail = user.tempChangeEmail;
+            user.tempChangeEmail = "";
+            user.email = newEmail;
+            yield user.save();
+            return true;
         });
     }
 };
@@ -53,6 +79,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], ChangeEmailResolver.prototype, "changeEmail", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, type_graphql_1.Arg)("token")),
+    __param(1, (0, type_graphql_1.Arg)("password")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], ChangeEmailResolver.prototype, "confirmChangeEmail", null);
 ChangeEmailResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], ChangeEmailResolver);

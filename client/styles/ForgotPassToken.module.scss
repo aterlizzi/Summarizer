@@ -124,6 +124,12 @@
       height: 37.5px;
       outline: none;
     }
+    .failure {
+      color: $clr-error;
+    }
+    .success {
+      color: $clr-secondary;
+    }
   }
 }
 

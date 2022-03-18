@@ -78,7 +78,10 @@ function Personal() {
           res.data.changeEmail &&
           res.data.changeEmail.success
         ) {
-          setSuccess({ type: "email", msg: "Successfully updated email." });
+          setSuccess({
+            type: "email",
+            msg: "Sent instructions for changing email.",
+          });
         }
       });
     }
