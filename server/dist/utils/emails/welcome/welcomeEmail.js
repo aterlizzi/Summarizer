@@ -45,50 +45,123 @@ If you decide to stay, consider helping us expand through our referral program a
         
 Best, 
 The Untanglify Team`,
-                    html: `
-        <main style="min-height: 100vh; width: 100%; background: #121212; display: flex; flex-direction: column; align-items: center; padding: 2em;">
-          <div style="display: flex; align-items: center;">
-            <p style="color: rgba(255, 255, 255, 0.87); font-size: 2rem;">
-              Untanglify
-            </p>
-          </div>
-          <div style="background: rgba(255, 255, 255, 0.05); border-radius: 2em; max-width: 30em; width: 90%; border: "1px solid rgba(255, 255, 255, 0.08);">
-            <header style="background: #4740d1; border-bottom: 3px solid rgba(255, 255, 255, 0.08); padding: 2em 1em; border-top-left-radius: 2em; border-top-right-radius: 2em;">
-              <h3 style="color: rgba(255, 255, 255, 0.87); margin: 0em;">
-                Welcome to Untanglify!
-              </h3>
-            </header>
-            <section style="padding: 1em; display: flex; flex-direction: column;">
-              <p style="color: rgba(255, 255, 255, .6); margin: 0em 0em 1em 0em">
-                Hi ${username}, 
-                <br /> <br />
-                Welcome to <span style="color: #bb86fc;">Untanglify!</span> We are a community of readers just trying to expand our knowledge and read even faster. 
-                <br /> <br />
-                We're glad you've decided to join us and hope we can make it worth your while. 
-                <br /> <br />
-                In the next few days expect some tips and suggestions coming your way so we can make the most of your experience. Despite all that, if you ever need anything, please feel free to contact
-                <a href="https://untanglify.com/contact" style="text-decoration: none;">
-                  <span style="color: #bb86fc;">Customer Support.</span>
-                </a>
-                <br /> <br />
-                If you decide to stay, consider helping us expand through our 
-                <a href="https://untanglify.com/referral" style="text-decoration: none;">
-                    <span style="color: #bb86fc;">Referral Program.</span>
-                </a> You'd be doing us a favor so we'll give you some good rewards for your effort.
-                <br /> <br />
-                Oh, and you can change your preferences for the emails you receive 
-                <a href="https://untanglify.com/users/settings?reminders=true" style="text-decoration: none;">
-                    <span style="color: #bb86fc;">here.</span>
-                </a> 
-                My inbox is currently at 10,000+ emails so needless to say most of us understand the frustration.
-                <br /> <br />
-                Best,
-                <br />
-                The Untanglify Team.
-              </p>
-            </section>
-          </div>
-        </main>`,
+                    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="color-scheme" content="only">
+            <title>Email Structure Untanglify</title>
+          </head>
+          <body style="margin:0;padding:0;background:#121212;">
+            <center class="wrapper" style="width:100%;table-layout:fixed;background:#121212;padding-bottom:40px;">
+              <div class="webkit" style="max-width:500px;">
+                <table class="outer" align="center" style="Margin:0 auto;max-width:500px;width:100%;border-spacing:0;font-family:sans-serif;color:#ffffff99;">
+                  <tr>
+                    <td style="padding-top:20px;padding-bottom:40px;">
+                      <table width="100%" style="border-spacing:0;">
+                        <tr>
+                          <td width="100%" style="padding:0;text-align:center;">
+                            <h3 style="display:inline-block;color:#ffffffde;Margin:0;font-size:45px;">Untanglify</h3>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 20px;background:#4740d1;">
+                      <table width="100%" style="border-spacing:0;">
+                        <tr>
+                          <td style="padding:0;font-size:25px;color:#ffffffde;">
+                            <h4 style="Margin:0;">
+                              Welcome to Untanglify!
+                            </h4>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0;background:#564ee2;" width="100%" height="5"></td>
+                  </tr>
+                  <tr>
+                    <td style="background:#ffffff0d;padding: 20px;color: #ffffff99;">
+                      <table width="100%" style="border-spacing:0;">
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Hi ${username},
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Welcome to <span style="color: #bb86fc;">Untanglify!</span> We are a community of readers just trying to expand our knowledge and read even faster. 
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              We're glad you've decided to join us and hope we can make it worth your while. 
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              In the next few days expect some tips and suggestions coming your way so we can make the most of your experience. Despite all that, if you ever need anything, please feel free to contact
+                              <a href="https://untanglify.com/contact" style="text-decoration: none;">
+                                <span style="color: #bb86fc;">Customer Support.</span>
+                              </a>                            
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              If you decide to stay, consider helping us expand through our 
+                              <a href="https://untanglify.com/referral" style="text-decoration: none;">
+                                <span style="color: #bb86fc;">Referral Program.</span>
+                              </a> You'd be doing us a favor so we'll give you some good rewards for your effort.
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Oh, and you can change your preferences for the emails you receive 
+                              <a href="https://untanglify.com/users/settings?reminders=true" style="text-decoration: none;">
+                                  <span style="color: #bb86fc;">here.</span>
+                              </a> 
+                              My inbox is currently at 10,000+ emails so needless to say most of us understand the frustration.
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Best,
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              The Untanglify Team.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </center>
+          </body>
+        </html>`,
                 };
                 let info = yield transport.sendMail(mailOptions);
                 console.log("Message sent: %s", info.messageId);
@@ -121,50 +194,123 @@ If you decide to stay, consider helping us expand through our referral program a
         
 Best, 
 The Untanglify Team`,
-                    html: `
-        <main style="min-height: 100vh; width: 100%; background: #121212; display: flex; flex-direction: column; align-items: center; padding: 2em;">
-          <div style="display: flex; align-items: center;">
-            <p style="color: rgba(255, 255, 255, 0.87); font-size: 2rem;">
-              Untanglify
-            </p>
-          </div>
-          <div style="background: rgba(255, 255, 255, 0.05); border-radius: 2em; max-width: 30em; width: 90%; border: "1px solid rgba(255, 255, 255, 0.08);">
-            <header style="background: #4740d1; border-bottom: 3px solid rgba(255, 255, 255, 0.08); padding: 2em 1em; border-top-left-radius: 2em; border-top-right-radius: 2em;">
-              <h3 style="color: rgba(255, 255, 255, 0.87); margin: 0em;">
-                Welcome to Untanglify!
-              </h3>
-            </header>
-            <section style="padding: 1em; display: flex; flex-direction: column;">
-              <p style="color: rgba(255, 255, 255, .6); margin: 0em 0em 1em 0em">
-                Hi ${username}, 
-                <br /> <br />
-                Welcome to <span style="color: #bb86fc;">Untanglify!</span> We are a community of readers just trying to expand our knowledge and read even faster. 
-                <br /> <br />
-                We're glad you've decided to join us and hope we can make it worth your while. 
-                <br /> <br />
-                In the next few days expect some tips and suggestions coming your way so we can make the most of your experience. Despite all that, if you ever need anything, please feel free to contact
-                <a href="https://untanglify.com/contact" style="text-decoration: none;">
-                  <span style="color: #bb86fc;">Customer Support.</span>
-                </a>
-                <br /> <br />
-                If you decide to stay, consider helping us expand through our 
-                <a href="https://untanglify.com/referral" style="text-decoration: none;">
-                    <span style="color: #bb86fc;">Referral Program.</span>
-                </a> You'd be doing us a favor so we'll give you some good rewards for your effort.
-                <br /> <br />
-                Oh, and you can change your preferences for the emails you receive 
-                <a href="https://untanglify.com/users/settings?reminders=true" style="text-decoration: none;">
-                    <span style="color: #bb86fc;">here.</span>
-                </a> 
-                My inbox is currently at 10,000+ emails so needless to say most of us understand the frustration.
-                <br /> <br />
-                Best,
-                <br />
-                The Untanglify Team.
-              </p>
-            </section>
-          </div>
-        </main>`,
+                    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="color-scheme" content="only">
+            <title>Email Structure Untanglify</title>
+          </head>
+          <body style="margin:0;padding:0;background:#121212;">
+            <center class="wrapper" style="width:100%;table-layout:fixed;background:#121212;padding-bottom:40px;">
+              <div class="webkit" style="max-width:500px;">
+                <table class="outer" align="center" style="Margin:0 auto;max-width:500px;width:100%;border-spacing:0;font-family:sans-serif;color:#ffffff99;">
+                  <tr>
+                    <td style="padding-top:20px;padding-bottom:40px;">
+                      <table width="100%" style="border-spacing:0;">
+                        <tr>
+                          <td width="100%" style="padding:0;text-align:center;">
+                            <h3 style="display:inline-block;color:#ffffffde;Margin:0;font-size:45px;">Untanglify</h3>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 20px;background:#4740d1;">
+                      <table width="100%" style="border-spacing:0;">
+                        <tr>
+                          <td style="padding:0;font-size:25px;color:#ffffffde;">
+                            <h4 style="Margin:0;">
+                              Welcome to Untanglify!
+                            </h4>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0;background:#564ee2;" width="100%" height="5"></td>
+                  </tr>
+                  <tr>
+                    <td style="background:#ffffff0d;padding: 20px;color: #ffffff99;">
+                      <table width="100%" style="border-spacing:0;">
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Hi ${username},
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Welcome to <span style="color: #bb86fc;">Untanglify!</span> We are a community of readers just trying to expand our knowledge and read even faster. 
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              We're glad you've decided to join us and hope we can make it worth your while. 
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              In the next few days expect some tips and suggestions coming your way so we can make the most of your experience. Despite all that, if you ever need anything, please feel free to contact
+                              <a href="https://untanglify.com/contact" style="text-decoration: none;">
+                                <span style="color: #bb86fc;">Customer Support.</span>
+                              </a>                            
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              If you decide to stay, consider helping us expand through our 
+                              <a href="https://untanglify.com/referral" style="text-decoration: none;">
+                                <span style="color: #bb86fc;">Referral Program.</span>
+                              </a> You'd be doing us a favor so we'll give you some good rewards for your effort.
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Oh, and you can change your preferences for the emails you receive 
+                              <a href="https://untanglify.com/users/settings?reminders=true" style="text-decoration: none;">
+                                  <span style="color: #bb86fc;">here.</span>
+                              </a> 
+                              My inbox is currently at 10,000+ emails so needless to say most of us understand the frustration.
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              Best,
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:10px;color: #ffffff99;">
+                            <p style="Margin:0;">
+                              The Untanglify Team.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </center>
+          </body>
+        </html>`,
                 };
                 let info = yield transporter.sendMail(mailOptions);
                 console.log("Message sent: %s", info.messageId);
