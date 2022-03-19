@@ -43,6 +43,7 @@ The Untanglify Team`,
           <head>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="color-scheme" content="only">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Email Structure Untanglify</title>
             <style type="text/css">
@@ -54,8 +55,8 @@ The Untanglify Team`,
           </head>
           <body style="margin:0;padding:0;background:#121212;">
             <center class="wrapper" style="width:100%;table-layout:fixed;background:#121212;padding-bottom:40px;">
-              <div class="webkit" style="max-width:600px;">
-                <table class="outer" align="center" style="Margin:0 auto;max-width:600px;width:100%;border-spacing:0;font-family:sans-serif;color:#ffffff99;">
+              <div class="webkit" style="max-width:500px;">
+                <table class="outer" align="center" style="Margin:0 auto;max-width:500px;width:100%;border-spacing:0;font-family:sans-serif;color:#ffffff99;">
                   <tr>
                     <td style="padding-top:20px;padding-bottom:40px;">
                       <table width="100%" style="border-spacing:0;">
@@ -183,6 +184,7 @@ The Untanglify Team`,
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="color-scheme" content="only">
             <title>Email Structure Untanglify</title>
             <style type="text/css">
               @media screen and (max-width: 600px) {
@@ -193,8 +195,8 @@ The Untanglify Team`,
           </head>
           <body style="margin:0;padding:0;background:#121212;">
             <center class="wrapper" style="width:100%;table-layout:fixed;background:#121212;padding-bottom:40px;">
-              <div class="webkit" style="max-width:600px;">
-                <table class="outer" align="center" style="Margin:0 auto;max-width:600px;width:100%;border-spacing:0;font-family:sans-serif;color:#ffffff99;">
+              <div class="webkit" style="max-width:500px;">
+                <table class="outer" align="center" style="Margin:0 auto;max-width:500px;width:100%;border-spacing:0;font-family:sans-serif;color:#ffffff99;">
                   <tr>
                     <td style="padding-top:20px;padding-bottom:40px;">
                       <table width="100%" style="border-spacing:0;">
