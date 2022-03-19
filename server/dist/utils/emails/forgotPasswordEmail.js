@@ -12,9 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendForgotPasswordEmail = void 0;
 const googleapi_1 = require("../googleapi");
 const nodemailer = require("nodemailer");
-function sendForgotPasswordEmail(email, token) {
+function sendForgotPasswordEmail(email, token, username) {
     return __awaiter(this, void 0, void 0, function* () {
-        const username = "Aidan";
         const url = process.env.NODE_ENV === "production"
             ? `https://untanglify.com/users/forgot-password/${token}`
             : `http://localhost:4000/users/forgot-password/${token}`;

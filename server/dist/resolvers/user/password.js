@@ -43,7 +43,7 @@ let PasswordResolver = class PasswordResolver {
             const usersEmail = user.email;
             const token = (0, uuid_1.v4)();
             yield redis_1.redis.set(redisPrefixes_1.forgotPasswordToken + token, user.id, "ex", 60 * 60 * 24);
-            (0, forgotPasswordEmail_1.sendForgotPasswordEmail)(usersEmail, token);
+            (0, forgotPasswordEmail_1.sendForgotPasswordEmail)(usersEmail, token, user.username);
             return `Reset password email sent to ${email}`;
         });
     }

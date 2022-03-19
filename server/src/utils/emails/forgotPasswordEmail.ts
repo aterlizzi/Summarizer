@@ -4,8 +4,11 @@ import { GetAccessToken } from "../googleapi";
 
 const nodemailer = require("nodemailer");
 
-export async function sendForgotPasswordEmail(email: string, token: string) {
-  const username = "Aidan";
+export async function sendForgotPasswordEmail(
+  email: string,
+  token: string,
+  username: string
+) {
   const url =
     process.env.NODE_ENV === "production"
       ? `https://untanglify.com/users/forgot-password/${token}`

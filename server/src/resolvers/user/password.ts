@@ -19,7 +19,7 @@ export class PasswordResolver {
     const usersEmail = user.email;
     const token = v4();
     await redis.set(forgotPasswordToken + token, user.id, "ex", 60 * 60 * 24);
-    sendForgotPasswordEmail(usersEmail, token);
+    sendForgotPasswordEmail(usersEmail, token, user.username!);
     return `Reset password email sent to ${email}`;
   }
   @Mutation(() => String)
