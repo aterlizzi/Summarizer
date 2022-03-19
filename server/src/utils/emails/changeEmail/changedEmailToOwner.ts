@@ -25,7 +25,7 @@ export async function sendChangeEmailToOwnerMail(
       const mailOptions = {
         from: '"Untanglify" <team@untanglify.com>',
         to: email,
-        subject: `Untanglify Email Change`, // Subject line
+        subject: `Untanglify Email Change Requested`, // Subject line
         text: `Hi ${username}, 
 
 We got a request to change the email associated with your Untanglify account.
@@ -94,7 +94,7 @@ The Untanglify Team`,
       const mailOptions = {
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: email,
-        subject: `Untanglify Email Change`, // Subject line
+        subject: `Untanglify Email Change Requested`, // Subject line
         text: `Hi ${username}, 
 
 We got a request to change the email associated with your Untanglify account.

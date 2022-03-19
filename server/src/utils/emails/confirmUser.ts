@@ -28,7 +28,7 @@ export async function sendConfirmationMail(
       const mailOptions = {
         from: '"Untanglify" <team@untanglify.com>', // sender address
         to: email, // list of receivers
-        subject: `Confirm your Account - Untanglify`, // Subject line
+        subject: `Confirm Your Untanglify Account`, // Subject line
         text: `Hi ${username}, your verification code is: ${code}. If you did not request a verification code you can ignore this email.`, // plain text body
         html: `Hi ${username}, <br/><p>Your verification code is: </p><br/><h1>${code}</h1><br/><p>If you did not request a verification code, you can ignore this email.</p>`, // html body
       };
@@ -54,7 +54,7 @@ export async function sendConfirmationMail(
       const mailOptions = {
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: email, // list of receivers
-        subject: `Confirm your account.`, // Subject line
+        subject: `Confirm Your Untanglify Account`, // Subject line
         text: `Hi ${username}, 
 
         In order to finish signing up, you must verify your email address.

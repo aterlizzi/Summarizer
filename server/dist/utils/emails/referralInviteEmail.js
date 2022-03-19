@@ -39,7 +39,7 @@ function sendReferralInviteEmail(email, referralLink, username, createdAt) {
                 const mailOptions = {
                     from: '"Untanglify" <team@untanglify.com>',
                     to: email,
-                    subject: `Untanglify Referral`,
+                    subject: `You've Been Invited To Untanglify`,
                     text: `Hi Friend, 
 
         ${username}, a user of Untanglify since ${createdAt.toDateString()}, has sent you a 10% discount on your first month of Untanglify!
@@ -106,7 +106,7 @@ function sendReferralInviteEmail(email, referralLink, username, createdAt) {
                 const mailOptions = {
                     from: '"Fred Foo 👻" <foo@example.com>',
                     to: email,
-                    subject: `Untanglify Referral`,
+                    subject: `You've Been Invited To Untanglify`,
                     text: `Hi Friend, 
 
 ${username}, a user of Untanglify since ${createdAt.toDateString()}, has sent you a 10% discount on your first month of Untanglify!

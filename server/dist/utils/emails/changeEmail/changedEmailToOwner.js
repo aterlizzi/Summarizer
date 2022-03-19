@@ -32,7 +32,7 @@ function sendChangeEmailToOwnerMail(username, email) {
                 const mailOptions = {
                     from: '"Untanglify" <team@untanglify.com>',
                     to: email,
-                    subject: `Untanglify Email Change`,
+                    subject: `Untanglify Email Change Requested`,
                     text: `Hi ${username}, 
 
 We got a request to change the email associated with your Untanglify account.
@@ -97,7 +97,7 @@ The Untanglify Team`,
                 const mailOptions = {
                     from: '"Fred Foo 👻" <foo@example.com>',
                     to: email,
-                    subject: `Untanglify Email Change`,
+                    subject: `Untanglify Email Change Requested`,
                     text: `Hi ${username}, 
 
 We got a request to change the email associated with your Untanglify account.

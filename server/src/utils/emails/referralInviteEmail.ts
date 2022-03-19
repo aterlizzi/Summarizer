@@ -36,7 +36,7 @@ export async function sendReferralInviteEmail(
       const mailOptions = {
         from: '"Untanglify" <team@untanglify.com>', // sender address
         to: email, // list of receivers
-        subject: `Untanglify Referral`, // Subject line
+        subject: `You've Been Invited To Untanglify`, // Subject line
         text: `Hi Friend, 
 
         ${username}, a user of Untanglify since ${createdAt.toDateString()}, has sent you a 10% discount on your first month of Untanglify!
@@ -107,7 +107,7 @@ export async function sendReferralInviteEmail(
       const mailOptions = {
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: email, // list of receivers
-        subject: `Untanglify Referral`, // Subject line
+        subject: `You've Been Invited To Untanglify`, // Subject line
         text: `Hi Friend, 
 
 ${username}, a user of Untanglify since ${createdAt.toDateString()}, has sent you a 10% discount on your first month of Untanglify!

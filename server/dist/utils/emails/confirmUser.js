@@ -31,7 +31,7 @@ function sendConfirmationMail(email, username, code) {
                 const mailOptions = {
                     from: '"Untanglify" <team@untanglify.com>',
                     to: email,
-                    subject: `Confirm your Account - Untanglify`,
+                    subject: `Confirm Your Untanglify Account`,
                     text: `Hi ${username}, your verification code is: ${code}. If you did not request a verification code you can ignore this email.`,
                     html: `Hi ${username}, <br/><p>Your verification code is: </p><br/><h1>${code}</h1><br/><p>If you did not request a verification code, you can ignore this email.</p>`,
                 };
@@ -53,7 +53,7 @@ function sendConfirmationMail(email, username, code) {
                 const mailOptions = {
                     from: '"Fred Foo 👻" <foo@example.com>',
                     to: email,
-                    subject: `Confirm your account.`,
+                    subject: `Confirm Your Untanglify Account`,
                     text: `Hi ${username}, 
 
         In order to finish signing up, you must verify your email address.
