@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendChangeEmailMail = void 0;
-const googleapi_1 = require("./../googleapi");
+const googleapi_1 = require("../../googleapi");
 ("use strict");
 const nodemailer = require("nodemailer");
 function sendChangeEmailMail(username, email, token) {

@@ -1,42 +1,37 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendChangeEmailMail = void 0;
-const googleapi_1 = require("./../googleapi");
+import { GetAccessToken } from "../../googleapi";
 ("use strict");
 const nodemailer = require("nodemailer");
-function sendChangeEmailMail(username, email, token) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const url = process.env.NODE_ENV === "production"
-            ? `https://untanglify.com/users/change-email/${token}`
-            : `http://localhost:4000/users/change-email/${token}`;
-        try {
-            if (process.env.NODE_ENV === "production") {
-                const accessToken = (0, googleapi_1.GetAccessToken)();
-                const transport = nodemailer.createTransport({
-                    service: "gmail",
-                    auth: {
-                        type: "OAuth2",
-                        user: "untanglify@gmail.com",
-                        clientId: process.env.GOOGLE_GMAIL_CLIENT_ID,
-                        clientSecret: process.env.GOOGLE_GMAIL_CLIENT_SECRET,
-                        refreshToken: process.env.GOOGLE_GMAIL_REFRESH_TOKEN,
-                        accessToken,
-                    },
-                });
-                const mailOptions = {
-                    from: '"Untanglify" <team@untanglify.com>',
-                    to: email,
-                    subject: `[ACTION REQUIRED] Email Updated`,
-                    text: `Hi ${username}, 
+
+export async function sendChangeEmailMail(
+  username: string,
+  email: string,
+  token: string
+) {
+  const url =
+    process.env.NODE_ENV === "production"
+      ? `https://untanglify.com/users/change-email/${token}`
+      : `http://localhost:4000/users/change-email/${token}`;
+  try {
+    if (process.env.NODE_ENV === "production") {
+      const accessToken = GetAccessToken();
+
+      const transport = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          type: "OAuth2",
+          user: "untanglify@gmail.com",
+          clientId: process.env.GOOGLE_GMAIL_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_GMAIL_CLIENT_SECRET,
+          refreshToken: process.env.GOOGLE_GMAIL_REFRESH_TOKEN,
+          accessToken,
+        },
+      });
+
+      const mailOptions = {
+        from: '"Untanglify" <team@untanglify.com>',
+        to: email,
+        subject: `[ACTION REQUIRED] Email Updated`, // Subject line
+        text: `Hi ${username}, 
 
         We got a request to change the email associated with your Untanglify account.
         
@@ -50,7 +45,7 @@ function sendChangeEmailMail(username, email, token) {
         The Untanglify Team
         
         Confirm Email Change Link: ${url}`,
-                    html: `
+        html: `
         <main style="min-height: 100vh; width: 100%; background: #121212; display: flex; flex-direction: column; align-items: center; padding: 2em;">
           <div style="display: flex; align-items: center;">
             <p style="color: rgba(255, 255, 255, 0.87); font-size: 2rem;">
@@ -92,27 +87,31 @@ function sendChangeEmailMail(username, email, token) {
             </section>
           </div>
         </main>`,
-                };
-                let info = yield transport.sendMail(mailOptions);
-                console.log("Message sent: %s", info.messageId);
-                console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-            }
-            else {
-                const testAccount = yield nodemailer.createTestAccount();
-                const transporter = nodemailer.createTransport({
-                    host: "smtp.ethereal.email",
-                    port: 587,
-                    secure: false,
-                    auth: {
-                        user: testAccount.user,
-                        pass: testAccount.pass,
-                    },
-                });
-                const mailOptions = {
-                    from: '"Fred Foo 👻" <foo@example.com>',
-                    to: email,
-                    subject: `[ACTION REQUIRED] Email Updated`,
-                    text: `Hi ${username}, 
+      };
+
+      let info = await transport.sendMail(mailOptions);
+
+      console.log("Message sent: %s", info.messageId);
+
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    } else {
+      const testAccount = await nodemailer.createTestAccount();
+
+      const transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: testAccount.user, // generated ethereal user
+          pass: testAccount.pass, // generated ethereal password
+        },
+      });
+
+      const mailOptions = {
+        from: '"Fred Foo 👻" <foo@example.com>', // sender address
+        to: email,
+        subject: `[ACTION REQUIRED] Email Updated`, // Subject line
+        text: `Hi ${username}, 
 
         We got a request to change the email associated with your Untanglify account.
         
@@ -126,7 +125,7 @@ function sendChangeEmailMail(username, email, token) {
         The Untanglify Team
         
         Confirm Email Change Link: ${url}`,
-                    html: `
+        html: `
         <main style="min-height: 100vh; width: 100%; background: #121212; display: flex; flex-direction: column; align-items: center; padding: 2em;">
           <div style="display: flex; align-items: center;">
             <p style="color: rgba(255, 255, 255, 0.87); font-size: 2rem;">
@@ -168,16 +167,15 @@ function sendChangeEmailMail(username, email, token) {
             </section>
           </div>
         </main>`,
-                };
-                let info = yield transporter.sendMail(mailOptions);
-                console.log("Message sent: %s", info.messageId);
-                console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-            }
-        }
-        catch (err) {
-            return err;
-        }
-    });
+      };
+
+      let info = await transporter.sendMail(mailOptions);
+
+      console.log("Message sent: %s", info.messageId);
+
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    }
+  } catch (err) {
+    return err;
+  }
 }
-exports.sendChangeEmailMail = sendChangeEmailMail;
-//# sourceMappingURL=changeEmail.js.map

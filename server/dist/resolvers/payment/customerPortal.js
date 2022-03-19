@@ -34,7 +34,9 @@ let CustomerPortalResolver = class CustomerPortalResolver {
                 return "";
             const session = yield stripe.billingPortal.sessions.create({
                 customer: user.custKey,
-                return_url: "http://localhost:3000/users/settings",
+                return_url: process.env.NODE_ENV === "production"
+                    ? "https://untanglify.com/users/settings"
+                    : "http://localhost:4000/users/settings",
             });
             return session.url;
         });

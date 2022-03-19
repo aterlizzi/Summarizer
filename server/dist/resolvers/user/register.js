@@ -41,6 +41,7 @@ const registerUserOutput_1 = require("../../types/registerUserOutput");
 const Settings_1 = require("../../entities/Settings");
 const uuid_1 = require("uuid");
 const newUserEmail_1 = require("../../utils/emails/newUserEmail");
+const welcomeEmail_1 = require("../../utils/emails/welcome/welcomeEmail");
 const voucher_codes = require("voucher-code-generator");
 let RegisterResolver = class RegisterResolver {
     registerGoogleUser(token, usecase, referral, ctx) {
@@ -191,6 +192,7 @@ let RegisterResolver = class RegisterResolver {
                 maxAge: 1000 * 60 * 60 * 24 * 7,
                 path: "/",
             });
+            (0, welcomeEmail_1.sendWelcomeMail)(user.username, user.email);
             return {
                 accessToken: (0, jsonwebtoken_1.sign)({ userId: user.id }, process.env.JWT_AT_SECRET_TOKEN, {
                     expiresIn: "15m",

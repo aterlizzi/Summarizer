@@ -7,7 +7,8 @@ import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "../../middlewares/isAuth";
 import { changeEmailToken } from "../../constants/redisPrefixes";
 import { v4 } from "uuid";
-import { sendChangeEmailMail } from "../../utils/emails/changeEmail";
+import { sendChangeEmailMail } from "../../utils/emails/changeEmail/changeEmail";
+import { sendChangeEmailToOwnerMail } from "../../utils/emails/changeEmail/changedEmailToOwner";
 
 @Resolver()
 export class ChangeEmailResolver {
@@ -27,6 +28,7 @@ export class ChangeEmailResolver {
     const CODE = v4();
     await redis.set(changeEmailToken + CODE, user.id, "ex", 60 * 60 * 24);
     await sendChangeEmailMail(user.username!, email, CODE);
+    sendChangeEmailToOwnerMail(user.username!, user.email);
     return { success: true, error: "" };
   }
   @Mutation(() => Boolean)

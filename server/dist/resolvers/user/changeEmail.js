@@ -33,7 +33,8 @@ const type_graphql_1 = require("type-graphql");
 const isAuth_1 = require("../../middlewares/isAuth");
 const redisPrefixes_1 = require("../../constants/redisPrefixes");
 const uuid_1 = require("uuid");
-const changeEmail_2 = require("../../utils/emails/changeEmail");
+const changeEmail_2 = require("../../utils/emails/changeEmail/changeEmail");
+const changedEmailToOwner_1 = require("../../utils/emails/changeEmail/changedEmailToOwner");
 let ChangeEmailResolver = class ChangeEmailResolver {
     changeEmail({ payload }, email) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -48,6 +49,7 @@ let ChangeEmailResolver = class ChangeEmailResolver {
             const CODE = (0, uuid_1.v4)();
             yield redis_1.redis.set(redisPrefixes_1.changeEmailToken + CODE, user.id, "ex", 60 * 60 * 24);
             yield (0, changeEmail_2.sendChangeEmailMail)(user.username, email, CODE);
+            (0, changedEmailToOwner_1.sendChangeEmailToOwnerMail)(user.username, user.email);
             return { success: true, error: "" };
         });
     }

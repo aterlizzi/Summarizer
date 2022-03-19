@@ -1,7 +1,7 @@
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "urql";
 import styles from "../../../styles/ForgotPassToken.module.scss";
 
@@ -87,9 +87,7 @@ function ChangeEmail() {
           </p>
         ) : null}
         {success ? (
-          <p className={styles.success}>
-            Successfully changed your email. Redirecting in 5
-          </p>
+          <p className={styles.success}>Successfully changed your email.</p>
         ) : null}
       </section>
     </main>

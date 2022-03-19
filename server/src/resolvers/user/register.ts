@@ -15,6 +15,7 @@ import { RegisterUserOutput } from "../../types/registerUserOutput";
 import { Settings } from "../../entities/Settings";
 import { v4 } from "uuid";
 import { sendNewUserEmail } from "../../utils/emails/newUserEmail";
+import { sendWelcomeMail } from "../../utils/emails/welcome/welcomeEmail";
 const voucher_codes = require("voucher-code-generator");
 
 @Resolver()
@@ -184,6 +185,7 @@ export class RegisterResolver {
         path: "/",
       }
     );
+    sendWelcomeMail(user.username!, user.email);
     return {
       accessToken: sign({ userId: user.id }, process.env.JWT_AT_SECRET_TOKEN!, {
         expiresIn: "15m",
