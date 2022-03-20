@@ -167,9 +167,10 @@ function Questions() {
         </div>
         {active[4] ? (
           <div className={styles.bottom}>
-            Users are given a free trial by default, simply click "Begin now" on
-            the plan you want to trial and it will be added. Allowing everyone
-            to experience the most we offer is one of our primary objectives.
+            Users are given a free trial by default, simply click &quot;Begin
+            now&quot; on the plan you want to trial and it will be added.
+            Allowing everyone to experience the most we offer is one of our
+            primary objectives.
           </div>
         ) : null}
       </section>

@@ -28,7 +28,7 @@ function Group() {
         router.push("/home");
       }
     }
-  }, [result]);
+  }, [result, router]);
 
   return <div>Group</div>;
 }
