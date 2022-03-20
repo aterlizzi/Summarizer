@@ -78,6 +78,11 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Groups.prototype, "description", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => String),
+    (0, typeorm_1.Column)({ default: "" }),
+    __metadata("design:type", String)
+], Groups.prototype, "groupId", void 0);
 Groups = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

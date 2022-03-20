@@ -28,6 +28,14 @@ let DeleteGroupResolver = class DeleteGroupResolver {
     deleteGroup(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const group = yield Groups_1.Groups.findOne(id);
+                if (!group)
+                    return false;
+                group.admins = [];
+                group.users = [];
+                group.summaries = [];
+                group.pinnedSummaries = [];
+                yield group.save();
                 yield Groups_1.Groups.delete(id);
                 return true;
             }

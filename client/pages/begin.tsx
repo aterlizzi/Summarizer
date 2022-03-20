@@ -7,6 +7,7 @@ import styles from "../styles/Begin.module.scss";
 import { useRouter } from "next/router";
 import BannerComp from "../components/begin/bannerComp";
 import MobileMenu from "../components/begin/mobileMenuComp";
+import Questions from "../components/begin/questions";
 
 const Me = `
   query {
@@ -401,6 +402,9 @@ function Begin() {
             ) : null}
           </section>
         </div>
+      </section>
+      <section className={styles.faq}>
+        <Questions />
       </section>
     </main>
   );

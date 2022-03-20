@@ -22,6 +22,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReturnGroupResolver = void 0;
+const checkIfLogged_1 = require("./../../middlewares/checkIfLogged");
 const isAuth_1 = require("./../../middlewares/isAuth");
 const Groups_1 = require("./../../entities/Groups");
 const type_graphql_1 = require("type-graphql");
@@ -52,6 +53,26 @@ let ReturnGroupResolver = class ReturnGroupResolver {
             return arr;
         });
     }
+    returnGroup(id, { payload }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const group = yield Groups_1.Groups.findOne({
+                where: { groupId: id },
+                relations: ["admins", "users"],
+            });
+            if (!group)
+                return undefined;
+            if (!group.publicPosts) {
+                if (!payload)
+                    return undefined;
+                if (group.users.filter((user) => user.id === parseInt(payload.userId))
+                    .length === 0 &&
+                    group.admins.filter((user) => user.id === parseInt(payload.userId))
+                        .length === 0)
+                    return undefined;
+            }
+            return group;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Groups_1.Groups]),
@@ -67,6 +88,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ReturnGroupResolver.prototype, "returnUserGroups", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Groups_1.Groups, { nullable: true }),
+    (0, type_graphql_1.UseMiddleware)(checkIfLogged_1.checkIfLogged),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __param(1, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ReturnGroupResolver.prototype, "returnGroup", null);
 ReturnGroupResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], ReturnGroupResolver);

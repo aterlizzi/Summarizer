@@ -6,8 +6,9 @@ import CreateBundle from "./CreateBundle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH, faUser } from "@fortawesome/free-solid-svg-icons";
 import CreateGroup from "./Groups/CreateGroup";
-import { useQuery } from "urql";
+import { useMutation, useQuery } from "urql";
 import InviteUsers from "./Groups/InviteUsers";
+import router from "next/router";
 
 const testArr = [0, 1, 2, 3, 4];
 
@@ -18,6 +19,7 @@ const ReturnGroups = `
       id
       description
       allowMemberToInvite
+      groupId
       users{
         id
       }
@@ -25,6 +27,12 @@ const ReturnGroups = `
         id
       }
     }
+  }
+`;
+
+const DeleteGroup = `
+  mutation($id: Float!){
+    deleteGroup(id: $id)
   }
 `;
 
@@ -44,9 +52,12 @@ function Groups({
   setExecute,
 }) {
   const [groupsResult, reexecuteGroups] = useQuery({ query: ReturnGroups });
+  const [deleteGroupResult, deleteGroup] = useMutation(DeleteGroup);
   const [revealAside, setRevealAside] = useState({});
   const [groupName, setGroupName] = useState("");
   const [groupId, setGroupId] = useState(0);
+
+  console.log(deleteGroupResult);
 
   const node = useRef(null);
 
@@ -65,6 +76,14 @@ function Groups({
       document.removeEventListener("click", checkIfClickedOutside);
     };
   }, [revealAside]);
+
+  const handleDeleteGroup = (id: number) => {
+    deleteGroup({ id }).then((res) => {
+      if (res.data && res.data.deleteGroup) {
+        reexecuteGroups();
+      }
+    });
+  };
 
   return (
     <>
@@ -119,7 +138,13 @@ function Groups({
                 ? groupsResult.data.returnUserGroups.map((group) => {
                     return (
                       <div className={styles.card} key={group.id}>
-                        <div className={styles.top}>
+                        <div
+                          className={styles.top}
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            router.push(`/users/groups/${group.groupId}`)
+                          }
+                        >
                           <header className={styles.cardHead}>
                             <h3 className={styles.groupName}>{group.name}</h3>
                             {/* Check if one of the admin ids match the user id */}
@@ -237,6 +262,14 @@ function Groups({
                                   <p className={styles.option}>Invite User</p>
                                 </div>
                               ) : null}
+                              <div
+                                className={styles.container}
+                                onClick={() =>
+                                  router.push(`/users/groups/${group.groupId}`)
+                                }
+                              >
+                                <p className={styles.option}>Visit</p>
+                              </div>
                               {group.admins.filter(
                                 (admin) => admin.id === result.data.me.id
                               ).length > 0 ? (
@@ -247,7 +280,12 @@ function Groups({
                               {group.admins.filter(
                                 (admin) => admin.id === result.data.me.id
                               ).length > 0 ? (
-                                <div className={styles.container}>
+                                <div
+                                  className={styles.container}
+                                  onClick={() =>
+                                    handleDeleteGroup(parseInt(group.id))
+                                  }
+                                >
                                   <p className={styles.option}>Delete Group</p>
                                 </div>
                               ) : null}

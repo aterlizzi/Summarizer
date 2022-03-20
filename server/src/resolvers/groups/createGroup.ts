@@ -4,6 +4,7 @@ import { MyContext } from "../../types/MyContext";
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { User } from "../../entities/User";
 import { Groups } from "../../entities/Groups";
+import { v4 } from "uuid";
 
 @Resolver()
 export class CreateGroupResolver {
@@ -29,6 +30,7 @@ export class CreateGroupResolver {
       publicPosts,
       allowMemberToInvite,
       admins: [user],
+      groupId: v4(),
     });
     await group.save();
     return true;

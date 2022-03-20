@@ -27,6 +27,7 @@ const isAuth_1 = require("./../../middlewares/isAuth");
 const type_graphql_1 = require("type-graphql");
 const User_1 = require("../../entities/User");
 const Groups_1 = require("../../entities/Groups");
+const uuid_1 = require("uuid");
 let CreateGroupResolver = class CreateGroupResolver {
     createGroup({ payload }, { name, description, inviteOnly, publicPosts, allowMemberToInvite, }) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -40,6 +41,7 @@ let CreateGroupResolver = class CreateGroupResolver {
                 publicPosts,
                 allowMemberToInvite,
                 admins: [user],
+                groupId: (0, uuid_1.v4)(),
             });
             yield group.save();
             return true;

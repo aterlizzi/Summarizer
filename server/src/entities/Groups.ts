@@ -64,4 +64,8 @@ export class Groups extends BaseEntity {
   @Field(() => String)
   @Column()
   description: string;
+
+  @Field(() => String)
+  @Column({ default: "" })
+  groupId: string;
 }
