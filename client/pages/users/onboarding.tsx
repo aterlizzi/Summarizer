@@ -1,11 +1,23 @@
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import Popup from "../../components/onboarding/popupComp";
 import styles from "../../styles/Onboarding.module.scss";
 
 function Onboarding() {
   const [popup, setPopup] = useState(true);
+
+  useEffect(() => {
+    const myInterval = setInterval(callBackend, 5000);
+    return function cleanup() {
+      clearInterval(myInterval);
+    };
+  }, []);
+
+  const callBackend = async () => {
+    console.log("called");
+  };
+
   return (
     <main
       className={styles.main}

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+const Onboarding_1 = require("./Onboarding");
 const Notification_1 = require("./Notification");
 const UserRelationship_1 = require("./UserRelationship");
 const Bundle_1 = require("./Bundle");
@@ -133,6 +134,16 @@ __decorate([
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", Settings_1.Settings)
 ], User.prototype, "settings", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Onboarding_1.Onboarding, { nullable: true }),
+    (0, typeorm_1.OneToOne)(() => Onboarding_1.Onboarding, {
+        cascade: true,
+        nullable: true,
+        onDelete: "CASCADE",
+    }),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", Onboarding_1.Onboarding)
+], User.prototype, "onboarding", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Boolean),
     (0, typeorm_1.Column)({ default: false }),

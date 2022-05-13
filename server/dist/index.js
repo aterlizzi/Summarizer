@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Onboarding_1 = require("./entities/Onboarding");
 const UserRelationship_1 = require("./entities/UserRelationship");
 const Bundle_1 = require("./entities/Bundle");
 const Groups_1 = require("./entities/Groups");
@@ -56,6 +57,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             Bundle_1.Bundle,
             UserRelationship_1.UserRelationship,
             Notification_1.Notification,
+            Onboarding_1.Onboarding,
         ],
         synchronize: true,
         logging: process.env.NODE_ENV !== "production",

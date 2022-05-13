@@ -1,3 +1,4 @@
+import { Onboarding } from "./entities/Onboarding";
 import { UserRelationship } from "./entities/UserRelationship";
 import { Bundle } from "./entities/Bundle";
 import { Groups } from "./entities/Groups";
@@ -27,7 +28,6 @@ const refreshTokenRoute = require("./routes/refreshToken");
 
 const main = async () => {
   const app = fastify();
-
   await createConnection({
     type: "postgres",
     host: process.env.PGHOST,
@@ -47,6 +47,7 @@ const main = async () => {
       Bundle,
       UserRelationship,
       Notification,
+      Onboarding,
     ],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",

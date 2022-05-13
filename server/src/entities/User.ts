@@ -1,3 +1,4 @@
+import { Onboarding } from "./Onboarding";
 import { Notification } from "./Notification";
 import { UserRelationship } from "./UserRelationship";
 import { Bundle } from "./Bundle";
@@ -113,6 +114,15 @@ export class User extends BaseEntity {
   }) // cascade makes it such that I only need to save user to save settings, ondelete makes it so if a user is deleted, so are the settings.
   @JoinColumn()
   settings: Settings;
+
+  @Field(() => Onboarding, { nullable: true })
+  @OneToOne(() => Onboarding, {
+    cascade: true,
+    nullable: true,
+    onDelete: "CASCADE",
+  }) // cascade makes it such that I only need to save user to save settings, ondelete makes it so if a user is deleted, so are the settings.
+  @JoinColumn()
+  onboarding: Onboarding;
 
   @Field(() => Boolean)
   @Column({ default: false })

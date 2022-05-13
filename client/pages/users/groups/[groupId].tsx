@@ -2,11 +2,13 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useQuery } from "urql";
 import Layout from "../../../components/layout";
+import styles from "../../../styles/GroupId.module.scss";
 
 const ReturnGroup = `
   query($id: String!){
     returnGroup(id: $id){
       id
+      name
     }
   }
 `;
@@ -30,7 +32,13 @@ function Group() {
     }
   }, [result, router]);
 
-  return <div>Group</div>;
+  return (
+    <main className={styles.main}>
+      {result.data && result.data.returnGroup
+        ? result.data.returnGroup.name
+        : null}
+    </main>
+  );
 }
 Group.getLayout = (page) => {
   return (

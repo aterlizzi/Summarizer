@@ -34,6 +34,28 @@ const openai = new OpenAI(process.env.OPENAI_API_KEY);
 let SummarizeResolver = class SummarizeResolver {
     summarize({ text, url, title, privateSummary, actionType }, { payload }) {
         return __awaiter(this, void 0, void 0, function* () {
+            const user = yield User_1.User.findOne({
+                where: { id: payload.userId },
+                relations: [
+                    "recentSummaries",
+                    "settings",
+                    "settings.extensionSettings",
+                    "onboarding",
+                ],
+            });
+            if (!user)
+                return undefined;
+            if (process.env.NODE_ENV === "production") {
+                if (url === "https://untanglify.com/users/onboarding" ||
+                    url === "https://www.untanglify.com/users/onboarding") {
+                    return yield (0, utils_1.handleOnboardingPage)(actionType, user, url, text, privateSummary);
+                }
+            }
+            else {
+                if (url === "http://localhost:4000/users/onboarding") {
+                    return yield (0, utils_1.handleOnboardingPage)(actionType, user, url, text, privateSummary);
+                }
+            }
             if (!actionType) {
                 actionType = "entire";
             }
@@ -43,12 +65,6 @@ let SummarizeResolver = class SummarizeResolver {
             }
             const wordCount = (0, utils_1.countWords)(text);
             console.log(text, wordCount);
-            const user = yield User_1.User.findOne({
-                where: { id: payload.userId },
-                relations: ["recentSummaries", "settings", "settings.extensionSettings"],
-            });
-            if (!user)
-                return undefined;
             if (!user.prem)
                 yield (0, utils_1.handleCooldown)(user);
             if (user.wordCount < wordCount)

@@ -1,3 +1,4 @@
+import { Onboarding } from "../../entities/Onboarding";
 import { RecentSummaries } from "../../entities/RecentSummaries";
 import { User } from "../../entities/User";
 const OpenAI = require("openai-api");
@@ -285,4 +286,115 @@ const handleParseHash = (hash: summaryHash) => {
     }
   }
   return hash;
+};
+
+// active onboarding page changes.
+export const handleOnboardingPage = async (
+  actionType: string | undefined,
+  user: User,
+  url: string,
+  text: string,
+  privateSummary: boolean | undefined
+) => {
+  // if the entire page is being summarized, update that.
+  if (actionType === "entire") {
+    if (user.onboarding) {
+      user.onboarding.summarizedEntirePage = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    } else {
+      const onboarding = Onboarding.create();
+      user.onboarding = onboarding;
+      user.onboarding.summarizedEntirePage = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    }
+    return {
+      summary: `Congradulations! You've successfully summarized this page! Normally this would display the summary.`,
+      url,
+      popout: false,
+      remainingSummaries: user.wordCount,
+    };
+  } else if (
+    actionType === "highlighted" &&
+    text ===
+      "Please highlight this text and then click summarize (after selecting highlighted) to complete this part!"
+  ) {
+    if (user.onboarding) {
+      user.onboarding.summarizedHighlightedSectionPage = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    } else {
+      const onboarding = Onboarding.create();
+      user.onboarding = onboarding;
+      user.onboarding.summarizedHighlightedSectionPage = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    }
+    return {
+      summary: `Congradulations! You've successfully summarized a highlighted section! Normally this would display the summary.`,
+      url,
+      popout: false,
+      remainingSummaries: user.wordCount,
+    };
+  } else if (actionType === "file") {
+    if (user.onboarding) {
+      user.onboarding.summarizedFile = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    } else {
+      const onboarding = Onboarding.create();
+      user.onboarding = onboarding;
+      user.onboarding.summarizedFile = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    }
+    return {
+      summary: `Well done! Normally this would display the summary for the pdf you submitted, but not this time!`,
+      url,
+      popout: false,
+      remainingSummaries: user.wordCount,
+    };
+  } else if (actionType === "manual") {
+    if (user.onboarding) {
+      user.onboarding.summarizedManual = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    } else {
+      const onboarding = Onboarding.create();
+      user.onboarding = onboarding;
+      user.onboarding.summarizedManual = true;
+      if (privateSummary) {
+        user.onboarding.summarizedPrivately = true;
+      }
+      await user.save();
+    }
+    return {
+      summary: `Success! You would have a summary of your manually inputted text.`,
+      url,
+      popout: false,
+      remainingSummaries: user.wordCount,
+    };
+  } else {
+    return {
+      summary: `Whoops, I think you were trying to complete the onboarding process but something might have been messed up.`,
+      url,
+      popout: false,
+      remainingSummaries: user.wordCount,
+    };
+  }
 };

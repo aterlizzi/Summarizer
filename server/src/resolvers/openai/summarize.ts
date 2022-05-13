@@ -8,6 +8,7 @@ import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import {
   countWords,
   handleCooldown,
+  handleOnboardingPage,
   handlePromiseChain,
   handleSaveRecentSummary,
   spliceLargeText,
@@ -24,6 +25,48 @@ export class SummarizeResolver {
     { text, url, title, privateSummary, actionType }: SummaryInputObj,
     @Ctx() { payload }: MyContext
   ): Promise<SummaryReturnObj | undefined> {
+    // ---------- MISC LEGEND ---------------------
+    // action types: entire, highlighted, file, manual
+
+    // payload is not undefined because of authentication process.
+    const user = await User.findOne({
+      where: { id: payload!.userId },
+      relations: [
+        "recentSummaries",
+        "settings",
+        "settings.extensionSettings",
+        "onboarding",
+      ],
+    });
+
+    if (!user) return undefined;
+
+    // ------------- ONBOARDING PAGE ---------------------
+    if (process.env.NODE_ENV === "production") {
+      if (
+        url === "https://untanglify.com/users/onboarding" ||
+        url === "https://www.untanglify.com/users/onboarding"
+      ) {
+        return await handleOnboardingPage(
+          actionType,
+          user,
+          url,
+          text,
+          privateSummary
+        );
+      }
+    } else {
+      if (url === "http://localhost:4000/users/onboarding") {
+        return await handleOnboardingPage(
+          actionType,
+          user,
+          url,
+          text,
+          privateSummary
+        );
+      }
+    }
+
     // if these are not assigned for some reason, assign them.
     if (!actionType) {
       actionType = "entire";
@@ -38,14 +81,6 @@ export class SummarizeResolver {
     // get accurate word count
     const wordCount = countWords(text);
     console.log(text, wordCount);
-
-    // payload is not undefined because of authentication process.
-    const user = await User.findOne({
-      where: { id: payload!.userId },
-      relations: ["recentSummaries", "settings", "settings.extensionSettings"],
-    });
-
-    if (!user) return undefined;
 
     // check for cooldown on user
     if (!user.prem) await handleCooldown(user);

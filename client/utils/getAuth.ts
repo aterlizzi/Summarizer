@@ -3,8 +3,8 @@ import { getAccessToken, setAccessToken } from "../accesstoken";
 export const getAuth = async ({ authState }) => {
   if (!authState) {
     let accessToken = getAccessToken();
-    if (accessToken) return { accessToken };
-
+    console.log(accessToken);
+    if (accessToken !== "") return { accessToken };
     // if you have a cookie but not an accessToken
     if (!accessToken) {
       const token = await handleRefreshToken();
