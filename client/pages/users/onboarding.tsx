@@ -1,11 +1,18 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
+import BannerComp from "../../components/onboarding/bannerComp";
+import Grid from "../../components/onboarding/grid";
+import Header from "../../components/onboarding/header";
+import MobileMenu from "../../components/onboarding/mobileMenuComp";
+import Options from "../../components/onboarding/options";
 import Popup from "../../components/onboarding/popupComp";
 import styles from "../../styles/Onboarding.module.scss";
 
 function Onboarding() {
   const [popup, setPopup] = useState(true);
+  const [isOpen, setOpen] = useState(false);
+  const [displayExtension, setDisplayExtension] = useState(true);
 
   useEffect(() => {
     const myInterval = setInterval(callBackend, 5000);
@@ -28,6 +35,14 @@ function Onboarding() {
       }
     >
       {popup ? <Popup setPopup={setPopup} /> : null}
+      <BannerComp isOpen={isOpen} setOpen={setOpen} />
+      <MobileMenu isOpen={isOpen} />
+      <Header />
+      <Options
+        displayExtension={displayExtension}
+        setDisplayExtension={setDisplayExtension}
+      />
+      <Grid />
     </main>
   );
 }
