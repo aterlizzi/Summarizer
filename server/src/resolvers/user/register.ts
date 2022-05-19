@@ -1,3 +1,4 @@
+import { Onboarding } from "./../../entities/Onboarding";
 import { ExtensionSettings } from "./../../entities/ExtensionSettings";
 import { EmailSettings } from "./../../entities/EmailSettings";
 import { ConfirmUserOutput } from "./../../types/confirmUserOutput";
@@ -54,9 +55,13 @@ export class RegisterResolver {
     const userExtensionSettings = ExtensionSettings.create({
       settings: userSettings,
     });
+    const userOnboarding = Onboarding.create({
+      user: newUser,
+    });
     userSettings.emailSettings = userEmailSettings;
     userSettings.extensionSettings = userExtensionSettings;
     newUser.settings = userSettings;
+    newUser.onboarding = userOnboarding;
     const code = await generateCode();
     newUser.referralCode = code;
     sendNewUserEmail(email, name);
@@ -136,9 +141,13 @@ export class RegisterResolver {
     const userExtensionSettings = ExtensionSettings.create({
       settings: userSettings,
     });
+    const userOnboarding = Onboarding.create({
+      user,
+    });
     userSettings.emailSettings = userEmailSettings;
     userSettings.extensionSettings = userExtensionSettings;
     user.settings = userSettings;
+    user.onboarding = userOnboarding;
     const code = await generateCode();
     user.referralCode = code;
     await user.save();

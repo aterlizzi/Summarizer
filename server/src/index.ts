@@ -1,3 +1,4 @@
+import { Info } from "./entities/Info";
 import { Onboarding } from "./entities/Onboarding";
 import { UserRelationship } from "./entities/UserRelationship";
 import { Bundle } from "./entities/Bundle";
@@ -48,6 +49,7 @@ const main = async () => {
       UserRelationship,
       Notification,
       Onboarding,
+      Info,
     ],
     synchronize: true,
     logging: process.env.NODE_ENV !== "production",

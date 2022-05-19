@@ -25,6 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterResolver = void 0;
+const Onboarding_1 = require("./../../entities/Onboarding");
 const ExtensionSettings_1 = require("./../../entities/ExtensionSettings");
 const EmailSettings_1 = require("./../../entities/EmailSettings");
 const confirmUserOutput_1 = require("./../../types/confirmUserOutput");
@@ -75,9 +76,13 @@ let RegisterResolver = class RegisterResolver {
             const userExtensionSettings = ExtensionSettings_1.ExtensionSettings.create({
                 settings: userSettings,
             });
+            const userOnboarding = Onboarding_1.Onboarding.create({
+                user: newUser,
+            });
             userSettings.emailSettings = userEmailSettings;
             userSettings.extensionSettings = userExtensionSettings;
             newUser.settings = userSettings;
+            newUser.onboarding = userOnboarding;
             const code = yield generateCode();
             newUser.referralCode = code;
             (0, newUserEmail_1.sendNewUserEmail)(email, name);
@@ -145,9 +150,13 @@ let RegisterResolver = class RegisterResolver {
             const userExtensionSettings = ExtensionSettings_1.ExtensionSettings.create({
                 settings: userSettings,
             });
+            const userOnboarding = Onboarding_1.Onboarding.create({
+                user,
+            });
             userSettings.emailSettings = userEmailSettings;
             userSettings.extensionSettings = userExtensionSettings;
             user.settings = userSettings;
+            user.onboarding = userOnboarding;
             const code = yield generateCode();
             user.referralCode = code;
             yield user.save();

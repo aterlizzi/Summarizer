@@ -261,7 +261,9 @@ const handleOnboardingPage = (actionType, user, url, text, privateSummary) => __
             yield user.save();
         }
         else {
-            const onboarding = Onboarding_1.Onboarding.create();
+            const onboarding = Onboarding_1.Onboarding.create({
+                user,
+            });
             user.onboarding = onboarding;
             user.onboarding.summarizedEntirePage = true;
             if (privateSummary) {
@@ -278,7 +280,7 @@ const handleOnboardingPage = (actionType, user, url, text, privateSummary) => __
     }
     else if (actionType === "highlighted" &&
         text ===
-            "Please highlight this text and then click summarize (after selecting highlighted) to complete this part!") {
+            'Summarize text you highlight on a webpage by simply clicking and dragging the cursor over words. Then click "summarize highlighted" on the extension and click the summarize button. Try it on this paragraph!') {
         if (user.onboarding) {
             user.onboarding.summarizedHighlightedSectionPage = true;
             if (privateSummary) {
@@ -287,7 +289,9 @@ const handleOnboardingPage = (actionType, user, url, text, privateSummary) => __
             yield user.save();
         }
         else {
-            const onboarding = Onboarding_1.Onboarding.create();
+            const onboarding = Onboarding_1.Onboarding.create({
+                user,
+            });
             user.onboarding = onboarding;
             user.onboarding.summarizedHighlightedSectionPage = true;
             if (privateSummary) {
@@ -311,7 +315,9 @@ const handleOnboardingPage = (actionType, user, url, text, privateSummary) => __
             yield user.save();
         }
         else {
-            const onboarding = Onboarding_1.Onboarding.create();
+            const onboarding = Onboarding_1.Onboarding.create({
+                user,
+            });
             user.onboarding = onboarding;
             user.onboarding.summarizedFile = true;
             if (privateSummary) {
@@ -335,7 +341,9 @@ const handleOnboardingPage = (actionType, user, url, text, privateSummary) => __
             yield user.save();
         }
         else {
-            const onboarding = Onboarding_1.Onboarding.create();
+            const onboarding = Onboarding_1.Onboarding.create({
+                user,
+            });
             user.onboarding = onboarding;
             user.onboarding.summarizedManual = true;
             if (privateSummary) {

@@ -27,7 +27,7 @@ function Step({ info, reversed, num, color }) {
       </div>
       <p
         className={styles.stepInfo}
-        style={reversed ? { marginRight: "1em" } : null}
+        style={reversed ? { marginRight: "1em", textAlign: "right" } : null}
       >
         {info}
       </p>

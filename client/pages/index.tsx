@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import styles from "../styles/Home.module.scss";
 import BannerComp from "../components/home/bannerComp";
@@ -10,10 +10,30 @@ const Feature = dynamic(() => import("../components/home/feature"));
 import MobileMenu from "../components/home/mobileMenuComp";
 import TitlePage from "../components/home/titlePage";
 import Why from "../components/home/why";
+import { useRouter } from "next/router";
+import { useMutation } from "urql";
+
+const UpdateData = `
+mutation($medium: String!, $type: String!) {
+  updateABCount(medium: $medium, type: $type)
+}
+`;
 
 function Home() {
+  const router = useRouter();
   const [isOpen, setOpen] = useState(false);
+  const [updateResult, updateData] = useMutation(UpdateData);
 
+  const { referral_med, referral_type } = router.query; // if user comes in via an email link or etc.
+
+  useEffect(() => {
+    if (referral_med === "email") {
+      updateData({
+        medium: referral_med as string,
+        type: referral_type as string,
+      });
+    }
+  }, [referral_med, referral_type]);
   return (
     <main className={styles.main}>
       <BannerComp isOpen={isOpen} setOpen={setOpen} />

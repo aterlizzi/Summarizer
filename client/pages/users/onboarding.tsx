@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "urql";
 import Layout from "../../components/layout";
 import BannerComp from "../../components/onboarding/bannerComp";
 import Grid from "../../components/onboarding/grid";
@@ -9,20 +10,33 @@ import Options from "../../components/onboarding/options";
 import Popup from "../../components/onboarding/popupComp";
 import styles from "../../styles/Onboarding.module.scss";
 
+const CallBackend = `
+  query{
+    userOnboardingProgress{
+      summarizedEntirePage
+      summarizedFile
+      summarizedHighlightedSectionPage
+      summarizedManual
+      summarizedPrivately
+    }
+  }
+`;
+
 function Onboarding() {
   const [popup, setPopup] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [displayExtension, setDisplayExtension] = useState(true);
+  const [data, callBackend] = useQuery({ query: CallBackend });
 
   useEffect(() => {
-    const myInterval = setInterval(callBackend, 5000);
+    const myInterval = setInterval(handleCallBackend, 5000);
     return function cleanup() {
       clearInterval(myInterval);
     };
   }, []);
 
-  const callBackend = async () => {
-    console.log("called");
+  const handleCallBackend = async () => {
+    callBackend();
   };
 
   return (
@@ -42,7 +56,7 @@ function Onboarding() {
         displayExtension={displayExtension}
         setDisplayExtension={setDisplayExtension}
       />
-      <Grid />
+      <Grid data={data} />
     </main>
   );
 }

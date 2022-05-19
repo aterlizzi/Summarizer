@@ -28,7 +28,7 @@ function Tier({ reversed, title, data, para, steps, prem }) {
               style={
                 !reversed
                   ? { margin: "0em 0em 0em 1em" }
-                  : { marginRight: "0em 1em 0em 0em" }
+                  : { margin: "0em 1em 0em 0em" }
               }
             >
               Premium only
@@ -36,17 +36,13 @@ function Tier({ reversed, title, data, para, steps, prem }) {
           ) : null}
           <div
             className={styles.statusBanner}
-            style={
-              data === ""
-                ? { background: "#03DAC6" }
-                : { background: "#4740D1" }
-            }
+            style={data ? { background: "#03DAC6" } : { background: "#4740D1" }}
           >
             <p
               className={styles.status}
-              style={data === "" ? { color: "black" } : { color: "white" }}
+              style={data ? { color: "black" } : { color: "white" }}
             >
-              {data === "" ? "Complete" : "In Progress"}
+              {data ? "Complete" : "In Progress"}
             </p>
           </div>
         </div>
@@ -59,21 +55,21 @@ function Tier({ reversed, title, data, para, steps, prem }) {
           info={steps[0]}
           reversed={false}
           num={1}
-          color={data === "" ? "green" : "blue"}
+          color={data ? "green" : "blue"}
         />
         <div className={styles.divider}></div>
         <Step
           info={steps[1]}
           reversed={true}
           num={2}
-          color={data === "" ? "green" : "blue"}
+          color={data ? "green" : "blue"}
         />
         <div className={styles.divider}></div>
         <Step
           info={steps[2]}
           reversed={false}
           num={3}
-          color={data === "" ? "green" : "blue"}
+          color={data ? "green" : "blue"}
         />
         <div className={styles.divider}></div>
       </div>
