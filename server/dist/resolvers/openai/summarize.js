@@ -45,17 +45,6 @@ let SummarizeResolver = class SummarizeResolver {
             });
             if (!user)
                 return undefined;
-            if (process.env.NODE_ENV === "production") {
-                if (url === "https://untanglify.com/users/onboarding" ||
-                    url === "https://www.untanglify.com/users/onboarding") {
-                    return yield (0, utils_1.handleOnboardingPage)(actionType, user, url, text, privateSummary);
-                }
-            }
-            else {
-                if (url === "http://localhost:4000/users/onboarding") {
-                    return yield (0, utils_1.handleOnboardingPage)(actionType, user, url, text, privateSummary);
-                }
-            }
             if (!actionType) {
                 actionType = "entire";
             }
