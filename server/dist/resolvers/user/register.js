@@ -25,6 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterResolver = void 0;
+const isAdmin_1 = require("./../../middlewares/isAdmin");
 const Onboarding_1 = require("./../../entities/Onboarding");
 const ExtensionSettings_1 = require("./../../entities/ExtensionSettings");
 const EmailSettings_1 = require("./../../entities/EmailSettings");
@@ -209,6 +210,17 @@ let RegisterResolver = class RegisterResolver {
             };
         });
     }
+    confirmAdminUser(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield User_1.User.findOne({ where: { email } });
+            if (!user || user.confirmed)
+                return false;
+            user.confirmed = true;
+            yield user.save();
+            (0, welcomeEmail_1.sendWelcomeMail)(user.username, user.email);
+            return true;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => confirmUserOutput_1.ConfirmUserOutput),
@@ -243,6 +255,14 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "confirmUser", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.UseMiddleware)(isAdmin_1.isAdmin),
+    __param(0, (0, type_graphql_1.Arg)("email")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RegisterResolver.prototype, "confirmAdminUser", null);
 RegisterResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], RegisterResolver);

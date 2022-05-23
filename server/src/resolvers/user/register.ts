@@ -1,3 +1,4 @@
+import { isAdmin } from "./../../middlewares/isAdmin";
 import { Onboarding } from "./../../entities/Onboarding";
 import { ExtensionSettings } from "./../../entities/ExtensionSettings";
 import { EmailSettings } from "./../../entities/EmailSettings";
@@ -9,7 +10,7 @@ import { registerUserToken } from "./../../constants/redisPrefixes";
 import { redis } from "./../../redis";
 import argon2 from "argon2";
 import { User } from "./../../entities/User";
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { sendConfirmationMail } from "../../utils/emails/confirmUser";
 import jwtDecode from "jwt-decode";
 import { RegisterUserOutput } from "../../types/registerUserOutput";
@@ -200,6 +201,16 @@ export class RegisterResolver {
         expiresIn: "15m",
       }),
     };
+  }
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAdmin)
+  async confirmAdminUser(@Arg("email") email: string): Promise<Boolean> {
+    const user = await User.findOne({ where: { email } });
+    if (!user || user.confirmed) return false;
+    user.confirmed = true;
+    await user.save();
+    sendWelcomeMail(user.username!, user.email);
+    return true;
   }
 }
 

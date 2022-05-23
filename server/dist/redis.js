@@ -10,5 +10,6 @@ exports.redis = new ioredis_1.default({
     host: "127.0.0.1",
     family: 4,
     db: 0,
+    password: "RqEbRUjFuszBuELydR0Yln4tDEJWy0wvHnCYqKy7fWydndJi2jMYVsWyN/TuEO1cQBzHBeGK0x1hOBaGTg/95OvlhLzC0G09WZrmOmMTSK5OXrAYhPXJYalQX47L3zwmQpQGRQ",
 });
 //# sourceMappingURL=redis.js.map

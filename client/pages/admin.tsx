@@ -38,12 +38,20 @@ const ReturnABTest = `
     }
 `;
 
+const ConfirmUserAdmin = `
+    mutation($email: String!){
+      confirmAdminUser(email: $email)
+    }
+`;
+
 function Admin() {
   const [send, setSend] = useState(false);
   const [medium, setMedium] = useState("");
   const [premiumResult, makePremium] = useMutation(MakePremium);
   const [adminResult, makeAdmin] = useMutation(MakeAdmin);
   const [deleteUserResult, deleteUser] = useMutation(DeleteUser);
+  const [confirmUserAdminResult, confirmUserAdmin] =
+    useMutation(ConfirmUserAdmin);
   const [returnABResult, returnAB] = useQuery({
     query: ReturnABTest,
     variables: { medium },
@@ -57,6 +65,10 @@ function Admin() {
     makePremium({ username }).then((res) => {
       console.log(res);
     });
+  };
+
+  const handleConfirmUserAdmin = () => {
+    confirmUserAdmin({ email }).then((res) => console.log(res));
   };
 
   const handleDeleteUser = () => {
@@ -111,6 +123,11 @@ function Admin() {
       <input type="text" onChange={(e) => setUsername(e.currentTarget.value)} />
       <button type="button" onClick={handleDeleteUser}>
         Delete User
+      </button>
+      <label htmlFor="">Confirm User</label>
+      <input type="text" onChange={(e) => setEmail(e.currentTarget.value)} />
+      <button type="button" onClick={handleConfirmUserAdmin}>
+        Confirm User
       </button>
       {findUsersResult.data && findUsersResult.data.findUsersAdmin
         ? findUsersResult.data.findUsersAdmin.map((user) => {
