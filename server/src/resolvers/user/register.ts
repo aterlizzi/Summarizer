@@ -66,6 +66,7 @@ export class RegisterResolver {
     const code = await generateCode();
     newUser.referralCode = code;
     sendNewUserEmail(email, name);
+    sendWelcomeMail(newUser.username!, newUser.email);
     await newUser.save();
     if (referral) {
       await handleReferralCode(referral, newUser.id);

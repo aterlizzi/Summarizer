@@ -87,6 +87,7 @@ let RegisterResolver = class RegisterResolver {
             const code = yield generateCode();
             newUser.referralCode = code;
             (0, newUserEmail_1.sendNewUserEmail)(email, name);
+            (0, welcomeEmail_1.sendWelcomeMail)(newUser.username, newUser.email);
             yield newUser.save();
             if (referral) {
                 yield handleReferralCode(referral, newUser.id);
